@@ -1,0 +1,183 @@
+,Unnamed: 0,season,round,circuit_id,weather,weather_warm,weather_cold,weather_wet,weather_cloudy
+0,897,2014,1,albert_park,"Overcast, 19 °C(66 °F)",0,0,0,0
+1,898,2014,2,sepang,"Dry, 32°C",0,0,0,0
+2,899,2014,3,bahrain,Dry,1,0,0,0
+3,900,2014,4,shanghai,"Mostly cloudy, dry",1,0,0,0
+4,901,2014,5,catalunya,Sunny,1,0,0,0
+5,902,2014,6,monaco,"Overcast, Air: 20 to 21 °C (68 to 70 °F), Track: 28 to 30 °C (82 to 86 °F).",0,0,0,0
+6,903,2014,7,villeneuve,Temperatures up to 27.6 °C (81.7 °F); wind speeds up to 16.4 kilometres per hour (10.2 mph)[5],0,0,0,0
+7,904,2014,8,red_bull_ring,"Partially cloudy, hot and dry",1,0,0,0
+8,905,2014,9,silverstone,Mostly cloudy with maximum temperatures reaching 21 degrees during the day.,0,0,0,1
+9,906,2014,10,hockenheimring,Cloudy with maximum temperatures reaching 26 degrees during the day.,0,0,0,1
+10,907,2014,11,hungaroring,"Overcast. Wet track at start, then drying. Scattered thunderstorms during the day, temperatures reaching a maximum of 26 degrees.[1]",0,0,1,0
+11,908,2014,12,spa,Mostly cloudy,0,0,0,1
+12,909,2014,13,monza,"Sunny; Air: 25 °C (77 °F), Track: 37 to 42 °C (99 to 108 °F)",0,0,0,0
+13,910,2014,14,marina_bay,Clear. Air: 28 to 30 °C (82 to 86 °F) Track: 33 to 37 °C (91 to 99 °F).,0,0,0,0
+14,911,2014,15,suzuka,Rain. Air: 20 °C (68 °F) Track: 24 °C (75 °F),0,0,0,0
+15,912,2014,16,sochi,"Fine and dry; 21 °C (70 °F) ambient temperature, 33 °C (91 °F) track temperature[4]",1,0,0,0
+16,913,2014,17,americas,Sunny,1,0,0,0
+17,914,2014,18,interlagos,"Sunny, Air: 23 to 24 °C (73 to 75 °F), Track: 46 to 50 °C (115 to 122 °F)",0,0,0,0
+18,915,2014,19,yas_marina,"Clear skies; Air temp: 30 °C (86 °F) during the day, dropping to 24 °C (75.2 °F). Wind speed: 8 km/h (4.9 mph).[2] (Night race)",1,0,0,0
+19,916,2015,1,albert_park,Partly cloudy 17–18 °C (63–64 °F) air temperature 32–37 °C (90–99 °F) track temperature 6 m/s (20 ft/s) wind from the south[3],0,0,0,1
+20,917,2015,2,sepang,Sunny 32–33 °C (90–91 °F) air temperature 53–58 °C (127–136 °F) track temperature 2 m/s (6.6 ft/s) wind from the south[3],1,0,0,0
+21,918,2015,3,shanghai,Sunny 21 °C (70 °F) air temperature 46 °C (115 °F) track temperature 1.4 m/s (4.6 ft/s) wind from the northwest[1],1,0,0,0
+22,919,2015,4,bahrain,"Sunny, clear 24–26 °C (75–79 °F) air temperature 28–31 °C (82–88 °F) track temperature 1.5 m/s (4.9 ft/s) wind from the north[1]",1,0,0,0
+23,920,2015,5,catalunya,Sunny 25 °C (77 °F) air temperature 44 °C (111 °F) track temperature 1.8 m/s (5.9 ft/s) wind from the northeast[3],1,0,0,0
+24,921,2015,6,monaco,Partly cloudy 18–19 °C (64–66 °F) air temperature 31–37 °C (88–99 °F) track temperature 1.5 m/s (4.9 ft/s) wind from the west[2],0,0,0,1
+25,922,2015,7,villeneuve,Sunny 20–21 °C (68–70 °F) air temperature 39 °C (102 °F) track temperature 4 m/s (13 ft/s) wind from the north[2],1,0,0,0
+26,923,2015,8,red_bull_ring,Cloudy 14–15 °C (57–59 °F) air temperature 27–32 °C (81–90 °F) track temperature 2 m/s (6.6 ft/s) wind from the west[2],0,0,0,1
+27,924,2015,9,silverstone,"Cloudy, rain at times 17–20 °C (63–68 °F) air temperature 24–32 °C (75–90 °F) track temperature 2.5 m/s (8.2 ft/s) wind from the east[2]",0,0,1,0
+28,925,2015,10,hungaroring,Sunny 22–24 °C (72–75 °F) air temperature 41–48 °C (106–118 °F) track temperature 3.2 m/s (10 ft/s) wind from the east[2],1,0,0,0
+29,926,2015,11,spa,Cloudy 23 °C (73 °F) air temperature 33–37 °C (91–99 °F) track temperature 3.5 m/s (11 ft/s) wind from the northwest[2],0,0,0,1
+30,927,2015,12,monza,Partly cloudy 22–23 °C (72–73 °F) air temperature 38–39 °C (100–102 °F) track temperature 1.5 m/s (4.9 ft/s) wind from changing directions[2],0,0,0,1
+31,928,2015,13,marina_bay,Dry 28–29 °C (82–84 °F) air temperature 34–36 °C (93–97 °F) track temperature 0.5 m/s (1.6 ft/s) wind from the west[2],1,0,0,0
+32,929,2015,14,suzuka,Partly cloudy 27 °C (81 °F) air temperature 52–54 °C (126–129 °F) track temperature 4.5 m/s (15 ft/s) wind from the east[2],0,0,0,1
+33,930,2015,15,sochi,Partly cloudy 18 °C (64 °F) air temperature 25–27 °C (77–81 °F) track temperature 1.5 m/s (4.9 ft/s) wind from the north[2],0,0,0,1
+34,931,2015,16,americas,Very cloudy 17 °C (63 °F) air temperature 17–20 °C (63–68 °F) track temperature 8 m/s (26 ft/s) wind from the south[2],0,0,0,1
+35,932,2015,17,rodriguez,Partly cloudy 22–24 °C (72–75 °F) air temperature 48–56 °C (118–133 °F) track temperature 1.5 m/s (4.9 ft/s) wind from the northwest[2],0,0,0,1
+36,933,2015,18,interlagos,Dry 22–28 °C (72–82 °F) air temperature 38–48 °C (100–118 °F) track temperature 2.5 m/s (8.2 ft/s) wind from the north[2],1,0,0,0
+37,934,2015,19,yas_marina,Clear 25–27 °C (77–81 °F) air temperature 28–29 °C (82–84 °F) track temperature 1.5 m/s (4.9 ft/s) wind from the south[3],1,0,0,0
+38,935,2016,1,albert_park,Partly cloudy 22–23 °C (72–73 °F) air temperature 26–36 °C (79–97 °F) track temperature 4 m/s (8.9 mph; 14 km/h) wind from the south[4],0,0,0,1
+39,936,2016,2,bahrain,Dry 21–22 °C (70–72 °F) air temperature 26–29 °C (79–84 °F) track temperature 2 m/s (6.6 ft/s) wind from the southwest[4],1,0,0,0
+40,937,2016,3,shanghai,Sunny 21 °C (70 °F) air temperature 37 °C (99 °F) track temperature 4.8 m/s (16 ft/s) wind from the northeast[4],1,0,0,0
+41,938,2016,4,sochi,Partly cloudy 16 °C (61 °F) air temperature 37–41 °C (99–106 °F) track temperature 2.5 m/s (8.2 ft/s) wind from the southwest[4],0,0,0,1
+42,939,2016,5,catalunya,Partly cloudy 20–22 °C (68–72 °F) air temperature 39–41 °C (102–106 °F) track temperature 2 m/s (6.6 ft/s) wind from the north[4],0,0,0,1
+43,940,2016,6,monaco,"Rainy at start, dry later 17–18 °C (63–64 °F) air temperature 20–22 °C (68–72 °F) track temperature 2 m/s (6.6 ft/s) wind from the north[4]",1,0,1,0
+44,941,2016,7,villeneuve,Cloudy 12 °C (54 °F) air temperature 21–23 °C (70–73 °F) track temperature 2.5 m/s (8.2 ft/s) wind from the southeast[4],0,0,0,1
+45,942,2016,8,baku,Partly cloudy 30–33 °C (86–91 °F) air temperature 39–45 °C (102–113 °F) track temperature 2.5 m/s (8.2 ft/s) wind from the southeast[4],0,0,0,1
+46,943,2016,9,red_bull_ring,Cloudy,0,0,0,1
+47,944,2016,10,silverstone,"Wet at start, dry later",1,0,1,0
+48,945,2016,11,hungaroring,Sunny,1,0,0,0
+49,946,2016,12,hockenheimring,Partially cloudy and dry,1,0,0,1
+50,947,2016,13,spa,Partially cloudy and dry,1,0,0,1
+51,948,2016,14,monza,"Sunny, warm",1,0,0,0
+52,949,2016,15,marina_bay,Clear 30 °C (86 °F) air temperature 34–35 °C (93–95 °F) track temperature 1.5 m/s (4.9 ft/s) wind from the east[2],1,0,0,0
+53,950,2016,16,sepang,Sunny 33 °C (91 °F) air temperature 49 °C (120 °F) track temperature 2.8 m/s (9.2 ft/s) wind from the west[2],1,0,0,0
+54,951,2016,17,suzuka,Cloudy,0,0,0,1
+55,952,2016,18,americas,Sunny and hot with temperatures reaching up to 84 °F (29 °C); wind speeds approaching speeds of 9.2 miles per hour (14.8 km/h)[2],1,0,0,0
+56,953,2016,19,rodriguez,Sunny,1,0,0,0
+57,954,2016,20,interlagos,Rain and 16 °C (60.8 °F),0,0,1,0
+58,955,2016,21,yas_marina,Sunny,1,0,0,0
+59,956,2017,1,albert_park,Partly cloudy 24 °C (75 °F) air temperature 31–36 °C (88–97 °F) track temperature 2 m/s (4.5 mph; 7.2 km/h) wind from the northwest[3],0,0,0,1
+60,957,2017,2,shanghai,"Light rain at start, drying later.",0,0,1,0
+61,958,2017,3,bahrain,Clear,1,0,0,0
+62,959,2017,4,sochi,Sunny,1,0,0,0
+63,960,2017,5,catalunya,Sunny,1,0,0,0
+64,961,2017,6,monaco,Sunny,1,0,0,0
+65,962,2017,7,villeneuve,Sunny and hot with temperatures reaching up to 29 °C (84 °F); wind speeds reaching 12.9 kilometres per hour (8.0 mph)[4],1,0,0,0
+66,963,2017,8,baku,Sunny,1,0,0,0
+67,964,2017,9,red_bull_ring,Partly cloudy,0,0,0,1
+68,965,2017,10,silverstone,Overcast,0,0,0,1
+69,966,2017,11,hungaroring,Sunny,1,0,0,0
+70,967,2017,12,spa,Partially cloudy and dry,1,0,0,1
+71,968,2017,13,monza,Sunny,1,0,0,0
+72,969,2017,14,marina_bay,"Wet at start, then drying. Air temperature: 28°C (82°F)",0,0,1,0
+73,970,2017,15,sepang,Cloudy,0,0,0,1
+74,971,2017,16,suzuka,Sunny,1,0,0,0
+75,972,2017,17,americas,Sunny with temperatures reaching up to 82.9 °F (28.3 °C); wind speeds approaching speeds of 13.8 miles per hour (22.2 km/h)[4],1,0,0,0
+76,973,2017,18,rodriguez,"Sunny, dry",1,0,0,0
+77,974,2017,19,interlagos,Sunny,1,0,0,0
+78,975,2017,20,yas_marina,Clear,1,0,0,0
+79,976,2018,1,albert_park,Sunny,1,0,0,0
+80,977,2018,2,bahrain,Clear,1,0,0,0
+81,978,2018,3,shanghai,Sunny,1,0,0,0
+82,979,2018,4,baku,Cloudy,0,0,0,1
+83,980,2018,5,catalunya,"Partially cloudy and dry, 16°C and cold.",0,0,0,1
+84,981,2018,6,monaco,Sunny,1,0,0,0
+85,982,2018,7,villeneuve,Temperatures reaching up to 22.7 °C (72.9 °F); with wind speeds reaching 11.1 kilometres per hour (6.9 mph)[2],0,0,0,0
+86,983,2018,8,ricard,"Partially cloudy, warm and dry",1,0,0,0
+87,984,2018,9,red_bull_ring,Sunny,1,0,0,0
+88,985,2018,10,silverstone,Sunny 27.0 °C (80.6 °F)[2],1,0,0,0
+89,986,2018,11,hockenheimring,Overcast with intermittent rain,0,0,1,1
+90,987,2018,12,hungaroring,Sunny,1,0,0,0
+91,988,2018,13,spa,Cloudy,0,0,0,1
+92,989,2018,14,monza,Sunny,1,0,0,0
+93,990,2018,15,marina_bay,Clear,1,0,0,0
+94,991,2018,16,sochi,Cloudy,0,0,0,1
+95,992,2018,17,suzuka,Partly cloudy,0,0,0,1
+96,993,2018,18,americas,Partly cloudy,0,0,0,1
+97,994,2018,19,rodriguez,Sunny,1,0,0,0
+98,995,2018,20,interlagos,Cloudy,0,0,0,1
+99,996,2018,21,yas_marina,Clear,1,0,0,0
+100,997,2019,1,albert_park,Sunny,1,0,0,0
+101,998,2019,2,bahrain,Clear,1,0,0,0
+102,999,2019,3,shanghai,Partly cloudy,0,0,0,1
+103,1000,2019,4,baku,Mostly sunny,1,0,0,0
+104,1001,2019,5,catalunya,Sunny,1,0,0,0
+105,1002,2019,6,monaco,Overcast,0,0,0,1
+106,1003,2019,7,villeneuve,Temperatures reaching up to 29.6 °C (85.3 °F); wind speeds negligible[2],0,0,0,0
+107,1004,2019,8,ricard,Clear,1,0,0,0
+108,1005,2019,9,red_bull_ring,"Sunny, 36C (97F)",0,0,0,0
+109,1006,2019,10,silverstone,Partly cloudy,0,0,0,1
+110,1007,2019,11,hockenheimring,"Early rain, Late clouds",0,0,0,1
+111,1008,2019,12,hungaroring,Sunny,1,0,0,0
+112,1009,2019,13,spa,Partly cloudy,0,0,0,1
+113,1010,2019,14,monza,Partly cloudy,0,0,0,1
+114,1011,2019,15,marina_bay,Slightly hazy,0,0,0,0
+115,1012,2019,16,sochi,Partly cloudy,0,0,0,1
+116,1013,2019,17,suzuka,Sunny,1,0,0,0
+117,1014,2019,18,rodriguez,Partly cloudy,0,0,0,1
+118,1015,2019,19,americas,Sunny,1,0,0,0
+119,1016,2019,20,interlagos,Sunny,1,0,0,0
+120,1017,2019,21,yas_marina,Clear,1,0,0,0
+121,1018,2020,1,red_bull_ring,Sunny,1,0,0,0
+122,1019,2020,2,red_bull_ring,Sunny,1,0,0,0
+123,1020,2020,3,hungaroring,"Wet at start, partly cloudy",0,0,1,1
+124,1021,2020,4,silverstone,Partly cloudy,0,0,0,1
+125,1022,2020,5,silverstone,Sunny,1,0,0,0
+126,1023,2020,6,catalunya,Partly cloudy,0,0,0,1
+127,1024,2020,7,spa,Partly cloudy,0,0,0,1
+128,1025,2020,8,monza,Sunny,1,0,0,0
+129,1026,2020,9,mugello,Sunny,1,0,0,0
+130,1027,2020,10,sochi,Sunny,1,0,0,0
+131,1028,2020,11,nurburgring,"Partly cloudy, 10 °C (50 °F)",0,0,0,0
+132,1029,2020,12,portimao,Cloudy,0,0,0,1
+133,1030,2020,13,imola,Partly cloudy,0,0,0,1
+134,1031,2020,14,istanbul,Overcast. Wet and drying track. Air: 11–14 °C (52–57 °F); Track: 14–17 °C (57–63 °F),0,0,1,0
+135,1032,2020,15,bahrain,Clear,1,0,0,0
+136,1033,2020,16,bahrain,Clear,1,0,0,0
+137,1034,2020,17,yas_marina,Clear,1,0,0,0
+138,1035,2021,1,bahrain,"Clear, 21 °C (70 °F)",0,0,0,0
+139,1036,2021,2,imola,"Wet at start, drying during race, 9 °C (48 °F)",0,0,1,0
+140,1037,2021,3,portimao,Light cloud,0,0,0,0
+141,1038,2021,4,catalunya,Cloudy,0,0,0,1
+142,1039,2021,5,monaco,Sunny,1,0,0,0
+143,1040,2021,6,baku,Sunny,1,0,0,0
+144,1041,2021,7,ricard,Windy and partly cloudy. Ambient temperature: 24 to 27 °C (75 to 81 °F); Surface temperature: 33 to 38 °C (91 to 100 °F),0,0,0,0
+145,1042,2021,8,red_bull_ring,Partly cloudy. Ambient temperature: 25 to 29 °C (77 to 84 °F); Surface temperature: 48 to 56 °C (118 to 133 °F),0,0,0,0
+146,1043,2021,9,red_bull_ring,Partly cloudy,0,0,0,1
+147,1044,2021,10,silverstone,Clear. Ambient: 29 to 31 °C (84 to 88 °F); Surface: 48 to 52 °C (118 to 126 °F),0,0,0,0
+148,1045,2021,11,hungaroring,Rain and sunny. Ambient: 26 to 29 °C (79 to 84 °F); Surface: 31 to 52 °C (88 to 126 °F).[3],0,0,1,0
+149,1046,2021,12,spa,Wet; persistent rain,0,0,1,0
+150,1047,2021,13,zandvoort,Sunny,1,0,0,0
+151,1048,2021,14,monza,Sunny,1,0,0,0
+152,1049,2021,15,sochi,Cloudy and rainy,0,0,1,1
+153,1050,2021,16,istanbul,Overcast with intermittent rain,0,0,1,1
+154,1051,2021,17,americas,Sunny,1,0,0,0
+155,1052,2021,18,rodriguez,Sunny,1,0,0,0
+156,1053,2021,19,interlagos,Sunny,1,0,0,0
+157,1054,2021,20,losail,Clear,1,0,0,0
+158,1055,2021,21,jeddah,Clear,1,0,0,0
+159,1056,2021,22,yas_marina,Clear,1,0,0,0
+160,1057,2022,1,bahrain,Clear,1,0,0,0
+161,1058,2022,2,jeddah,Clear,1,0,0,0
+162,1059,2022,3,albert_park,Partly cloudy,0,0,0,1
+163,1060,2022,4,imola,Cloudy in a wet and drying track[2],0,0,1,1
+164,1061,2022,5,miami,"Warm, partly cloudy",0,0,0,1
+165,1062,2022,6,catalunya,Sunny,1,0,0,0
+166,1063,2022,7,monaco,Rain and partly cloudy in wet-and-drying track conditions,0,0,1,1
+167,1064,2022,8,baku,Sunny,1,0,0,0
+168,1065,2022,9,villeneuve,Sunny,1,0,0,0
+169,1066,2022,10,silverstone,Partly cloudy,0,0,0,1
+170,1067,2022,11,red_bull_ring,Partly cloudy,0,0,0,1
+171,1068,2022,12,ricard,Sunny,1,0,0,0
+172,1069,2022,13,hungaroring,"Overcast with drizzle throughout, light rain at the end",0,0,1,1
+173,1070,2022,14,spa,Sunny,1,0,0,0
+174,1071,2022,15,zandvoort,Partly cloudy,0,0,0,1
+175,1072,2022,16,monza,Sunny,1,0,0,0
+176,1073,2022,17,marina_bay,Partly cloudy in a wet and drying track,0,0,1,1
+177,1074,2022,18,suzuka,Rain,0,0,1,0
+178,1075,2022,19,americas,Partly cloudy,0,0,0,1
+179,1076,2022,20,rodriguez,Partly cloudy,0,0,0,1
+180,1077,2022,21,interlagos,Cloudy,0,0,0,1
+181,1078,2022,22,yas_marina,Clear,1,0,0,0
