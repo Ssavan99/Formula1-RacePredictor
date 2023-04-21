@@ -3706,3 +3706,63 @@
 3704,25384,2022,22,yas_marina,hamilton,1985-01-07,British,mercedes,5,,Hydraulics,0.0,18
 3705,25385,2022,22,yas_marina,latifi,1995-06-29,Canadian,williams,20,,Collision damage,0.0,19
 3706,25386,2022,22,yas_marina,alonso,1981-07-29,Spanish,alpine,10,,Water leak,0.0,20
+3707,25387,2023,1,bahrain,max_verstappen,1997-09-30,Dutch,red_bull,1,5636736.0,Finished,25.0,1
+3708,25388,2023,1,bahrain,perez,1990-01-26,Mexican,red_bull,2,5648723.0,Finished,18.0,2
+3709,25389,2023,1,bahrain,alonso,1981-07-29,Spanish,aston_martin,5,5675373.0,Finished,15.0,3
+3710,25390,2023,1,bahrain,sainz,1994-09-01,Spanish,ferrari,4,5684788.0,Finished,12.0,4
+3711,25391,2023,1,bahrain,hamilton,1985-01-07,British,mercedes,7,5687713.0,Finished,10.0,5
+3712,25392,2023,1,bahrain,stroll,1998-10-29,Canadian,aston_martin,8,5691238.0,Finished,8.0,6
+3713,25393,2023,1,bahrain,russell,1998-02-15,British,mercedes,6,5692609.0,Finished,6.0,7
+3714,25394,2023,1,bahrain,bottas,1989-08-28,Finnish,alfa,12,5709383.0,Finished,4.0,8
+3715,25395,2023,1,bahrain,gasly,1996-02-07,French,alpine,20,5710489.0,Finished,2.0,9
+3716,25396,2023,1,bahrain,albon,1996-03-23,Thai,williams,15,5726510.0,Finished,1.0,10
+3717,25397,2023,1,bahrain,tsunoda,2000-05-11,Japanese,alphatauri,14,5727606.0,Finished,0.0,11
+3718,25398,2023,1,bahrain,sargeant,2000-12-31,American,williams,16,,+1 Lap,0.0,12
+3719,25399,2023,1,bahrain,kevin_magnussen,1992-10-05,Danish,haas,17,,+1 Lap,0.0,13
+3720,25400,2023,1,bahrain,de_vries,1995-02-06,Dutch,alphatauri,19,,+1 Lap,0.0,14
+3721,25401,2023,1,bahrain,hulkenberg,1987-08-19,German,haas,10,,+1 Lap,0.0,15
+3722,25402,2023,1,bahrain,zhou,1999-05-30,Chinese,alfa,13,,+1 Lap,0.0,16
+3723,25403,2023,1,bahrain,norris,1999-11-13,British,mclaren,11,,+2 Laps,0.0,17
+3724,25404,2023,1,bahrain,ocon,1996-09-17,French,alpine,9,,Mechanical,0.0,18
+3725,25405,2023,1,bahrain,leclerc,1997-10-16,Monegasque,ferrari,3,,Engine,0.0,19
+3726,25406,2023,1,bahrain,piastri,2001-04-06,Australian,mclaren,18,,Electrical,0.0,20
+3727,25407,2023,2,jeddah,perez,1990-01-26,Mexican,red_bull,1,4874894.0,Finished,25.0,1
+3728,25408,2023,2,jeddah,max_verstappen,1997-09-30,Dutch,red_bull,15,4880249.0,Finished,19.0,2
+3729,25409,2023,2,jeddah,alonso,1981-07-29,Spanish,aston_martin,2,4895622.0,Finished,15.0,3
+3730,25410,2023,2,jeddah,russell,1998-02-15,British,mercedes,3,4900760.0,Finished,12.0,4
+3731,25411,2023,2,jeddah,hamilton,1985-01-07,British,mercedes,7,4905959.0,Finished,10.0,5
+3732,25412,2023,2,jeddah,sainz,1994-09-01,Spanish,ferrari,4,4910770.0,Finished,8.0,6
+3733,25413,2023,2,jeddah,leclerc,1997-10-16,Monegasque,ferrari,12,4918056.0,Finished,6.0,7
+3734,25414,2023,2,jeddah,ocon,1996-09-17,French,alpine,6,4927726.0,Finished,4.0,8
+3735,25415,2023,2,jeddah,gasly,1996-02-07,French,alpine,9,4929641.0,Finished,2.0,9
+3736,25416,2023,2,jeddah,kevin_magnussen,1992-10-05,Danish,haas,13,4939720.0,Finished,1.0,10
+3737,25417,2023,2,jeddah,tsunoda,2000-05-11,Japanese,alphatauri,16,4942388.0,Finished,0.0,11
+3738,25418,2023,2,jeddah,hulkenberg,1987-08-19,German,haas,10,4945482.0,Finished,0.0,12
+3739,25419,2023,2,jeddah,zhou,1999-05-30,Chinese,alfa,11,4950954.0,Finished,0.0,13
+3740,25420,2023,2,jeddah,de_vries,1995-02-06,Dutch,alphatauri,18,4952372.0,Finished,0.0,14
+3741,25421,2023,2,jeddah,piastri,2001-04-06,Australian,mclaren,8,4959915.0,Finished,0.0,15
+3742,25422,2023,2,jeddah,sargeant,2000-12-31,American,williams,20,4961187.0,Finished,0.0,16
+3743,25423,2023,2,jeddah,norris,1999-11-13,British,mclaren,19,4961339.0,Finished,0.0,17
+3744,25424,2023,2,jeddah,bottas,1989-08-28,Finnish,alfa,14,,+1 Lap,0.0,18
+3745,25425,2023,2,jeddah,albon,1996-03-23,Thai,williams,17,,Brakes,0.0,19
+3746,25426,2023,2,jeddah,stroll,1998-10-29,Canadian,aston_martin,5,,Engine,0.0,20
+3747,25427,2023,3,albert_park,max_verstappen,1997-09-30,Dutch,red_bull,1,9158371.0,Finished,25.0,1
+3748,25428,2023,3,albert_park,hamilton,1985-01-07,British,mercedes,3,9158550.0,Finished,18.0,2
+3749,25429,2023,3,albert_park,alonso,1981-07-29,Spanish,aston_martin,4,9159140.0,Finished,15.0,3
+3750,25430,2023,3,albert_park,stroll,1998-10-29,Canadian,aston_martin,6,9161453.0,Finished,12.0,4
+3751,25431,2023,3,albert_park,perez,1990-01-26,Mexican,red_bull,0,9161691.0,Finished,11.0,5
+3752,25432,2023,3,albert_park,norris,1999-11-13,British,mclaren,13,9162072.0,Finished,8.0,6
+3753,25433,2023,3,albert_park,hulkenberg,1987-08-19,German,haas,10,9163310.0,Finished,6.0,7
+3754,25434,2023,3,albert_park,piastri,2001-04-06,Australian,mclaren,16,9163753.0,Finished,4.0,8
+3755,25435,2023,3,albert_park,zhou,1999-05-30,Chinese,alfa,17,9164084.0,Finished,2.0,9
+3756,25436,2023,3,albert_park,tsunoda,2000-05-11,Japanese,alphatauri,12,9164423.0,Finished,1.0,10
+3757,25437,2023,3,albert_park,bottas,1989-08-28,Finnish,alfa,0,9164884.0,Finished,0.0,11
+3758,25438,2023,3,albert_park,sainz,1994-09-01,Spanish,ferrari,5,9164965.0,Finished,0.0,12
+3759,25439,2023,3,albert_park,gasly,1996-02-07,French,alpine,9,,Collision,0.0,13
+3760,25440,2023,3,albert_park,ocon,1996-09-17,French,alpine,11,,Collision,0.0,14
+3761,25441,2023,3,albert_park,de_vries,1995-02-06,Dutch,alphatauri,15,,Collision,0.0,15
+3762,25442,2023,3,albert_park,sargeant,2000-12-31,American,williams,18,,Collision,0.0,16
+3763,25443,2023,3,albert_park,kevin_magnussen,1992-10-05,Danish,haas,14,,Accident,0.0,17
+3764,25444,2023,3,albert_park,russell,1998-02-15,British,mercedes,2,,Engine,0.0,18
+3765,25445,2023,3,albert_park,albon,1996-03-23,Thai,williams,8,,Accident,0.0,19
+3766,25446,2023,3,albert_park,leclerc,1997-10-16,Monegasque,ferrari,7,,Collision,0.0,20

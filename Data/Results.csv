@@ -19,8 +19,8 @@
 17,1950,1,silverstone,graffenried,1914-05-18,Swiss,maserati,8,,Engine,0.0,17
 18,1950,1,silverstone,chiron,1899-08-03,Monegasque,maserati,11,,Clutch,0.0,18
 19,1950,1,silverstone,martin,1915-03-24,French,lago,7,,Oil pressure,0.0,19
-20,1950,1,silverstone,rolt,1918-10-16,British,era,10,,Gearbox,0.0,20
-21,1950,1,silverstone,peter_walker,1912-10-07,British,era,10,,Gearbox,0.0,20
+20,1950,1,silverstone,peter_walker,1912-10-07,British,era,10,,Gearbox,0.0,20
+21,1950,1,silverstone,rolt,1918-10-16,British,era,10,,Gearbox,0.0,20
 22,1950,1,silverstone,leslie_johnson,1912-03-22,British,era,12,,Supercharger,0.0,21
 23,1950,2,monaco,fangio,1911-06-24,Argentine,alfa,1,11598700.0,Finished,9.0,1
 24,1950,2,monaco,ascari,1918-07-13,Italian,ferrari,7,,+1 Lap,6.0,2
@@ -218,8 +218,8 @@
 216,1951,3,spa,sanesi,1911-03-28,Italian,alfa,6,,Radiator,0.0,11
 217,1951,3,spa,taruffi,1906-10-12,Italian,ferrari,5,,Transmission,0.0,12
 218,1951,3,spa,etancelin,1896-12-28,French,lago,10,,Transmission,0.0,13
-219,1951,4,reims,fagioli,1898-06-09,Italian,alfa,7,12131000.0,Finished,4.0,1
-220,1951,4,reims,fangio,1911-06-24,Argentine,alfa,7,12131000.0,Finished,5.0,1
+219,1951,4,reims,fangio,1911-06-24,Argentine,alfa,7,12131000.0,Finished,5.0,1
+220,1951,4,reims,fagioli,1898-06-09,Italian,alfa,7,12131000.0,Finished,4.0,1
 221,1951,4,reims,ascari,1918-07-13,Italian,ferrari,6,12189200.0,Finished,3.0,2
 222,1951,4,reims,gonzalez,1922-10-05,Argentine,ferrari,6,12189200.0,Finished,3.0,2
 223,1951,4,reims,villoresi,1909-05-16,Italian,ferrari,4,,+3 Laps,4.0,3
@@ -230,8 +230,8 @@
 228,1951,4,reims,chaboud,1907-04-12,French,lago,14,,+8 Laps,0.0,8
 229,1951,4,reims,guy_mairesse,1910-08-10,French,lago,19,,+11 Laps,0.0,9
 230,1951,4,reims,sanesi,1911-03-28,Italian,alfa,5,,+19 Laps,0.0,10
-231,1951,4,reims,fagioli,1898-06-09,Italian,alfa,1,,+22 Laps,0.0,11
-232,1951,4,reims,fangio,1911-06-24,Argentine,alfa,1,,+22 Laps,0.0,11
+231,1951,4,reims,fangio,1911-06-24,Argentine,alfa,1,,+22 Laps,0.0,11
+232,1951,4,reims,fagioli,1898-06-09,Italian,alfa,1,,+22 Laps,0.0,11
 233,1951,4,reims,claes,1916-08-11,Belgian,lago,12,,Accident,0.0,12
 234,1951,4,reims,rosier,1905-11-05,French,lago,13,,Transmission,0.0,13
 235,1951,4,reims,etancelin,1896-12-28,French,lago,10,,Engine,0.0,14
@@ -338,8 +338,8 @@
 336,1952,1,bremgarten,hirt,1910-03-30,Swiss,ferrari,19,,+6 Laps,0.0,7
 337,1952,1,bremgarten,brandon,1920-07-18,British,cooper,17,,+7 Laps,0.0,8
 338,1952,1,bremgarten,bira,1914-07-15,Thai,simca,11,,Engine,0.0,9
-339,1952,1,bremgarten,farina,1906-10-30,Italian,ferrari,4,,Magneto,0.0,10
-340,1952,1,bremgarten,simon,1920-01-05,French,ferrari,4,,Magneto,0.0,10
+339,1952,1,bremgarten,simon,1920-01-05,French,ferrari,4,,Magneto,0.0,10
+340,1952,1,bremgarten,farina,1906-10-30,Italian,ferrari,4,,Magneto,0.0,10
 341,1952,1,bremgarten,schell,1921-06-29,American,maserati,18,,Engine,0.0,11
 342,1952,1,bremgarten,moss,1929-09-17,British,hwm,9,,Withdrew,0.0,12
 343,1952,1,bremgarten,macklin,1919-09-02,British,hwm,12,,Withdrew,0.0,13
@@ -493,8 +493,8 @@
 491,1952,7,zandvoort,trintignant,1917-10-30,French,gordini,5,,+3 Laps,0.0,6
 492,1952,7,zandvoort,duncan_hamilton,1920-04-30,British,hwm,10,,+5 Laps,0.0,7
 493,1952,7,zandvoort,macklin,1919-09-02,British,hwm,9,,+6 Laps,0.0,8
-494,1952,7,zandvoort,flinterman,1919-10-02,Dutch,maserati,16,,+7 Laps,0.0,9
-495,1952,7,zandvoort,landi,1907-07-14,Brazilian,maserati,16,,+7 Laps,0.0,9
+494,1952,7,zandvoort,landi,1907-07-14,Brazilian,maserati,16,,+7 Laps,0.0,9
+495,1952,7,zandvoort,flinterman,1919-10-02,Dutch,maserati,16,,+7 Laps,0.0,9
 496,1952,7,zandvoort,wharton,1916-03-21,British,frazer_nash,7,,Wheel bearing,0.0,10
 497,1952,7,zandvoort,moss,1929-09-17,British,era,18,,Engine,0.0,11
 498,1952,7,zandvoort,lof,1919-08-23,Dutch,hwm,14,,Not classified,0.0,12
@@ -540,8 +540,8 @@
 538,1953,1,galvez,hawthorn,1929-04-10,British,ferrari,6,,+1 Lap,3.0,4
 539,1953,1,galvez,galvez,1913-08-17,Argentine,maserati,9,,+1 Lap,2.0,5
 540,1953,1,galvez,behra,1921-02-16,French,gordini,11,,+3 Laps,0.0,6
-541,1953,1,galvez,schell,1921-06-29,American,gordini,7,,+6 Laps,0.0,7
-542,1953,1,galvez,trintignant,1917-10-30,French,gordini,7,,+6 Laps,0.0,7
+541,1953,1,galvez,trintignant,1917-10-30,French,gordini,7,,+6 Laps,0.0,7
+542,1953,1,galvez,schell,1921-06-29,American,gordini,7,,+6 Laps,0.0,7
 543,1953,1,galvez,john_barber,1929-07-22,British,cooper,16,,+7 Laps,0.0,8
 544,1953,1,galvez,alan_brown,1919-11-20,British,cooper,12,,+10 Laps,0.0,9
 545,1953,1,galvez,manzon,1917-04-12,French,gordini,8,,Wheel,0.0,10
@@ -553,8 +553,8 @@
 551,1953,1,galvez,cruz,1923-06-28,Argentine,cooper,13,,Wheel,0.0,16
 552,1953,2,indianapolis,vukovich,1918-12-13,American,kurtis_kraft,1,13981690.0,Finished,9.0,1
 553,1953,2,indianapolis,cross,1918-01-24,American,kurtis_kraft,12,14192560.0,Finished,6.0,2
-554,1953,2,indianapolis,hanks,1914-07-13,American,kurtis_kraft,9,14233190.0,Finished,2.0,3
-555,1953,2,indianapolis,darter,1913-05-05,American,kurtis_kraft,9,14233190.0,Finished,2.0,3
+554,1953,2,indianapolis,darter,1913-05-05,American,kurtis_kraft,9,14233190.0,Finished,2.0,3
+555,1953,2,indianapolis,hanks,1914-07-13,American,kurtis_kraft,9,14233190.0,Finished,2.0,3
 556,1953,2,indianapolis,agabashian,1913-08-21,American,kurtis_kraft,2,14260930.0,Finished,,4
 557,1953,2,indianapolis,paul_russo,1914-04-10,American,kurtis_kraft,2,14260930.0,Finished,,4
 558,1953,2,indianapolis,mcgrath,1919-10-08,American,kurtis_kraft,3,14451330.0,Finished,2.0,5
@@ -573,18 +573,18 @@
 571,1953,2,indianapolis,bryan,1926-01-28,American,schroeder,31,,+17 Laps,0.0,14
 572,1953,2,indianapolis,rathmann,1928-07-16,American,kurtis_kraft,28,,Magneto,0.0,15
 573,1953,2,indianapolis,holland,1907-12-18,American,kurtis_kraft,28,,Magneto,0.0,15
-574,1953,2,indianapolis,linden,1922-04-05,American,kurtis_kraft,10,,Axle,0.0,16
-575,1953,2,indianapolis,ward,1921-01-10,American,kurtis_kraft,10,,Axle,0.0,16
+574,1953,2,indianapolis,ward,1921-01-10,American,kurtis_kraft,10,,Axle,0.0,16
+575,1953,2,indianapolis,linden,1922-04-05,American,kurtis_kraft,10,,Axle,0.0,16
 576,1953,2,indianapolis,dinsmore,1913-04-10,American,kurtis_kraft,10,,Axle,0.0,16
 577,1953,2,indianapolis,faulkner,1920-02-16,American,kurtis_kraft,14,,+24 Laps,0.0,17
 578,1953,2,indianapolis,mantz,1918-09-18,American,kurtis_kraft,14,,+24 Laps,0.0,17
 579,1953,2,indianapolis,teague,1921-02-22,American,kurtis_kraft,22,,Oil leak,0.0,18
-580,1953,2,indianapolis,thomson,1922-04-09,American,kurtis_kraft,18,,Oil leak,0.0,19
-581,1953,2,indianapolis,webb,1910-10-08,American,kurtis_kraft,18,,Oil leak,0.0,19
+580,1953,2,indianapolis,webb,1910-10-08,American,kurtis_kraft,18,,Oil leak,0.0,19
+581,1953,2,indianapolis,holmes,1920-09-04,American,kurtis_kraft,18,,Oil leak,0.0,19
 582,1953,3,zandvoort,ascari,1918-07-13,Italian,ferrari,1,10415800.0,Finished,8.0,1
 583,1953,3,zandvoort,farina,1906-10-30,Italian,ferrari,3,10426200.0,Finished,6.0,2
-584,1953,3,zandvoort,bonetto,1903-06-09,Italian,maserati,13,,+1 Lap,2.0,3
-585,1953,3,zandvoort,gonzalez,1922-10-05,Argentine,maserati,13,,+1 Lap,2.0,3
+584,1953,3,zandvoort,gonzalez,1922-10-05,Argentine,maserati,13,,+1 Lap,2.0,3
+585,1953,3,zandvoort,bonetto,1903-06-09,Italian,maserati,13,,+1 Lap,2.0,3
 586,1953,3,zandvoort,hawthorn,1929-04-10,British,ferrari,6,,+1 Lap,3.0,4
 587,1953,3,zandvoort,graffenried,1914-05-18,Swiss,maserati,7,,+2 Laps,2.0,5
 588,1953,3,zandvoort,trintignant,1917-10-30,French,gordini,12,,+3 Laps,0.0,6
@@ -612,8 +612,8 @@
 610,1953,4,spa,wacker,1918-07-10,American,gordini,15,,+4 Laps,0.0,9
 611,1953,4,spa,frere,1917-01-30,Belgian,hwm,11,,+6 Laps,0.0,10
 612,1953,4,spa,andre_pilette,1918-10-06,Belgian,connaught,18,,+7 Laps,0.0,11
-613,1953,4,spa,claes,1916-08-11,Belgian,maserati,10,,Accident,0.0,12
-614,1953,4,spa,fangio,1911-06-24,Argentine,maserati,10,,Accident,0.0,12
+613,1953,4,spa,fangio,1911-06-24,Argentine,maserati,10,,Accident,0.0,12
+614,1953,4,spa,claes,1916-08-11,Belgian,maserati,10,,Accident,0.0,12
 615,1953,4,spa,macklin,1919-09-02,British,hwm,17,,Engine,0.0,13
 616,1953,4,spa,farina,1906-10-30,Italian,ferrari,4,,Engine,0.0,14
 617,1953,4,spa,fangio,1911-06-24,Argentine,maserati,1,,Engine,0.0,15
@@ -681,8 +681,8 @@
 679,1953,7,nurburgring,graffenried,1914-05-18,Swiss,maserati,11,,+1 Lap,2.0,5
 680,1953,7,nurburgring,moss,1929-09-17,British,cooper,12,,+1 Lap,0.0,6
 681,1953,7,nurburgring,swaters,1926-10-30,American,ferrari,19,,+1 Lap,0.0,7
-682,1953,7,nurburgring,ascari,1918-07-13,Italian,ferrari,1,,+1 Lap,0.0,8
-683,1953,7,nurburgring,villoresi,1909-05-16,Italian,ferrari,1,,+1 Lap,0.0,8
+682,1953,7,nurburgring,villoresi,1909-05-16,Italian,ferrari,1,,+1 Lap,0.0,8
+683,1953,7,nurburgring,ascari,1918-07-13,Italian,ferrari,1,,+1 Lap,0.0,8
 684,1953,7,nurburgring,herrmann,1928-02-23,German,veritas,14,,+1 Lap,0.0,9
 685,1953,7,nurburgring,rosier,1905-11-05,French,ferrari,22,,+1 Lap,0.0,10
 686,1953,7,nurburgring,nuckey,1929-06-26,British,cooper,20,,+2 Laps,0.0,11
@@ -732,8 +732,8 @@
 730,1953,9,monza,hawthorn,1929-04-10,British,ferrari,6,,+1 Lap,3.0,4
 731,1953,9,monza,trintignant,1917-10-30,French,gordini,8,,+1 Lap,2.0,5
 732,1953,9,monza,mieres,1924-12-03,Argentine,gordini,16,,+3 Laps,0.0,6
-733,1953,9,monza,mantovani,1929-05-22,Italian,maserati,12,,+4 Laps,0.0,7
-734,1953,9,monza,musso,1924-07-28,Italian,maserati,12,,+4 Laps,0.0,7
+733,1953,9,monza,musso,1924-07-28,Italian,maserati,12,,+4 Laps,0.0,7
+734,1953,9,monza,mantovani,1929-05-22,Italian,maserati,12,,+4 Laps,0.0,7
 735,1953,9,monza,maglioli,1928-06-05,Italian,ferrari,11,,+5 Laps,0.0,8
 736,1953,9,monza,schell,1921-06-29,American,gordini,15,,+5 Laps,0.0,9
 737,1953,9,monza,chiron,1899-08-03,Monegasque,osca,25,,+8 Laps,0.0,10
@@ -860,8 +860,8 @@
 858,1954,5,silverstone,whitehouse,1909-04-01,British,connaught,19,,Fuel system,0.0,17
 859,1954,5,silverstone,behra,1921-02-16,French,gordini,5,,Suspension,0.0,18
 860,1954,5,silverstone,salvadori,1922-05-12,British,maserati,7,,Transmission,0.0,19
-861,1954,5,silverstone,flockhart,1923-06-16,British,maserati,10,,Accident,0.0,20
-862,1954,5,silverstone,bira,1914-07-15,Thai,maserati,10,,Accident,0.0,20
+861,1954,5,silverstone,bira,1914-07-15,Thai,maserati,10,,Accident,0.0,20
+862,1954,5,silverstone,flockhart,1923-06-16,British,maserati,10,,Accident,0.0,20
 863,1954,5,silverstone,ascari,1918-07-13,Italian,maserati,27,,Engine,0.0,21
 864,1954,5,silverstone,villoresi,1909-05-16,Italian,maserati,27,,Engine,0.0,21
 865,1954,5,silverstone,riseley_prichard,1924-01-17,British,connaught,21,,Accident,0.0,22
@@ -944,8 +944,8 @@
 942,1954,9,pedralbes,wharton,1916-03-21,British,maserati,14,,+6 Laps,0.0,8
 943,1954,9,pedralbes,bira,1914-07-15,Thai,maserati,15,,+12 Laps,0.0,9
 944,1954,9,pedralbes,mantovani,1929-05-22,Italian,maserati,10,,Brakes,0.0,10
-945,1954,9,pedralbes,graffenried,1914-05-18,Swiss,maserati,21,,Engine,0.0,11
-946,1954,9,pedralbes,volonterio,1917-12-07,Swiss,maserati,21,,Engine,0.0,11
+945,1954,9,pedralbes,volonterio,1917-12-07,Swiss,maserati,21,,Engine,0.0,11
+946,1954,9,pedralbes,graffenried,1914-05-18,Swiss,maserati,21,,Engine,0.0,11
 947,1954,9,pedralbes,herrmann,1928-02-23,German,mercedes,9,,Injection,0.0,12
 948,1954,9,pedralbes,trintignant,1917-10-30,French,ferrari,8,,Gearbox,0.0,13
 949,1954,9,pedralbes,pollet,1922-07-02,French,gordini,16,,Engine,0.0,14
@@ -958,27 +958,27 @@
 956,1954,9,pedralbes,manzon,1917-04-12,French,ferrari,17,,Engine,0.0,21
 957,1954,9,pedralbes,collins,1931-11-06,British,vanwall,0,,Accident,0.0,22
 958,1955,1,galvez,fangio,1911-06-24,Argentine,mercedes,3,10838600.0,Finished,9.0,1
-959,1955,1,galvez,trintignant,1917-10-30,French,ferrari,1,10928200.0,Finished,2.0,2
-960,1955,1,galvez,gonzalez,1922-10-05,Argentine,ferrari,1,10928200.0,Finished,2.0,2
-961,1955,1,galvez,farina,1906-10-30,Italian,ferrari,1,10928200.0,Finished,2.0,2
+959,1955,1,galvez,farina,1906-10-30,Italian,ferrari,1,10928200.0,Finished,2.0,2
+960,1955,1,galvez,trintignant,1917-10-30,French,ferrari,1,10928200.0,Finished,2.0,2
+961,1955,1,galvez,gonzalez,1922-10-05,Argentine,ferrari,1,10928200.0,Finished,2.0,2
 962,1955,1,galvez,trintignant,1917-10-30,French,ferrari,5,,+2 Laps,,3
 963,1955,1,galvez,farina,1906-10-30,Italian,ferrari,5,,+2 Laps,,3
 964,1955,1,galvez,maglioli,1928-06-05,Italian,ferrari,5,,+2 Laps,,3
-965,1955,1,galvez,kling,1910-09-16,German,mercedes,10,,+2 Laps,1.0,4
-966,1955,1,galvez,moss,1929-09-17,British,mercedes,10,,+2 Laps,1.0,4
-967,1955,1,galvez,herrmann,1928-02-23,German,mercedes,10,,+2 Laps,1.0,4
+965,1955,1,galvez,herrmann,1928-02-23,German,mercedes,10,,+2 Laps,1.0,4
+966,1955,1,galvez,kling,1910-09-16,German,mercedes,10,,+2 Laps,1.0,4
+967,1955,1,galvez,moss,1929-09-17,British,mercedes,10,,+2 Laps,1.0,4
 968,1955,1,galvez,mieres,1924-12-03,Argentine,maserati,16,,+5 Laps,2.0,5
 969,1955,1,galvez,schell,1921-06-29,American,maserati,7,,+8 Laps,0.0,6
 970,1955,1,galvez,behra,1921-02-16,French,maserati,7,,+8 Laps,0.0,6
 971,1955,1,galvez,schell,1921-06-29,American,maserati,18,,+13 Laps,0.0,7
 972,1955,1,galvez,musso,1924-07-28,Italian,maserati,18,,+13 Laps,0.0,7
 973,1955,1,galvez,mantovani,1929-05-22,Italian,maserati,18,,+13 Laps,0.0,7
-974,1955,1,galvez,behra,1921-02-16,French,maserati,19,,Engine,0.0,8
-975,1955,1,galvez,musso,1924-07-28,Italian,maserati,19,,Engine,0.0,8
-976,1955,1,galvez,mantovani,1929-05-22,Italian,maserati,19,,Engine,0.0,8
-977,1955,1,galvez,menditeguy,1914-08-10,Argentine,maserati,20,,Fuel pressure,0.0,9
-978,1955,1,galvez,bucci,1920-09-04,Argentine,maserati,20,,Fuel pressure,0.0,9
-979,1955,1,galvez,schell,1921-06-29,American,maserati,20,,Fuel pressure,0.0,9
+974,1955,1,galvez,mantovani,1929-05-22,Italian,maserati,19,,Engine,0.0,8
+975,1955,1,galvez,behra,1921-02-16,French,maserati,19,,Engine,0.0,8
+976,1955,1,galvez,musso,1924-07-28,Italian,maserati,19,,Engine,0.0,8
+977,1955,1,galvez,schell,1921-06-29,American,maserati,20,,Fuel pressure,0.0,9
+978,1955,1,galvez,menditeguy,1914-08-10,Argentine,maserati,20,,Fuel pressure,0.0,9
+979,1955,1,galvez,bucci,1920-09-04,Argentine,maserati,20,,Fuel pressure,0.0,9
 980,1955,1,galvez,iglesias,1922-02-22,Argentine,gordini,17,,Transmission,0.0,10
 981,1955,1,galvez,trintignant,1917-10-30,French,ferrari,14,,Engine,0.0,11
 982,1955,1,galvez,castellotti,1930-10-10,Italian,lancia,12,,Accident,0.0,12
@@ -989,8 +989,8 @@
 987,1955,1,galvez,bayol,1914-02-28,French,gordini,15,,Transmission,0.0,16
 988,1955,2,monaco,trintignant,1917-10-30,French,ferrari,9,10689800.0,Finished,8.0,1
 989,1955,2,monaco,castellotti,1930-10-10,Italian,lancia,4,10710000.0,Finished,6.0,2
-990,1955,2,monaco,behra,1921-02-16,French,maserati,5,,+1 Lap,2.0,3
-991,1955,2,monaco,perdisa,1932-10-21,Italian,maserati,5,,+1 Lap,2.0,3
+990,1955,2,monaco,perdisa,1932-10-21,Italian,maserati,5,,+1 Lap,2.0,3
+991,1955,2,monaco,behra,1921-02-16,French,maserati,5,,+1 Lap,2.0,3
 992,1955,2,monaco,farina,1906-10-30,Italian,ferrari,14,,+1 Lap,3.0,4
 993,1955,2,monaco,villoresi,1909-05-16,Italian,lancia,7,,+1 Lap,2.0,5
 994,1955,2,monaco,chiron,1899-08-03,Monegasque,lancia,19,,+5 Laps,0.0,6
@@ -1014,12 +1014,12 @@
 1012,1955,2,monaco,whiteaway,1928-11-01,British,hwm,0,,Did not qualify,0.0,22
 1013,1955,2,monaco,herrmann,1928-02-23,German,mercedes,0,,Did not qualify,0.0,23
 1014,1955,3,indianapolis,sweikert,1926-05-20,American,kurtis_kraft,14,14039530.0,Finished,8.0,1
-1015,1955,3,indianapolis,paul_russo,1914-04-10,American,kurtis_kraft,2,14203090.0,Finished,3.0,2
-1016,1955,3,indianapolis,bettenhausen,1916-09-12,American,kurtis_kraft,2,14203090.0,Finished,3.0,2
+1015,1955,3,indianapolis,bettenhausen,1916-09-12,American,kurtis_kraft,2,14203090.0,Finished,3.0,2
+1016,1955,3,indianapolis,paul_russo,1914-04-10,American,kurtis_kraft,2,14203090.0,Finished,3.0,2
 1017,1955,3,indianapolis,davies,1929-08-08,American,kurtis_kraft,10,14251890.0,Finished,4.0,3
 1018,1955,3,indianapolis,thomson,1922-04-09,American,kuzma,33,14258440.0,Finished,3.0,4
-1019,1955,3,indianapolis,faulkner,1920-02-16,American,kurtis_kraft,7,14356700.0,Finished,1.0,5
-1020,1955,3,indianapolis,homeier,1918-08-31,American,kurtis_kraft,7,14356700.0,Finished,1.0,5
+1019,1955,3,indianapolis,homeier,1918-08-31,American,kurtis_kraft,7,14356700.0,Finished,1.0,5
+1020,1955,3,indianapolis,faulkner,1920-02-16,American,kurtis_kraft,7,14356700.0,Finished,1.0,5
 1021,1955,3,indianapolis,linden,1922-04-05,American,kurtis_kraft,8,14397470.0,Finished,0.0,6
 1022,1955,3,indianapolis,herman,1927-03-15,American,kurtis_kraft,16,14423770.0,Finished,0.0,7
 1023,1955,3,indianapolis,connor,1928-10-09,American,kurtis_kraft,19,14441130.0,Finished,0.0,8
@@ -1081,12 +1081,12 @@
 1079,1955,6,aintree,kling,1910-09-16,German,mercedes,4,11313000.0,Finished,4.0,3
 1080,1955,6,aintree,taruffi,1906-10-12,Italian,mercedes,5,,+1 Lap,3.0,4
 1081,1955,6,aintree,musso,1924-07-28,Italian,maserati,9,,+1 Lap,2.0,5
-1082,1955,6,aintree,castellotti,1930-10-10,Italian,ferrari,12,,+3 Laps,0.0,6
-1083,1955,6,aintree,hawthorn,1929-04-10,British,ferrari,12,,+3 Laps,0.0,6
+1082,1955,6,aintree,hawthorn,1929-04-10,British,ferrari,12,,+3 Laps,0.0,6
+1083,1955,6,aintree,castellotti,1930-10-10,Italian,ferrari,12,,+3 Laps,0.0,6
 1084,1955,6,aintree,sparken,1930-06-16,French,gordini,23,,+9 Laps,0.0,7
 1085,1955,6,aintree,macklin,1919-09-02,British,maserati,16,,+11 Laps,0.0,8
-1086,1955,6,aintree,schell,1921-06-29,American,vanwall,15,,+18 Laps,0.0,9
-1087,1955,6,aintree,wharton,1916-03-21,British,vanwall,15,,+18 Laps,0.0,9
+1086,1955,6,aintree,wharton,1916-03-21,British,vanwall,15,,+18 Laps,0.0,9
+1087,1955,6,aintree,schell,1921-06-29,American,vanwall,15,,+18 Laps,0.0,9
 1088,1955,6,aintree,trintignant,1917-10-30,French,ferrari,13,,Overheating,0.0,10
 1089,1955,6,aintree,mieres,1924-12-03,Argentine,maserati,6,,Engine,0.0,11
 1090,1955,6,aintree,jack_brabham,1926-04-02,Australian,cooper,25,,Engine,0.0,12
@@ -1128,14 +1128,14 @@
 1126,1955,7,monza,villoresi,1909-05-16,Italian,ferrari,8,,Withdrew,0.0,22
 1127,1955,7,monza,piotti,1913-10-27,Italian,arzani-volpini,0,,Withdrew,0.0,23
 1128,1956,1,galvez,fangio,1911-06-24,Argentine,ferrari,3,10803700.0,Finished,5.0,1
-1129,1956,1,galvez,musso,1924-07-28,Italian,ferrari,3,10803700.0,Finished,5.0,1
+1129,1956,1,galvez,musso,1924-07-28,Italian,ferrari,3,10803700.0,Finished,4.0,1
 1130,1956,1,galvez,behra,1921-02-16,French,maserati,4,10828100.0,Finished,6.0,2
 1131,1956,1,galvez,hawthorn,1929-04-10,British,maserati,8,,+2 Laps,4.0,3
 1132,1956,1,galvez,gerini,1928-08-10,Italian,maserati,11,,+6 Laps,,4
 1133,1956,1,galvez,landi,1907-07-14,Brazilian,maserati,11,,+6 Laps,,4
 1134,1956,1,galvez,gendebien,1924-01-12,Belgian,ferrari,10,,+7 Laps,2.0,5
-1135,1956,1,galvez,oscar_gonzalez,1923-11-10,Uruguayan,maserati,13,,+10 Laps,0.0,6
-1136,1956,1,galvez,uria,1924-07-11,Uruguayan,maserati,13,,+10 Laps,0.0,6
+1135,1956,1,galvez,uria,1924-07-11,Uruguayan,maserati,13,,+10 Laps,0.0,6
+1136,1956,1,galvez,oscar_gonzalez,1923-11-10,Uruguayan,maserati,13,,+10 Laps,0.0,6
 1137,1956,1,galvez,moss,1929-09-17,British,maserati,7,,Engine,0.0,7
 1138,1956,1,galvez,collins,1931-11-06,British,ferrari,9,,Accident,0.0,8
 1139,1956,1,galvez,piotti,1913-10-27,Italian,maserati,12,,Accident,0.0,9
@@ -1144,11 +1144,11 @@
 1142,1956,1,galvez,gonzalez,1922-10-05,Argentine,maserati,5,,Engine,0.0,12
 1143,1956,1,galvez,fangio,1911-06-24,Argentine,ferrari,1,,Fuel pump,0.0,13
 1144,1956,2,monaco,moss,1929-09-17,British,maserati,2,10832900.0,Finished,8.0,1
-1145,1956,2,monaco,collins,1931-11-06,British,ferrari,9,10839000.0,Finished,3.0,2
-1146,1956,2,monaco,fangio,1911-06-24,Argentine,ferrari,9,10839000.0,Finished,4.0,2
+1145,1956,2,monaco,fangio,1911-06-24,Argentine,ferrari,9,10839000.0,Finished,4.0,2
+1146,1956,2,monaco,collins,1931-11-06,British,ferrari,9,10839000.0,Finished,3.0,2
 1147,1956,2,monaco,behra,1921-02-16,French,maserati,4,,+1 Lap,4.0,3
-1148,1956,2,monaco,castellotti,1930-10-10,Italian,ferrari,1,,+1 Lap,,4
-1149,1956,2,monaco,fangio,1911-06-24,Argentine,ferrari,1,,+1 Lap,,4
+1148,1956,2,monaco,fangio,1911-06-24,Argentine,ferrari,1,,+1 Lap,,4
+1149,1956,2,monaco,castellotti,1930-10-10,Italian,ferrari,1,,+1 Lap,,4
 1150,1956,2,monaco,ramos,1925-12-07,Brazilian,gordini,14,,+7 Laps,2.0,5
 1151,1956,2,monaco,bayol,1914-02-28,French,gordini,11,,+12 Laps,0.0,6
 1152,1956,2,monaco,andre_pilette,1918-10-06,Belgian,gordini,11,,+12 Laps,0.0,6
@@ -1214,14 +1214,14 @@
 1212,1956,5,reims,castellotti,1930-10-10,Italian,ferrari,2,9263700.0,Finished,6.0,2
 1213,1956,5,reims,behra,1921-02-16,French,maserati,7,9353300.0,Finished,4.0,3
 1214,1956,5,reims,fangio,1911-06-24,Argentine,ferrari,1,9358500.0,Finished,4.0,4
-1215,1956,5,reims,perdisa,1932-10-21,Italian,maserati,13,,+2 Laps,1.0,5
-1216,1956,5,reims,moss,1929-09-17,British,maserati,13,,+2 Laps,1.0,5
+1215,1956,5,reims,moss,1929-09-17,British,maserati,13,,+2 Laps,1.0,5
+1216,1956,5,reims,perdisa,1932-10-21,Italian,maserati,13,,+2 Laps,1.0,5
 1217,1956,5,reims,rosier,1905-11-05,French,maserati,12,,+3 Laps,0.0,6
 1218,1956,5,reims,godia,1921-03-21,Spanish,maserati,17,,+4 Laps,0.0,7
 1219,1956,5,reims,ramos,1925-12-07,Brazilian,gordini,14,,+4 Laps,0.0,8
 1220,1956,5,reims,manzon,1917-04-12,French,gordini,15,,+5 Laps,0.0,9
-1221,1956,5,reims,schell,1921-06-29,American,vanwall,6,,+5 Laps,0.0,10
-1222,1956,5,reims,hawthorn,1929-04-10,British,vanwall,6,,+5 Laps,0.0,10
+1221,1956,5,reims,hawthorn,1929-04-10,British,vanwall,6,,+5 Laps,0.0,10
+1222,1956,5,reims,schell,1921-06-29,American,vanwall,6,,+5 Laps,0.0,10
 1223,1956,5,reims,andre_pilette,1918-10-06,Belgian,gordini,19,,+6 Laps,0.0,11
 1224,1956,5,reims,simon,1920-01-05,French,maserati,20,,Engine,0.0,12
 1225,1956,5,reims,ramos,1925-12-07,Brazilian,maserati,16,,Engine,0.0,13
@@ -1242,8 +1242,8 @@
 1240,1956,6,silverstone,perdisa,1932-10-21,Italian,maserati,15,,+6 Laps,0.0,7
 1241,1956,6,silverstone,godia,1921-03-21,Spanish,maserati,25,,+7 Laps,0.0,8
 1242,1956,6,silverstone,manzon,1917-04-12,French,gordini,18,,+7 Laps,0.0,9
-1243,1956,6,silverstone,portago,1928-10-11,Spanish,ferrari,8,,+9 Laps,0.0,10
-1244,1956,6,silverstone,castellotti,1930-10-10,Italian,ferrari,8,,+9 Laps,0.0,10
+1243,1956,6,silverstone,castellotti,1930-10-10,Italian,ferrari,8,,+9 Laps,0.0,10
+1244,1956,6,silverstone,portago,1928-10-11,Spanish,ferrari,8,,+9 Laps,0.0,10
 1245,1956,6,silverstone,gerard,1914-01-19,British,cooper,22,,+13 Laps,0.0,11
 1246,1956,6,silverstone,moss,1929-09-17,British,maserati,1,,Axle,1.0,12
 1247,1956,6,silverstone,schell,1921-06-29,American,vanwall,5,,Fuel system,0.0,13
@@ -1338,8 +1338,8 @@
 1336,1957,2,monaco,jack_brabham,1926-04-02,Australian,cooper,15,,+5 Laps,0.0,6
 1337,1957,2,monaco,trips,1928-05-04,German,ferrari,9,,Engine,0.0,7
 1338,1957,2,monaco,hawthorn,1929-04-10,British,ferrari,9,,Engine,0.0,7
-1339,1957,2,monaco,schell,1921-06-29,American,maserati,14,,Oil leak,0.0,8
-1340,1957,2,monaco,scarlatti,1921-10-02,Italian,maserati,14,,Oil leak,0.0,8
+1339,1957,2,monaco,scarlatti,1921-10-02,Italian,maserati,14,,Oil leak,0.0,8
+1340,1957,2,monaco,schell,1921-06-29,American,maserati,14,,Oil leak,0.0,8
 1341,1957,2,monaco,flockhart,1923-06-16,British,brm,11,,Engine,0.0,9
 1342,1957,2,monaco,menditeguy,1914-08-10,Argentine,maserati,7,,Spun off,0.0,10
 1343,1957,2,monaco,bueb,1923-06-06,British,connaught,16,,Fuel leak,0.0,11
@@ -1403,8 +1403,8 @@
 1401,1957,5,aintree,moss,1929-09-17,British,vanwall,3,11197800.0,Finished,5.0,1
 1402,1957,5,aintree,musso,1924-07-28,Italian,ferrari,10,11223400.0,Finished,6.0,2
 1403,1957,5,aintree,hawthorn,1929-04-10,British,ferrari,5,11240600.0,Finished,4.0,3
-1404,1957,5,aintree,trintignant,1917-10-30,French,ferrari,9,,+2 Laps,3.0,4
-1405,1957,5,aintree,collins,1931-11-06,British,ferrari,9,,+2 Laps,0.0,4
+1404,1957,5,aintree,collins,1931-11-06,British,ferrari,9,,+2 Laps,0.0,4
+1405,1957,5,aintree,trintignant,1917-10-30,French,ferrari,9,,+2 Laps,3.0,4
 1406,1957,5,aintree,salvadori,1922-05-12,British,cooper,15,,+5 Laps,2.0,5
 1407,1957,5,aintree,gerard,1914-01-19,British,cooper,18,,+8 Laps,0.0,6
 1408,1957,5,aintree,lewis-evans,1930-04-20,British,vanwall,6,,+8 Laps,0.0,7
@@ -1472,8 +1472,8 @@
 1470,1957,8,monza,musso,1924-07-28,Italian,ferrari,9,,+5 Laps,0.0,8
 1471,1957,8,monza,godia,1921-03-21,Spanish,maserati,15,,+6 Laps,0.0,9
 1472,1957,8,monza,gould,1918-09-20,British,maserati,18,,+9 Laps,0.0,10
-1473,1957,8,monza,simon,1920-01-05,French,maserati,16,,+15 Laps,0.0,11
-1474,1957,8,monza,volonterio,1917-12-07,Swiss,maserati,16,,+15 Laps,0.0,11
+1473,1957,8,monza,volonterio,1917-12-07,Swiss,maserati,16,,+15 Laps,0.0,11
+1474,1957,8,monza,simon,1920-01-05,French,maserati,16,,+15 Laps,0.0,11
 1475,1957,8,monza,collins,1931-11-06,British,ferrari,7,,Engine,0.0,12
 1476,1957,8,monza,lewis-evans,1930-04-20,British,vanwall,1,,Engine,0.0,13
 1477,1957,8,monza,behra,1921-02-16,French,maserati,5,,Overheating,0.0,14
@@ -1601,8 +1601,8 @@
 1599,1958,6,reims,salvadori,1922-05-12,British,cooper,14,,+13 Laps,0.0,11
 1600,1958,6,reims,schell,1921-06-29,American,brm,3,,Overheating,0.0,12
 1601,1958,6,reims,behra,1921-02-16,French,brm,9,,Fuel pump,0.0,13
-1602,1958,6,reims,lewis-evans,1930-04-20,British,vanwall,10,,Engine,0.0,14
-1603,1958,6,reims,brooks,1932-02-25,British,vanwall,10,,Engine,0.0,14
+1602,1958,6,reims,brooks,1932-02-25,British,vanwall,10,,Engine,0.0,14
+1603,1958,6,reims,lewis-evans,1930-04-20,British,vanwall,10,,Engine,0.0,14
 1604,1958,6,reims,hill,1929-02-15,British,team_lotus,19,,Overheating,0.0,15
 1605,1958,6,reims,godia,1921-03-21,Spanish,maserati,11,,Accident,0.0,16
 1606,1958,6,reims,trintignant,1917-10-30,French,brm,7,,Fuel pump,0.0,17
@@ -25386,3 +25386,63 @@
 25384,2022,22,yas_marina,hamilton,1985-01-07,British,mercedes,5,,Hydraulics,0.0,18
 25385,2022,22,yas_marina,latifi,1995-06-29,Canadian,williams,20,,Collision damage,0.0,19
 25386,2022,22,yas_marina,alonso,1981-07-29,Spanish,alpine,10,,Water leak,0.0,20
+25387,2023,1,bahrain,max_verstappen,1997-09-30,Dutch,red_bull,1,5636736.0,Finished,25.0,1
+25388,2023,1,bahrain,perez,1990-01-26,Mexican,red_bull,2,5648723.0,Finished,18.0,2
+25389,2023,1,bahrain,alonso,1981-07-29,Spanish,aston_martin,5,5675373.0,Finished,15.0,3
+25390,2023,1,bahrain,sainz,1994-09-01,Spanish,ferrari,4,5684788.0,Finished,12.0,4
+25391,2023,1,bahrain,hamilton,1985-01-07,British,mercedes,7,5687713.0,Finished,10.0,5
+25392,2023,1,bahrain,stroll,1998-10-29,Canadian,aston_martin,8,5691238.0,Finished,8.0,6
+25393,2023,1,bahrain,russell,1998-02-15,British,mercedes,6,5692609.0,Finished,6.0,7
+25394,2023,1,bahrain,bottas,1989-08-28,Finnish,alfa,12,5709383.0,Finished,4.0,8
+25395,2023,1,bahrain,gasly,1996-02-07,French,alpine,20,5710489.0,Finished,2.0,9
+25396,2023,1,bahrain,albon,1996-03-23,Thai,williams,15,5726510.0,Finished,1.0,10
+25397,2023,1,bahrain,tsunoda,2000-05-11,Japanese,alphatauri,14,5727606.0,Finished,0.0,11
+25398,2023,1,bahrain,sargeant,2000-12-31,American,williams,16,,+1 Lap,0.0,12
+25399,2023,1,bahrain,kevin_magnussen,1992-10-05,Danish,haas,17,,+1 Lap,0.0,13
+25400,2023,1,bahrain,de_vries,1995-02-06,Dutch,alphatauri,19,,+1 Lap,0.0,14
+25401,2023,1,bahrain,hulkenberg,1987-08-19,German,haas,10,,+1 Lap,0.0,15
+25402,2023,1,bahrain,zhou,1999-05-30,Chinese,alfa,13,,+1 Lap,0.0,16
+25403,2023,1,bahrain,norris,1999-11-13,British,mclaren,11,,+2 Laps,0.0,17
+25404,2023,1,bahrain,ocon,1996-09-17,French,alpine,9,,Mechanical,0.0,18
+25405,2023,1,bahrain,leclerc,1997-10-16,Monegasque,ferrari,3,,Engine,0.0,19
+25406,2023,1,bahrain,piastri,2001-04-06,Australian,mclaren,18,,Electrical,0.0,20
+25407,2023,2,jeddah,perez,1990-01-26,Mexican,red_bull,1,4874894.0,Finished,25.0,1
+25408,2023,2,jeddah,max_verstappen,1997-09-30,Dutch,red_bull,15,4880249.0,Finished,19.0,2
+25409,2023,2,jeddah,alonso,1981-07-29,Spanish,aston_martin,2,4895622.0,Finished,15.0,3
+25410,2023,2,jeddah,russell,1998-02-15,British,mercedes,3,4900760.0,Finished,12.0,4
+25411,2023,2,jeddah,hamilton,1985-01-07,British,mercedes,7,4905959.0,Finished,10.0,5
+25412,2023,2,jeddah,sainz,1994-09-01,Spanish,ferrari,4,4910770.0,Finished,8.0,6
+25413,2023,2,jeddah,leclerc,1997-10-16,Monegasque,ferrari,12,4918056.0,Finished,6.0,7
+25414,2023,2,jeddah,ocon,1996-09-17,French,alpine,6,4927726.0,Finished,4.0,8
+25415,2023,2,jeddah,gasly,1996-02-07,French,alpine,9,4929641.0,Finished,2.0,9
+25416,2023,2,jeddah,kevin_magnussen,1992-10-05,Danish,haas,13,4939720.0,Finished,1.0,10
+25417,2023,2,jeddah,tsunoda,2000-05-11,Japanese,alphatauri,16,4942388.0,Finished,0.0,11
+25418,2023,2,jeddah,hulkenberg,1987-08-19,German,haas,10,4945482.0,Finished,0.0,12
+25419,2023,2,jeddah,zhou,1999-05-30,Chinese,alfa,11,4950954.0,Finished,0.0,13
+25420,2023,2,jeddah,de_vries,1995-02-06,Dutch,alphatauri,18,4952372.0,Finished,0.0,14
+25421,2023,2,jeddah,piastri,2001-04-06,Australian,mclaren,8,4959915.0,Finished,0.0,15
+25422,2023,2,jeddah,sargeant,2000-12-31,American,williams,20,4961187.0,Finished,0.0,16
+25423,2023,2,jeddah,norris,1999-11-13,British,mclaren,19,4961339.0,Finished,0.0,17
+25424,2023,2,jeddah,bottas,1989-08-28,Finnish,alfa,14,,+1 Lap,0.0,18
+25425,2023,2,jeddah,albon,1996-03-23,Thai,williams,17,,Brakes,0.0,19
+25426,2023,2,jeddah,stroll,1998-10-29,Canadian,aston_martin,5,,Engine,0.0,20
+25427,2023,3,albert_park,max_verstappen,1997-09-30,Dutch,red_bull,1,9158371.0,Finished,25.0,1
+25428,2023,3,albert_park,hamilton,1985-01-07,British,mercedes,3,9158550.0,Finished,18.0,2
+25429,2023,3,albert_park,alonso,1981-07-29,Spanish,aston_martin,4,9159140.0,Finished,15.0,3
+25430,2023,3,albert_park,stroll,1998-10-29,Canadian,aston_martin,6,9161453.0,Finished,12.0,4
+25431,2023,3,albert_park,perez,1990-01-26,Mexican,red_bull,0,9161691.0,Finished,11.0,5
+25432,2023,3,albert_park,norris,1999-11-13,British,mclaren,13,9162072.0,Finished,8.0,6
+25433,2023,3,albert_park,hulkenberg,1987-08-19,German,haas,10,9163310.0,Finished,6.0,7
+25434,2023,3,albert_park,piastri,2001-04-06,Australian,mclaren,16,9163753.0,Finished,4.0,8
+25435,2023,3,albert_park,zhou,1999-05-30,Chinese,alfa,17,9164084.0,Finished,2.0,9
+25436,2023,3,albert_park,tsunoda,2000-05-11,Japanese,alphatauri,12,9164423.0,Finished,1.0,10
+25437,2023,3,albert_park,bottas,1989-08-28,Finnish,alfa,0,9164884.0,Finished,0.0,11
+25438,2023,3,albert_park,sainz,1994-09-01,Spanish,ferrari,5,9164965.0,Finished,0.0,12
+25439,2023,3,albert_park,gasly,1996-02-07,French,alpine,9,,Collision,0.0,13
+25440,2023,3,albert_park,ocon,1996-09-17,French,alpine,11,,Collision,0.0,14
+25441,2023,3,albert_park,de_vries,1995-02-06,Dutch,alphatauri,15,,Collision,0.0,15
+25442,2023,3,albert_park,sargeant,2000-12-31,American,williams,18,,Collision,0.0,16
+25443,2023,3,albert_park,kevin_magnussen,1992-10-05,Danish,haas,14,,Accident,0.0,17
+25444,2023,3,albert_park,russell,1998-02-15,British,mercedes,2,,Engine,0.0,18
+25445,2023,3,albert_park,albon,1996-03-23,Thai,williams,8,,Accident,0.0,19
+25446,2023,3,albert_park,leclerc,1997-10-16,Monegasque,ferrari,7,,Collision,0.0,20
