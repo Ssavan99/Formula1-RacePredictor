@@ -24,7 +24,7 @@ export function mountCar(container) {
   }
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
 
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -39,7 +39,7 @@ export function mountCar(container) {
 
   // ---- materials -----------------------------------------------------------
   const bodyMat = new THREE.MeshStandardMaterial({
-    color: RED, metalness: 0.45, roughness: 0.32,
+    color: RED, metalness: 0.25, roughness: 0.28,
   });
   const carbonMat = new THREE.MeshStandardMaterial({
     color: CARBON, metalness: 0.6, roughness: 0.45,
@@ -68,25 +68,25 @@ export function mountCar(container) {
   box(5.3, 0.08, 1.5, carbonMat, 0.1, 0.20, 0);
 
   // Monocoque, tapering forward via three stacked segments.
-  box(1.5, 0.42, 0.95, bodyMat, -0.55, 0.44, 0);
-  box(1.3, 0.34, 0.66, bodyMat, -1.42, 0.42, 0);
-  box(1.0, 0.26, 0.40, bodyMat, -2.10, 0.42, 0);
+  box(1.5, 0.30, 0.86, bodyMat, -0.55, 0.40, 0);
+  box(1.3, 0.24, 0.58, bodyMat, -1.42, 0.38, 0);
+  box(1.0, 0.18, 0.34, bodyMat, -2.10, 0.36, 0);
 
   // Nose cone, thin and low.
-  const nose = box(0.9, 0.20, 0.26, bodyMat, -2.72, 0.38, 0);
+  const nose = box(1.05, 0.14, 0.20, bodyMat, -2.80, 0.33, 0);
   nose.rotation.z = -0.05;
 
   // Sidepods: bulky at the front, tapering into the coke-bottle.
   [-1, 1].forEach((side) => {
-    box(1.55, 0.44, 0.42, bodyMat, 0.30, 0.45, side * 0.52);
-    box(0.95, 0.30, 0.26, bodyMat, 1.25, 0.42, side * 0.36);
+    box(1.55, 0.34, 0.40, bodyMat, 0.30, 0.41, side * 0.52);
+    box(0.95, 0.22, 0.24, bodyMat, 1.25, 0.38, side * 0.36);
     // inlet
     box(0.10, 0.30, 0.34, carbonMat, -0.50, 0.47, side * 0.53);
   });
 
   // Engine cover + airbox above the driver.
-  box(1.9, 0.40, 0.44, bodyMat, 0.85, 0.72, 0);
-  box(0.55, 0.34, 0.34, carbonMat, -0.02, 0.86, 0);
+  box(1.9, 0.28, 0.36, bodyMat, 0.85, 0.63, 0);
+  box(0.46, 0.26, 0.28, carbonMat, -0.04, 0.74, 0);
 
   // Cockpit opening + helmet.
   box(0.62, 0.10, 0.52, carbonMat, -0.55, 0.66, 0);
@@ -108,15 +108,15 @@ export function mountCar(container) {
 
   // ---- wings ---------------------------------------------------------------
   // Front wing: main plane, upper flap, endplates.
-  box(0.62, 0.045, 2.00, wingMat, -3.05, 0.16, 0);
-  box(0.42, 0.040, 1.90, bodyMat, -2.92, 0.27, 0);
-  [-1, 1].forEach((s) => box(0.70, 0.34, 0.05, bodyMat, -3.02, 0.28, s * 1.0));
+  box(0.70, 0.030, 2.00, wingMat, -3.15, 0.13, 0);
+  box(0.46, 0.028, 1.92, bodyMat, -3.00, 0.23, 0);
+  [-1, 1].forEach((s) => box(0.78, 0.30, 0.04, bodyMat, -3.10, 0.24, s * 1.0));
 
   // Rear wing: raised main plane on twin pillars, with endplates.
-  box(0.66, 0.05, 1.05, wingMat, 2.55, 1.02, 0);
-  box(0.46, 0.045, 1.02, bodyMat, 2.72, 0.86, 0);
-  [-1, 1].forEach((s) => box(0.80, 0.46, 0.05, bodyMat, 2.60, 0.86, s * 0.52));
-  box(0.10, 0.62, 0.10, carbonMat, 2.45, 0.62, 0);
+  box(0.62, 0.035, 1.02, wingMat, 2.58, 0.92, 0);
+  box(0.42, 0.030, 1.00, bodyMat, 2.74, 0.79, 0);
+  [-1, 1].forEach((s) => box(0.74, 0.36, 0.035, bodyMat, 2.63, 0.79, s * 0.50));
+  box(0.08, 0.52, 0.08, carbonMat, 2.48, 0.58, 0);
   // Beam wing + diffuser hint
   box(0.30, 0.05, 0.90, carbonMat, 2.62, 0.42, 0);
   box(0.45, 0.26, 1.20, carbonMat, 2.30, 0.28, 0);
@@ -171,10 +171,12 @@ export function mountCar(container) {
   scene.add(car);
 
   // ---- lighting: key, rim, fill --------------------------------------------
-  scene.add(new THREE.HemisphereLight(0x9fb4ff, 0x0a0c10, 0.55));
+  scene.add(new THREE.HemisphereLight(0x8ea6d8, 0x08090c, 0.85));
 
-  const key = new THREE.DirectionalLight(0xffffff, 2.6);
-  key.position.set(4, 6, 4);
+  // Key light does the describing: strong, white, high and to the front so the
+  // bodywork's curvature is legible rather than flat.
+  const key = new THREE.DirectionalLight(0xffffff, 4.2);
+  key.position.set(5, 7, 5);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
   key.shadow.camera.near = 1;
@@ -185,14 +187,21 @@ export function mountCar(container) {
   key.shadow.camera.bottom = -6;
   scene.add(key);
 
-  // Red rim light from behind — this is what gives the silhouette its edge.
-  const rim = new THREE.DirectionalLight(0xff2a44, 3.0);
-  rim.position.set(-6, 2.5, -5);
+  // Rim light picks out the silhouette. Kept low: at high intensity it stops
+  // being an edge and becomes a red wash over the whole car.
+  const rim = new THREE.DirectionalLight(0xff4059, 1.1);
+  rim.position.set(-7, 3, -6);
   scene.add(rim);
 
-  const fill = new THREE.DirectionalLight(0x6f8cff, 0.9);
-  fill.position.set(-3, 1.5, 6);
+  // Cool fill lifts the shadow side so the underbody is not a black hole.
+  const fill = new THREE.DirectionalLight(0x7d9bff, 1.0);
+  fill.position.set(-4, 2, 7);
   scene.add(fill);
+
+  // Small warm kicker along the flank, for a highlight to travel down.
+  const kicker = new THREE.DirectionalLight(0xffd9a8, 0.7);
+  kicker.position.set(2, 1.2, 8);
+  scene.add(kicker);
 
   // Ground: catches the shadow so the car sits in the scene rather than floating.
   const ground = new THREE.Mesh(
@@ -249,7 +258,7 @@ export function mountCar(container) {
     const lead = pointer + steer;
 
     // Slow turntable, nudged by the cursor rather than driven by it.
-    car.rotation.y = -0.55 + Math.sin(t * 0.18) * 0.16 + lead * 0.42;
+    car.rotation.y = 0.30 + Math.sin(t * 0.18) * 0.14 + lead * 0.38;
     car.rotation.z = -lead * 0.045;          // roll into the direction of travel
     car.position.y = -0.25 + (reduced ? 0 : Math.sin(t * 3.1) * 0.012); // suspension
 
@@ -260,11 +269,11 @@ export function mountCar(container) {
 
     // Camera drifts a little so the shot never feels frozen.
     camera.position.set(
-      6.4 + lead * 0.5,
-      2.5 + Math.sin(t * 0.24) * 0.22,
-      6.0 - lead * 0.9
+      -5.9 + lead * 0.5,
+      1.30 + Math.sin(t * 0.24) * 0.10,
+      5.4 - lead * 0.7
     );
-    camera.lookAt(0, 0.25, 0);
+    camera.lookAt(-0.15, 0.34, 0);
     renderer.render(scene, camera);
   }
   frame();
