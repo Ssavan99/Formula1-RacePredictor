@@ -1,0 +1,99 @@
+name: Weekly refresh and pre-weekend prediction
+
+# Calendar-driven, on a fixed schedule, rather than "N days after the last
+# race". A previous-race trigger has no season opener and breaks on calendar
+# gaps and back-to-back weekends; a standing weekly job that asks "is there a
+# race soon?" handles all three cases identically.
+#
+# The calendar is refetched on every run, not once in January: it genuinely
+# changes mid-season (the 2026 schedule lists round 16 as "Bahrain Grand Prix
+# in Malaysia"), and it is one cheap request.
+on:
+  schedule:
+    - cron: "0 6 * * 2"   # Tuesdays, 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      force_predict:
+        description: "Predict even if no race is within the window"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: f1-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      # Completed seasons are immutable, so a warm cache reduces the weekly
+      # cost to roughly a dozen requests against a 200/hour limit.
+      - name: Restore API cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: f1-api-cache-${{ github.run_id }}
+          restore-keys: f1-api-cache-
+
+      - run: pip install -r requirements.txt
+
+      - name: Refresh dataset (current season only)
+        run: python -m f1predict.data.update
+
+      - name: Settle predictions for races that have now run
+        run: python -m f1predict.settle
+
+      - name: Predict the upcoming race
+        run: |
+          python -m f1predict.cli predict \
+            --view pre_quali \
+            --within-days 10 \
+            ${{ inputs.force_predict && '--force' || '' }}
+
+      - name: Commit
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/processed docs/data
+          if git diff --staged --quiet; then
+            echo "nothing changed"
+          else
+            git commit -m "Weekly refresh: $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      # A silently-failing pipeline that keeps serving a stale prediction is
+      # worse than one that stops, so surface breakage as an issue.
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Weekly refresh failed';
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: 'automation'
+            });
+            const body = `Run failed: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+
+            Most likely causes: the Jolpica schema changed, the rate limit was
+            hit, or Open-Meteo was unreachable.`;
+            if (existing.data.some(i => i.title === title)) {
+              console.log('issue already open');
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title, body, labels: ['automation']
+              });
+            }

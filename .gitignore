@@ -127,3 +127,16 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# --- revive/2026-refresh additions ---
+.venv/
+data/cache/
+data/raw/
+models/*.joblib
+
+# data/processed/ IS committed: it is small, and it lets the scheduled job
+# update incrementally instead of doing a cold backfill against a 200/hr API.
+.pytest_cache/
+
+# Local editor/preview config
+.claude/
