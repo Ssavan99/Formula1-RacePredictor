@@ -137,3 +137,6 @@ models/*.joblib
 # data/processed/ IS committed: it is small, and it lets the scheduled job
 # update incrementally instead of doing a cold backfill against a 200/hr API.
 .pytest_cache/
+
+# Local editor/preview config
+.claude/
