@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# --- revive/2026-refresh additions ---
+.venv/
+data/cache/
+data/raw/
+*.parquet
+models/*.joblib
+.pytest_cache/
