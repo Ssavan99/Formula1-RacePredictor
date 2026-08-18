@@ -290,6 +290,23 @@ def add_form_features(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def normalise_grid(df: pd.DataFrame) -> pd.DataFrame:
+    """Turn a pit-lane start into a back-of-grid position.
+
+    Ergast (and Jolpica after it) encode a pit-lane start as ``grid = 0``. Left
+    alone that sorts *ahead* of pole under any "lower grid is better" rule, so
+    every consumer -- the pole-sitter baseline included -- would treat a pit-lane
+    start as the best possible position. Map it to one past the back of that
+    race's grid instead.
+    """
+    grid = pd.to_numeric(df["grid"], errors="coerce")
+    back_of_grid = (
+        grid.where(grid > 0).groupby([df["season"], df["round"]]).transform("max") + 1
+    )
+    df["grid"] = grid.where(grid > 0, back_of_grid)
+    return df
+
+
 def add_targets(df: pd.DataFrame) -> pd.DataFrame:
     df["is_winner"] = (df["finish_position"] == 1).astype(int)
     df["is_podium"] = (df["finish_position"] <= 3).astype(int)
@@ -365,14 +382,18 @@ def build_dataset(
     if not sprint_df.empty:
         df = df.merge(sprint_df, on=["season", "round", "driver_id"], how="left")
 
+    df = normalise_grid(df)
     df = add_championship_state(df)
     df = add_form_features(df)
     df = add_targets(df)
 
+    # Trim before fetching weather: the warm-up seasons exist only to populate
+    # form and career features, and their rows are discarded, so fetching
+    # weather for them would be several dozen wasted requests.
+    df = df[df["season"] >= start_season].reset_index(drop=True)
+
     if weather is not None:
         df = attach_weather(df, weather)
-
-    df = df[df["season"] >= start_season].reset_index(drop=True)
     return df.sort_values(["race_date", "round", "finish_position"]).reset_index(
         drop=True
     )
@@ -396,12 +417,18 @@ def validate_standings(df: pd.DataFrame, client: JolpicaClient, season: int) -> 
     season_rows = df[df["season"] == season]
     if season_rows.empty:
         return {"season": season, "checked": 0}
-    final_round = season_rows["round"].max()
-    last = season_rows[season_rows["round"] == final_round]
-    derived = (
-        last.set_index("driver_id")["driver_points_before"]
-        + last.set_index("driver_id")["total_race_points"]
-    ).to_dict()
+
+    # Take each driver's *own last appearance*, not the season's final round.
+    # Mid-season replacements and departures (de Vries 2023, Sargeant 2024,
+    # Doohan 2025) have no row in the finale, and reading the finale alone
+    # reports them as mismatches when the derivation is in fact correct.
+    last = (
+        season_rows.sort_values("round")
+        .groupby("driver_id", as_index=False)
+        .last()
+        .set_index("driver_id")
+    )
+    derived = (last["driver_points_before"] + last["total_race_points"]).to_dict()
 
     mismatches = {
         driver: (round(derived.get(driver, float("nan")), 1), points)

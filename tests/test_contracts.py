@@ -98,10 +98,24 @@ class TestPrefixResolution:
     def test_one_hot_constructor_is_pre_quali(self):
         assert availability_of("constructor_ferrari") is Availability.PRE_QUALI
 
-    def test_exact_match_beats_prefix(self):
-        """`constructor_points_before` must not be read as a one-hot column."""
+    def test_exact_match_beats_prefix(self, monkeypatch):
+        """An exact registry entry must win over a matching prefix rule.
+
+        Tested with an injected conflict rather than a real column: today no
+        registered column disagrees with its prefix, so a real example would
+        pass for the wrong reason and stop protecting anything.
+        """
+        from f1predict.data import contracts
+
+        monkeypatch.setitem(
+            contracts.REGISTRY, "status_special_case", Availability.PRE_QUALI
+        )
+        # The `status_` prefix says POST_RACE; the exact entry must override it.
+        assert availability_of("status_special_case") is Availability.PRE_QUALI
+        assert availability_of("status_anything_else") is Availability.POST_RACE
+
+    def test_constructor_points_is_not_read_as_a_one_hot_column(self):
         assert availability_of("constructor_points_before") is Availability.PRE_QUALI
-        assert availability_of("constructor_id") is Availability.IDENTIFIER
 
     def test_unknown_status_column_still_banned_by_prefix(self):
         assert availability_of("status_Disqualified") is Availability.POST_RACE

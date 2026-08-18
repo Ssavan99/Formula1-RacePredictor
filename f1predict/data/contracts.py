@@ -66,8 +66,16 @@ REGISTRY: dict[str, Availability] = {
     "race_date": Availability.IDENTIFIER,
     "race_name": Availability.IDENTIFIER,
     "driver_id": Availability.IDENTIFIER,
-    "constructor_id": Availability.IDENTIFIER,
-    "circuit_id": Availability.IDENTIFIER,
+    "driver_dob": Availability.IDENTIFIER,  # `driver_age` is the usable form
+    "race_time_utc": Availability.IDENTIFIER,  # scheduling; used for weather window
+    "circuit_lat": Availability.IDENTIFIER,  # join key for weather, not a feature
+    "circuit_lon": Availability.IDENTIFIER,
+    # Which team a driver is in, and which track they are at, are both known
+    # well before the race and were one-hot features in the original model.
+    # They are join keys as well as features; the registry classifies them by
+    # when they become knowable, which is what the guard cares about.
+    "constructor_id": Availability.PRE_QUALI,
+    "circuit_id": Availability.PRE_QUALI,
     # --- targets -----------------------------------------------------------
     "finish_position": Availability.TARGET,
     "is_winner": Availability.TARGET,
@@ -120,6 +128,18 @@ REGISTRY: dict[str, Availability] = {
     "race_time_ms": Availability.POST_RACE,
     "fastest_lap_rank": Availability.POST_RACE,
     "podium": Availability.POST_RACE,  # original column name; ambiguous, banned
+    "position_text": Availability.POST_RACE,
+    # Intermediates used to *build* the shifted pre-race features. They describe
+    # the race being predicted, so they are inputs to feature construction and
+    # never features themselves. `driver_dnf_rate_5` is the admissible,
+    # shifted form of `did_not_finish`; `driver_points_before` of these points.
+    "did_not_finish": Availability.POST_RACE,
+    "is_win": Availability.POST_RACE,
+    "total_race_points": Availability.POST_RACE,
+    # The sprint runs on the Saturday of the same weekend. Treated as post-race
+    # rather than post-qualifying: it is part of the weekend's outcome, and the
+    # gain from using it does not justify the risk of it standing in for form.
+    "sprint_points": Availability.POST_RACE,
 }
 
 
