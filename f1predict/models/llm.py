@@ -59,7 +59,12 @@ API_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
     "{model}:generateContent"
 )
-DEFAULT_MODEL = "gemini-2.0-flash"
+# Deliberately the OLDEST generation this key can still reach. A newer model has
+# a later training cutoff, which means a SMALLER window of races it has not
+# already seen -- and that window is the only thing this entrant can honestly be
+# scored on. Checked against the live model list on 2026-08-18: gemini-2.0-flash
+# no longer exists and gemini-2.5-flash is closed to new keys.
+DEFAULT_MODEL = "gemini-3.1-flash-lite"
 ENV_KEY = "GEMINI_API_KEY"
 
 #: Races before this are assumed contaminated until the probe says otherwise.

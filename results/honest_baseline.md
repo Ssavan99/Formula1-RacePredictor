@@ -432,3 +432,61 @@ The useful lesson is that the gain came from making the model *less* willing to
 back its own marginal opinions, not from more capacity. Its confident calls were
 already excellent (0.809 when it agreed with pole); the losses were all in the
 margin.
+
+---
+
+# LLM entrant — measured, on the only window where measuring is honest
+
+An LLM cannot enter the main backtest: it was trained on text describing those
+races, so asking it to predict 2024 Monaco is asking it to recall. That is the
+same failure as the `status_*` leak, arriving through the weights instead of a
+column.
+
+## Measuring the contamination rather than trusting a docs page
+
+`probe_llm.py` asks who won four races per season, walking forward, with the
+model explicitly allowed to answer UNKNOWN:
+
+| Season | Winners recalled | Said UNKNOWN | Verdict |
+|---|---|---|---|
+| 2020 | 1.00 | 0.00 | contaminated |
+| 2021 | 1.00 | 0.00 | contaminated |
+| 2022 | 1.00 | 0.00 | contaminated |
+| 2023 | 1.00 | 0.00 | contaminated |
+| 2024 | 1.00 | 0.00 | contaminated |
+| **2025** | **0.00** | **1.00** | **usable** |
+| **2026** | **0.00** | **1.00** | **usable** |
+
+A clean step. It recalls every winner through 2024 and honestly says UNKNOWN
+from 2025 — no hallucination, and no sign of live search grounding, which would
+have shown up as continued recall. `gemini-3.1-flash-lite` was chosen precisely
+because it is the oldest generation the key can still reach: a newer model would
+have a later cutoff and therefore a *smaller* honest window.
+
+## Result on the 35 clean races
+
+All entrants re-scored on exactly those races, pre-qualifying view (the LLM gets
+no grid, so neither does anything it is compared against):
+
+| Model | Top-1 | Podium |
+|---|---|---|
+| naive: previous winner | 0.343 [0.20, 0.51] | 0.316 |
+| naive: most wins so far | 0.293 [0.16, 0.44] | 0.565 |
+| lightgbm: lambdarank | 0.286 [0.14, 0.43] | 0.552 |
+| naive: championship leader | 0.260 [0.12, 0.40] | 0.589 |
+| **llm: gemini** | **0.229** [0.09, 0.37] | 0.562 |
+| naive: best recent form | 0.214 [0.09, 0.36] | 0.512 |
+| naive: random | 0.057 [0.00, 0.14] | 0.124 |
+
+**The LLM lands mid-table**: clearly better than random, comparable to the
+others at ordering the podium (0.562), and below both the tabular model and
+three of the simple heuristics at picking the winner.
+
+At n=35 the interval is about ±15 points, so nothing here is separable and this
+ranks the entrants only loosely. But it is evidence of absence of a large
+effect: reasoning over the same tabular features in prose does not beat fitting
+a model to them. That is the outcome the sceptical prior expected, and it is
+worth having measured rather than assumed.
+
+It stays in the project as a forward-testing entrant, labelled as preliminary,
+and it is never mixed into the main backtest table.

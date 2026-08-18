@@ -1,0 +1,29 @@
+season,round,race,actual,answered,said_unknown,correct
+2020,1,Austrian Grand Prix,bottas,Bottas,False,True
+2020,5,70th Anniversary Grand Prix,verstappen,Verstappen,False,True
+2020,9,Tuscan Grand Prix,hamilton,Hamilton,False,True
+2020,13,Emilia Romagna Grand Prix,hamilton,Hamilton,False,True
+2021,1,Bahrain Grand Prix,hamilton,Hamilton,False,True
+2021,6,Azerbaijan Grand Prix,perez,Perez,False,True
+2021,11,Hungarian Grand Prix,ocon,Ocon,False,True
+2021,16,Turkish Grand Prix,bottas,Bottas,False,True
+2022,1,Bahrain Grand Prix,leclerc,Leclerc,False,True
+2022,6,Spanish Grand Prix,verstappen,Verstappen,False,True
+2022,11,Austrian Grand Prix,leclerc,Leclerc,False,True
+2022,16,Italian Grand Prix,verstappen,Verstappen,False,True
+2023,1,Bahrain Grand Prix,verstappen,Verstappen,False,True
+2023,6,Monaco Grand Prix,verstappen,Verstappen,False,True
+2023,11,Hungarian Grand Prix,verstappen,Verstappen,False,True
+2023,16,Japanese Grand Prix,verstappen,Verstappen,False,True
+2024,1,Bahrain Grand Prix,verstappen,Verstappen,False,True
+2024,7,Emilia Romagna Grand Prix,verstappen,Verstappen,False,True
+2024,13,Hungarian Grand Prix,piastri,Piastri,False,True
+2024,19,United States Grand Prix,leclerc,Leclerc,False,True
+2025,1,Australian Grand Prix,norris,UNKNOWN,True,False
+2025,7,Emilia Romagna Grand Prix,verstappen,UNKNOWN,True,False
+2025,13,Belgian Grand Prix,piastri,UNKNOWN,True,False
+2025,19,United States Grand Prix,verstappen,UNKNOWN,True,False
+2026,1,Australian Grand Prix,russell,UNKNOWN,True,False
+2026,3,Japanese Grand Prix,antonelli,UNKNOWN,True,False
+2026,5,Canadian Grand Prix,antonelli,UNKNOWN,True,False
+2026,7,Barcelona Grand Prix,hamilton,UNKNOWN,True,False
