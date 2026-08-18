@@ -203,7 +203,7 @@ function setupNumbers() {
 async function setupGarage() {
   const layer = $("#drive-layer");
   try {
-    const { mountSiteCar } = await import("./car.js?v=6");
+    const { mountSiteCar } = await import("./car.js?v=10");
     const toggle = $("[data-car-toggle]");
     const toggleLabel = $("[data-car-toggle-label]");
     const hint = $("#garage-hint");

@@ -92,6 +92,7 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
     steerInput: 0,
     driving: true,
     dragging: null,
+    settling: null,
     lastTime: performance.now()
   };
 
@@ -104,6 +105,9 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
     state.driving = driving;
     state.speed = driving ? state.speed : 0;
     state.steering = 0;
+    state.throttle = 0;
+    state.steerInput = 0;
+    state.settling = null;
     keys.clear();
     car.classList.toggle("is-parked", !driving);
     emitState();
@@ -119,6 +123,7 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
     state.throttle = 0;
     state.steerInput = 0;
     previousTrack = null;
+    state.settling = null;
     setDriving(true);
     car.focus({ preventScroll: true });
   }
@@ -139,12 +144,11 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
     const focusedControl = document.activeElement?.closest?.("button, a, [role='tab']");
     if (focusedControl && focusedControl !== car) return;
     event.preventDefault();
+    state.settling = null;
     keys.add(key);
     if (!event.repeat) {
-      if (key === "arrowup" || key === "w") state.speed = clamp(state.speed + 72, -360, 760);
-      if (key === "arrowdown" || key === "s") state.speed = clamp(state.speed - 58, -360, 760);
-      if (key === "arrowleft" || key === "a") state.angle -= .045;
-      if (key === "arrowright" || key === "d") state.angle += .045;
+      if (key === "arrowup" || key === "w") state.speed = clamp(state.speed + 30, -240, 620);
+      if (key === "arrowdown" || key === "s") state.speed = clamp(state.speed - 24, -240, 620);
     }
     car.classList.add("is-moving");
   });
@@ -161,7 +165,8 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
     event.preventDefault();
     car.setPointerCapture(event.pointerId);
     car.focus({ preventScroll: true });
-    state.dragging = { id: event.pointerId, startX: event.clientX, startY: event.clientY, carX: state.x, carY: state.y, moved: false };
+    state.settling = null;
+    state.dragging = { id: event.pointerId, startX: event.clientX, startY: event.clientY, pointerX: event.clientX, pointerY: event.clientY, lastX: event.clientX, lastY: event.clientY, lastTime: performance.now(), carX: state.x, carY: state.y, targetX: state.x, targetY: state.y, targetAngle: state.angle, moved: false };
     state.speed = 0;
     car.classList.add("is-grabbed");
   });
@@ -170,78 +175,210 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
     if (!drag || drag.id !== event.pointerId) return;
     const dx = event.clientX - drag.startX;
     const dy = event.clientY - drag.startY;
+    const now = performance.now();
+    const elapsed = Math.max((now - drag.lastTime) / 1000, .008);
+    const segmentX = event.clientX - drag.lastX, segmentY = event.clientY - drag.lastY;
     drag.moved ||= Math.hypot(dx, dy) > 5;
-    state.x = clamp(drag.carX + dx, 18, innerWidth - 104);
-    state.y = clamp(drag.carY + dy, 18, innerHeight - 166);
-    if (Math.hypot(dx, dy) > 4) state.angle = Math.atan2(dx, -dy);
+    drag.pointerX = event.clientX;
+    drag.pointerY = event.clientY;
+    const bounds = safeBounds();
+    drag.targetX = clamp(drag.carX + dx, bounds.left, bounds.right);
+    drag.targetY = clamp(drag.carY + dy, bounds.top, bounds.bottom);
+    if (Math.hypot(segmentX, segmentY) > 2) {
+      const nextAngle = Math.atan2(segmentX, -segmentY);
+      state.speed = clamp(Math.hypot(segmentX, segmentY) / elapsed, 0, 620);
+      state.steering = clamp(angleDelta(drag.targetAngle, nextAngle) / elapsed, -3, 3);
+      drag.targetAngle = nextAngle;
+    }
+    // Keep quick pointer gestures attached to the car while the animation loop
+    // supplies the softer spring finish. This prevents a fast drag from feeling
+    // like the car is towing behind the cursor.
+    state.x += (drag.targetX - state.x) * .58;
+    state.y += (drag.targetY - state.y) * .58;
+    state.angle += angleDelta(state.angle, drag.targetAngle) * .34;
+    drag.lastX = event.clientX; drag.lastY = event.clientY; drag.lastTime = now;
   });
   function releasePointer(event) {
     if (!state.dragging || state.dragging.id !== event.pointerId) return;
-    const wasMoved = state.dragging.moved;
+    const target = { x: state.dragging.targetX, y: state.dragging.targetY, angle: state.dragging.targetAngle, until: performance.now() + 480 };
     if (car.hasPointerCapture(event.pointerId)) car.releasePointerCapture(event.pointerId);
-    state.dragging = wasMoved ? { moved: true } : null;
+    state.dragging = null;
+    state.settling = target;
     car.classList.remove("is-grabbed");
-    requestAnimationFrame(() => { state.dragging = null; });
   }
   car.addEventListener("pointerup", releasePointer);
   car.addEventListener("pointercancel", releasePointer);
 
-  function edgeScroll(dt, verticalVelocity) {
-    const verticalMargin = Math.min(150, innerHeight * .22);
-    let scrollVelocity = 0;
-    if (state.y < verticalMargin && scrollY > 0 && verticalVelocity < -20) {
-      scrollVelocity = -clamp(Math.min((verticalMargin - state.y) * 5.2, Math.abs(verticalVelocity)), 0, 620);
-      state.y = Math.max(state.y, 44);
-    } else if (state.y > innerHeight - verticalMargin - 150 && scrollY + innerHeight < document.documentElement.scrollHeight - 1 && verticalVelocity > 20) {
-      scrollVelocity = clamp(Math.min((state.y - (innerHeight - verticalMargin - 150)) * 5.2, Math.abs(verticalVelocity)), 0, 620);
-      state.y = Math.min(state.y, innerHeight - 72);
+  // Free-drive band, as a fraction of the viewport, in which the page does not
+  // move at all. Outside it the camera follows.
+  const FREE_BAND = 0.46;
+
+  /**
+   * Camera follow: the car pushes the page instead of bumping into it.
+   *
+   * The previous behaviour gated scrolling behind a velocity threshold and a
+   * narrow 64px edge strip, so the car crawled into the boundary and nudged the
+   * page in steps -- the "bumping" that made it feel slow and clunky.
+   *
+   * Instead: leave a generous band in the middle of the viewport where driving
+   * is completely free, and once the car crosses it, scroll by exactly the
+   * overshoot and subtract that overshoot from the car's position. The car then
+   * sits still at the band edge while the world slides past it, which is what
+   * "the page follows the car" actually looks like. It is continuous, so there
+   * is no threshold to stutter across.
+   */
+  function cameraFollow() {
+    const halfBand = (innerHeight * FREE_BAND) / 2;
+    const centre = innerHeight / 2;
+    const { height } = carDimensions();
+    const carCentre = state.y + height / 2;
+
+    let overshoot = 0;
+    if (carCentre < centre - halfBand) overshoot = carCentre - (centre - halfBand);
+    else if (carCentre > centre + halfBand) overshoot = carCentre - (centre + halfBand);
+    if (!overshoot) return;
+
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    const target = clamp(window.scrollY + overshoot, 0, maxScroll);
+    const applied = target - window.scrollY;
+    if (!applied) return;                       // already at an end: let the car run to the edge
+
+    window.scrollTo(window.scrollX, target);
+    state.y -= applied;                          // the world moved, so the car did not
+  }
+
+  function resizeEffects() {
+    const ratio = Math.min(devicePixelRatio || 1, 1.75);
+    effects.width = Math.round(innerWidth * ratio);
+    effects.height = Math.round(innerHeight * ratio);
+    effectContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+    previousTrack = null;
+  }
+
+  function carPoint(localX, localY) {
+    const { width, height } = carDimensions();
+    const centerX = state.x + width / 2;
+    const centerY = state.y + height / 2;
+    const cosine = Math.cos(state.angle), sine = Math.sin(state.angle);
+    return { x: centerX + localX * cosine - localY * sine, y: centerY + localX * sine + localY * cosine };
+  }
+
+  function drawEffects(dt) {
+    effectContext.save();
+    effectContext.globalCompositeOperation = "destination-out";
+    effectContext.fillStyle = `rgba(0,0,0,${clamp(dt * .22, 0, .018)})`;
+    effectContext.fillRect(0, 0, innerWidth, innerHeight);
+    effectContext.restore();
+
+    if (reducedMotion.matches) { particles.length = 0; previousTrack = null; return; }
+    const speed = Math.abs(state.speed);
+    const hardTurn = speed > 100 && Math.abs(state.steering) > .58;
+    const braking = speed > 130 && Math.sign(state.throttle) !== 0 && Math.sign(state.throttle) !== Math.sign(state.speed);
+    const { width, height } = carDimensions();
+    const left = carPoint(-width * .31, height * .27);
+    const right = carPoint(width * .31, height * .27);
+
+    if (hardTurn || braking) {
+      if (previousTrack) {
+        effectContext.save();
+        effectContext.globalCompositeOperation = "source-over";
+        effectContext.strokeStyle = `rgba(18,20,24,${hardTurn ? .27 : .15})`;
+        effectContext.lineWidth = hardTurn ? 2.25 : 1.5;
+        effectContext.lineCap = "round";
+        for (const [from, to] of [[previousTrack.left, left], [previousTrack.right, right]]) {
+          effectContext.beginPath(); effectContext.moveTo(from.x, from.y); effectContext.lineTo(to.x, to.y); effectContext.stroke();
+        }
+        effectContext.restore();
+      }
+      previousTrack = { left, right };
+      if (particles.length < 22 && Math.random() < clamp(dt * (hardTurn ? 13 : 4), 0, .30)) {
+        const source = Math.random() > .5 ? left : right;
+        particles.push({ x: source.x, y: source.y, vx: (Math.random() - .5) * 22, vy: 18 + Math.random() * 24, radius: 3 + Math.random() * 4, life: 1, decay: 4.2 + Math.random() * 1.6 });
+      }
+    } else previousTrack = null;
+
+    effectContext.save();
+    effectContext.globalCompositeOperation = "source-over";
+    for (let index = particles.length - 1; index >= 0; index--) {
+      const particle = particles[index];
+      particle.x += particle.vx * dt; particle.y += particle.vy * dt; particle.radius += dt * 10; particle.life -= particle.decay * dt;
+      if (particle.life <= 0) { particles.splice(index, 1); continue; }
+      const haze = effectContext.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, particle.radius);
+      haze.addColorStop(0, `rgba(226,229,236,${particle.life * particle.life * .12})`); haze.addColorStop(1, "rgba(190,194,197,0)");
+      effectContext.fillStyle = haze; effectContext.beginPath(); effectContext.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2); effectContext.fill();
     }
-    if (scrollVelocity) window.scrollTo(window.scrollX, window.scrollY + scrollVelocity * dt);
+    effectContext.restore();
   }
 
   function frame(now) {
     const dt = Math.min((now - state.lastTime) / 1000, .035);
     state.lastTime = now;
-    if (state.driving && !state.dragging) {
-      const throttle = keys.has("arrowup") || keys.has("w");
-      const reverse = keys.has("arrowdown") || keys.has("s");
-      const left = keys.has("arrowleft") || keys.has("a");
-      const right = keys.has("arrowright") || keys.has("d");
-      const input = (throttle ? 1 : 0) - (reverse ? 1 : 0);
-      const turn = (right ? 1 : 0) - (left ? 1 : 0);
+    if (state.driving) {
+      if (state.dragging) {
+        const follow = dampFactor(22, dt);
+        state.x += (state.dragging.targetX - state.x) * follow;
+        state.y += (state.dragging.targetY - state.y) * follow;
+        state.angle += angleDelta(state.angle, state.dragging.targetAngle) * dampFactor(13, dt);
+        state.speed *= Math.exp(-8 * dt);
+        state.steering *= Math.exp(-8 * dt);
+        cameraFollow();
+      } else if (state.settling) {
+        const follow = dampFactor(16, dt);
+        state.x += (state.settling.x - state.x) * follow;
+        state.y += (state.settling.y - state.y) * follow;
+        state.angle += angleDelta(state.angle, state.settling.angle) * dampFactor(13, dt);
+        state.speed *= Math.exp(-9 * dt);
+        state.steering *= Math.exp(-9 * dt);
+        if (performance.now() >= state.settling.until || Math.hypot(state.settling.x - state.x, state.settling.y - state.y) < 1) {
+          state.x = state.settling.x; state.y = state.settling.y; state.angle = state.settling.angle; state.settling = null;
+        }
+      } else {
+        const forward = keys.has("arrowup") || keys.has("w");
+        const reverse = keys.has("arrowdown") || keys.has("s");
+        const left = keys.has("arrowleft") || keys.has("a");
+        const right = keys.has("arrowright") || keys.has("d");
+        const input = (forward ? 1 : 0) - (reverse ? 1 : 0);
+        const turn = (right ? 1 : 0) - (left ? 1 : 0);
 
-      state.speed += input * (input < 0 ? 920 : 1350) * dt;
-      state.speed *= Math.exp(-(input ? 1.15 : 3.4) * dt);
-      state.speed = clamp(state.speed, -360, 760);
-      const steeringTarget = turn * (2.5 + Math.min(Math.abs(state.speed) / 260, 1.7));
-      state.steering += (steeringTarget - state.steering) * Math.min(1, dt * 12);
-      if (Math.abs(state.speed) > 5 || turn) state.angle += state.steering * dt * (state.speed < -5 ? -1 : 1);
+        state.throttle += (input - state.throttle) * dampFactor(input ? 8 : 5.5, dt);
+        state.steerInput += (turn - state.steerInput) * dampFactor(turn ? 7.5 : 5.5, dt);
+        state.speed += state.throttle * (state.throttle < 0 ? 720 : 1040) * dt;
+        state.speed *= Math.exp(-(input ? .78 : 1.8) * dt);
+        state.speed = clamp(state.speed, -240, 620);
+        const steeringTarget = state.steerInput * (1.05 + Math.min(Math.abs(state.speed) / 250, 1.45));
+        state.steering += (steeringTarget - state.steering) * dampFactor(6.5, dt);
+        const steeringAuthority = .28 + Math.min(Math.abs(state.speed) / 190, 1);
+        if (Math.abs(state.speed) > 3 || Math.abs(state.steerInput) > .05) state.angle += state.steering * steeringAuthority * dt * (state.speed < -5 ? -1 : 1);
 
-      const horizontalVelocity = Math.sin(state.angle) * state.speed;
-      const verticalVelocity = -Math.cos(state.angle) * state.speed;
-      state.x += horizontalVelocity * dt;
-      state.y += verticalVelocity * dt;
-      edgeScroll(dt, verticalVelocity);
+        const horizontalVelocity = Math.sin(state.angle) * state.speed;
+        const verticalVelocity = -Math.cos(state.angle) * state.speed;
+        state.x += horizontalVelocity * dt;
+        state.y += verticalVelocity * dt;
+        cameraFollow();
 
-      const sidePadding = innerWidth < 520 ? 10 : 24;
-      const maxX = innerWidth - (innerWidth < 520 ? 42 : 54);
-      if (state.x < sidePadding) { state.x = sidePadding; state.speed *= .6; }
-      if (state.x > maxX) { state.x = maxX; state.speed *= .6; }
-      state.y = clamp(state.y, 10, innerHeight - 164);
-      car.classList.toggle("is-moving", Math.abs(state.speed) > 28);
-      car.style.setProperty("--car-speed", Math.min(Math.abs(state.speed) / 760, 1).toFixed(3));
+        const bounds = safeBounds();
+        if (state.x < bounds.left) { state.x = bounds.left; state.speed *= .72; }
+        if (state.x > bounds.right) { state.x = bounds.right; state.speed *= .72; }
+        state.y = clamp(state.y, bounds.top, bounds.bottom);
+      }
+      car.classList.toggle("is-moving", Math.abs(state.speed) > 24 || Boolean(state.dragging?.moved));
+      car.style.setProperty("--car-speed", Math.min(Math.abs(state.speed) / 620, 1).toFixed(3));
     }
 
+    drawEffects(dt);
     car.style.transform = `translate3d(${state.x.toFixed(2)}px, ${state.y.toFixed(2)}px, 0) rotate(${state.angle.toFixed(4)}rad)`;
     requestAnimationFrame(frame);
   }
 
   addEventListener("resize", () => {
-    state.x = clamp(state.x, 12, innerWidth - (innerWidth < 520 ? 42 : 54));
-    state.y = clamp(state.y, 12, innerHeight - 168);
+    const bounds = safeBounds();
+    state.x = clamp(state.x, bounds.left, bounds.right);
+    state.y = clamp(state.y, bounds.top, bounds.bottom);
+    resizeEffects();
   });
   reducedMotion.addEventListener("change", () => car.classList.toggle("reduce-motion", reducedMotion.matches));
   car.classList.toggle("reduce-motion", reducedMotion.matches);
+  resizeEffects();
   emitState();
   requestAnimationFrame(frame);
 

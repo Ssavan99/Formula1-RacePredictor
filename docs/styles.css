@@ -1,18 +1,18 @@
 :root {
-  --paper:#f6f2e9; --paper-deep:#eae5dc; --white:#fff; --ink:#181c27; --ink-soft:#565d6c;
-  --line:#cfc9be; --red:#e52f3f; --red-dark:#a90f27; --peach:#f3c8be; --butter:#f3d477;
-  --sky:#b9dce8; --mint:#c4ddc0; --lavender:#d5cfea; --shadow:0 18px 42px rgba(24,28,39,.10);
-  --shadow-small:0 8px 22px rgba(24,28,39,.09); --radius-lg:20px; --radius-md:14px; --max:1180px;
+  --paper:#d7d4cd; --paper-deep:#c7c4bd; --white:#f5f2eb; --ink:#15171c; --ink-soft:#505660;
+  --line:#a7a6a2; --red:#ce1731; --red-dark:#850d20; --peach:#ddb7ae; --butter:#d8bd68;
+  --sky:#9fbfc8; --mint:#aebfa9; --lavender:#b9b3ca; --shadow:0 20px 48px rgba(10,12,16,.18);
+  --shadow-small:0 9px 25px rgba(10,12,16,.14); --radius-lg:18px; --radius-md:12px; --max:1180px;
   font-family:"Avenir Next",Avenir,"Trebuchet MS",system-ui,sans-serif; color:var(--ink); background:var(--paper);
   font-synthesis:none;
 }
-*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-width:320px;min-height:100vh;background-color:var(--paper);background-image:repeating-linear-gradient(0deg,transparent 0 63px,rgba(24,28,39,.025) 63px 64px);color:var(--ink)}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-width:320px;min-height:100vh;background-color:var(--paper);background-image:radial-gradient(circle at 86% 5%,rgba(206,23,49,.15),transparent 25%),linear-gradient(90deg,rgba(18,20,25,.13),transparent 12%,transparent 88%,rgba(18,20,25,.13)),repeating-linear-gradient(0deg,transparent 0 63px,rgba(18,20,25,.055) 63px 64px);color:var(--ink)}
 button,input,select{font:inherit} button{color:inherit} a{color:inherit} svg{display:block}
 .skip-link{position:fixed;left:16px;top:-80px;z-index:1000;background:var(--ink);color:#fff;padding:12px 16px;border-radius:0 0 12px 12px}.skip-link:focus{top:0}
 :focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .page-confetti{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1}.confetti{position:absolute;display:block;opacity:.8}
 .confetti-a{width:260px;height:260px;border:2px solid rgba(229,47,63,.24);border-radius:50%;top:90px;left:-174px}.confetti-b{width:180px;height:5px;background:var(--red);transform:skewX(-28deg);top:42%;right:-58px;border-radius:0}.confetti-c{width:64px;height:64px;background:conic-gradient(var(--ink) 25%,transparent 0 50%,var(--ink) 0 75%,transparent 0);background-size:20px 20px;transform:rotate(9deg);bottom:10%;left:2%;border-radius:0;opacity:.07}.confetti-d{width:140px;height:2px;border:0;background:var(--ink);transform:rotate(-34deg);top:88px;right:3%;border-radius:0;opacity:.14}
-.site-header{position:relative;z-index:20;max-width:calc(var(--max) + 48px);margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr auto;grid-template-areas:"brand live" "tabs tabs";gap:18px 24px;align-items:center}
+.site-header{position:relative;z-index:20;max-width:calc(var(--max) + 48px);margin:0 auto;padding:22px 24px;display:grid;grid-template-columns:1fr auto;grid-template-areas:"brand live" "tabs gantry";gap:18px 24px;align-items:center;background:rgba(19,21,26,.97);color:#f4f1ea;border-bottom:3px solid var(--red);border-radius:0 0 16px 16px;box-shadow:0 16px 38px rgba(10,12,16,.2)}
 .brand{grid-area:brand;display:inline-flex;align-items:center;gap:12px;width:fit-content;text-decoration:none}.brand-mark{width:54px;height:54px;display:grid;place-items:center;border:2px solid var(--ink);border-radius:18px;background:var(--red);box-shadow:4px 4px 0 var(--ink);transform:rotate(-2deg)}.brand-mark svg{width:38px;fill:white;color:white}.brand strong{display:block;font-size:20px;letter-spacing:-.02em}.brand small{display:block;margin-top:2px;color:var(--ink-soft);font-size:13px}
 .live-badge{grid-area:live;display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;background:rgba(255,255,255,.72);font-size:13px;font-weight:700}.live-dot{width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px rgba(237,70,85,.14)}
 .tabs{grid-area:tabs;display:flex;gap:8px;padding:6px;width:fit-content;max-width:100%;border:1.5px solid var(--line);border-radius:18px;background:rgba(255,255,255,.76);box-shadow:var(--shadow-small)}
@@ -49,7 +49,75 @@ h1,h2,p{overflow-wrap:anywhere}h1{margin:0;max-width:760px;font-size:clamp(38px,
 @keyframes speed-tread{to{stroke-dashoffset:-7}}
 
 .drive-dock{min-height:0;grid-template-columns:minmax(0,1.25fr) minmax(340px,.75fr);align-items:center;background:var(--ink);color:white;border-color:var(--ink);overflow:hidden;position:relative}.drive-dock::after{content:"";position:absolute;right:-24px;top:-38px;width:190px;height:190px;border:38px solid rgba(229,47,63,.18);border-radius:50%;pointer-events:none}.drive-dock .garage-copy{position:relative;z-index:1;padding-block:34px}.drive-dock .garage-copy>p:not(.eyebrow){max-width:650px;color:#c8ccd5}.drive-dock .eyebrow{color:#ff7a83}.drive-console{position:relative;z-index:1;padding:30px 34px;border-left:1px solid rgba(255,255,255,.18)}.drive-dock .garage-controls{margin-top:0}.drive-dock .garage-button{border-color:white;border-radius:7px;box-shadow:3px 3px 0 rgba(255,255,255,.28)}.drive-dock .garage-button:hover{box-shadow:5px 5px 0 rgba(255,255,255,.28)}.drive-dock .garage-button.is-active{background:var(--red);color:white}.drive-dock .garage-hint{color:#c8ccd5}.drive-dock kbd{border-color:#c8ccd5;background:#262c39;color:white}.garage-fallback{padding:20px;color:white}
+
+/* Dusk pitwall layer: dark chrome around warm, high-contrast forecast surfaces. */
+.brand small{color:#aeb3bc}.brand-mark{border-color:#f4f1ea;box-shadow:4px 4px 0 #07080a}.live-badge{color:#f4f1ea;border-color:#5a2a33;background:#252831;box-shadow:inset 3px 0 0 var(--red)}
+.tabs{background:#252831;border-color:#3f444e;box-shadow:0 8px 20px rgba(0,0,0,.28)}.tab{color:#d9dbe0}.tab:hover{background:#333741}.tab.is-active{color:white;background:var(--red)}
+.start-gantry{grid-area:gantry;justify-self:end;display:flex;align-items:center;gap:10px;color:#9fa4ae;text-transform:uppercase;letter-spacing:.12em;font:800 9px/1 ui-monospace,monospace}.start-housing{display:flex;gap:6px;padding:7px 9px;border:1px solid #4b505a;border-radius:5px;background:#090a0d;box-shadow:inset 0 -3px 0 rgba(255,255,255,.04),0 5px 12px rgba(0,0,0,.28)}.start-housing i{width:12px;height:12px;border:1px solid #5b2028;border-radius:50%;background:#2b1116;box-shadow:inset 0 2px 4px #090a0d;animation:start-light 4.4s ease-out calc(var(--light)*.18s) 1 both}
+@keyframes start-light{0%,12%{background:#2b1116;box-shadow:inset 0 2px 4px #090a0d}18%,68%{background:#f42c42;box-shadow:0 0 12px rgba(244,44,66,.9),inset 0 -2px 3px #7f091a}76%,100%{background:#17191e;box-shadow:inset 0 2px 4px #090a0d}}
+.paper-card,.pick-card,.model-card,.table-wrap,.page-heading,.section-heading,.model-toolbar,.numbers-toolbar,.method-cards,.data-note{position:relative;z-index:16}.paper-card{background:rgba(245,242,235,.97);border-color:#252830}.forecast-hero{background-color:#f3f0e9;background-image:linear-gradient(rgba(21,23,28,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(21,23,28,.035) 1px,transparent 1px);background-size:32px 32px}.forecast-hero::before{background:repeating-linear-gradient(180deg,var(--red) 0 19px,#15171c 19px 29px)}.race-round{background:#d8d4cc}.house-score{color:#f3f0e9;border-color:#333842;background:#242831;box-shadow:inset 5px 0 0 var(--red)}.house-score .mini-label{color:#ff7583}.house-score p:last-child{color:#b7bbc3}.score-dial::after{background:#242831}
+.pick-card{background:linear-gradient(145deg,#f7f4ee 0 76%,var(--card-color,var(--paper-deep)) 76%)}.prediction-metric{background:rgba(247,244,238,.88)}.weather-card,.last-result{background:#efede7}.weather-card{box-shadow:inset 5px 0 0 #587b86,var(--shadow-small)}.last-result{box-shadow:inset 5px 0 0 #b39232,var(--shadow-small)}.weather-stat{background:#f8f5ee}.model-card,.method-cards article,.table-wrap{background:#f3f0e9}.baseline-callout{background:#cfb75f}.site-footer{color:#454b55;border-color:#8f908e}.site-footer strong{color:#15171c}
+.drive-dock{background:#17191f;border-color:#0c0d10}.drive-dock::after{border-color:rgba(206,23,49,.2)}
+
+/* The car remains interactive but visually sits behind the forecast hierarchy. */
+.drive-layer{z-index:17}.drive-effects{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.76}.drive-car{opacity:.58;filter:saturate(.9) contrast(.98)}.drive-car:hover,.drive-car:focus-visible,.drive-car.is-moving,.drive-car.is-grabbed{opacity:.84;filter:saturate(1.02) brightness(1.02)}.drive-car.is-parked{opacity:.32;filter:saturate(.55)}.drive-car .sf-white{fill:#f1eee7;stroke:#c9c8c4;stroke-width:.7}.drive-car .rear-wing-red{fill:#c81730}.drive-car .livery-blue{fill:#3776c8;stroke:#f1eee7;stroke-width:1}.drive-car .rear-wing-accent{fill:#f1eee7}.drive-car .livery-light{fill:#f1eee7}.drive-car .body,.drive-car .nose,.drive-car .sidepod,.drive-car .engine-cover{filter:saturate(1.08)}
 .drive-dock .garage-button:not(.is-active){color:var(--ink)}
 @media(max-width:880px){.forecast-hero,.garage,.numbers-heading{grid-template-columns:1fr}.house-score{max-width:430px}.house-grid{grid-template-columns:1fr 1fr}.pick-card:last-child{grid-column:1/-1}.garage-scene{min-height:360px;border-left:0;border-top:2px dashed var(--ink)}.drive-console{border-left:0;border-top:1px solid rgba(255,255,255,.18)}.method-cards{grid-template-columns:1fr}}
 @media(max-width:650px){.site-header{padding:16px;grid-template-columns:1fr;grid-template-areas:"brand" "live" "tabs"}.live-badge{justify-self:start}.tabs{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible}.tab{min-width:0;padding-inline:5px;font-size:11.5px;line-height:1.1;white-space:nowrap}.tab svg{display:none}.weekend-shell,.content-shell{width:min(100% - 24px,var(--max))}.forecast-hero{padding:24px}h1{font-size:clamp(40px,13vw,60px)}.house-score{grid-template-columns:82px 1fr;padding:14px}.score-dial{width:80px;height:80px}.score-dial span{font-size:19px}.section-heading{display:grid;align-items:end}.explain-button{justify-self:start}.support-grid,.house-grid,.model-grid{grid-template-columns:1fr}.pick-card:last-child{grid-column:auto}.weather-stats{grid-template-columns:1fr 1fr}.garage-copy{padding:26px 22px}.drive-console{padding:24px 22px}.drive-car{width:72px;height:130px}.site-footer{flex-direction:column}.model-toolbar>span,.numbers-toolbar>p{width:100%;margin-left:0}}
+@media(max-width:650px){.site-header{grid-template-areas:"brand" "live" "tabs" "gantry"}.start-gantry{justify-self:start}.start-gantry>span{display:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* ============================================================
+   DARK PADDOCK THEME
+   Rich charcoal rather than black: a pure-black page loses the
+   panel edges that carry this layout, and reads cheap rather
+   than premium. Surfaces sit at #12-#26 so borders and elevation
+   stay visible, with F1 red (#e10600) and a champagne gold for
+   the expensive-paddock note.
+   ============================================================ */
+:root{
+  --paper:#1b1f28;          /* card surface */
+  --paper-deep:#11141b;     /* page ground */
+  --white:#232936;          /* raised panel */
+  --ink:#e9edf5;            /* strong: text + hairlines */
+  --ink-soft:#98a2b4;       /* secondary text */
+  --line:#2f3644;           /* dividers */
+  --red:#e10600;            /* the F1 red */
+  --red-dark:#ff6b63;       /* legible on dark, unlike the light-theme value */
+  --butter:#d8b45c;         /* champagne */
+  --peach:#dfa093;
+  --sky:#7fb4cd;
+  --mint:#79c3a2;
+  --lavender:#a89ed6;
+  --shadow:0 22px 52px rgba(0,0,0,.55);
+  --shadow-small:0 10px 26px rgba(0,0,0,.42);
+}
+html{color-scheme:dark}
+body{background:var(--paper-deep);color:var(--ink)}
+
+/* Borders were near-black on paper; at full strength on a dark ground they
+   glare. Same structure, dialled to a hairline. */
+.paper-card,.pick-card,.model-card,.stat-card,.numbers-table,
+.forecast-hero,.house-score,.weather-card,.last-result,
+.garage,.drive-console,.tab,.live-badge{border-color:var(--line)!important}
+
+/* Places the light theme inverted to near-black now need a raised dark
+   surface, or they punch a white hole in the page. */
+.tab.is-active,.stamp,.garage-button.is-active,.explain-button:hover,
+.brand-mark,.score-dial{background:var(--white);color:var(--ink)}
+
+/* Headline accents pick up the red instead of ink-on-paper. */
+h1,.rb-name{color:var(--ink)}
+.eyebrow,.mini-label{color:var(--butter)}
+.live-dot{background:var(--red);box-shadow:0 0 0 4px rgba(225,6,0,.18)}
+
+/* The car is decoration over data: keep it clearly readable through. */
+.drive-car{opacity:.34;filter:saturate(.95)}
+.drive-car:hover,.drive-car:focus-visible,.drive-car.is-moving,.drive-car.is-grabbed{opacity:.58}
+.drive-car.is-parked{opacity:.20}
+.drive-effects{opacity:.28}
+.drive-car .car-trail{opacity:calc(var(--car-speed) * .28)}
+
+/* Start gantry: five reds arming in sequence, then out -- the real procedure. */
+.start-housing i{background:#2a1418;box-shadow:inset 0 0 0 1px var(--line)}
+.start-housing i.lit{background:var(--red);box-shadow:0 0 12px 2px rgba(225,6,0,.55),inset 0 0 0 1px #ff8a84}
