@@ -44,13 +44,25 @@ def relevance_from_position(positions: np.ndarray) -> np.ndarray:
 class LambdaRankModel(RaceModel):
     name = "lightgbm: lambdarank"
 
+    #: Chosen by `f1predict.models.tuning` over 81 configurations, validated on
+    #: 2020-21 with seasons >= 2022 never loaded. The previous values (300 /
+    #: 0.05 / 15 / 30) were guesses that had never been tested against this data.
+    TUNED = {
+        "post_quali": dict(
+            n_estimators=300, learning_rate=0.02, num_leaves=7, min_child_samples=30
+        ),
+        "pre_quali": dict(
+            n_estimators=150, learning_rate=0.02, num_leaves=15, min_child_samples=10
+        ),
+    }
+
     def __init__(
         self,
         view: str = "post_quali",
-        n_estimators: int = 300,
-        learning_rate: float = 0.05,
-        num_leaves: int = 15,
-        min_child_samples: int = 30,
+        n_estimators: int | None = None,
+        learning_rate: float | None = None,
+        num_leaves: int | None = None,
+        min_child_samples: int | None = None,
         random_state: int = 1,
         name: str | None = None,
         target: str = "finish_position",
@@ -58,10 +70,13 @@ class LambdaRankModel(RaceModel):
         if lgb is None:  # pragma: no cover
             raise ImportError("lightgbm is required for LambdaRankModel")
         self.view = view
-        self.n_estimators = n_estimators
-        self.learning_rate = learning_rate
-        self.num_leaves = num_leaves
-        self.min_child_samples = min_child_samples
+        tuned = self.TUNED.get(view, self.TUNED["post_quali"])
+        self.n_estimators = n_estimators if n_estimators is not None else tuned["n_estimators"]
+        self.learning_rate = learning_rate if learning_rate is not None else tuned["learning_rate"]
+        self.num_leaves = num_leaves if num_leaves is not None else tuned["num_leaves"]
+        self.min_child_samples = (
+            min_child_samples if min_child_samples is not None else tuned["min_child_samples"]
+        )
         self.random_state = random_state
         self.target = target
         if name:

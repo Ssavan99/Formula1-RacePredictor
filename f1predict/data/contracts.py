@@ -112,6 +112,12 @@ REGISTRY: dict[str, Availability] = {
     "weather_windspeed_max": Availability.PRE_QUALI,
     "weather_is_wet": Availability.PRE_QUALI,
     # --- known only after qualifying --------------------------------------
+    # Practice runs Friday/Saturday morning, so these are known by the time
+    # qualifying ends but NOT on the Tuesday before a race. Registering them
+    # POST_QUALI keeps them out of pre-weekend predictions by construction.
+    "practice_best_gap": Availability.POST_QUALI,
+    "practice_long_run_gap": Availability.POST_QUALI,
+    "practice_laps": Availability.POST_QUALI,
     "grid": Availability.POST_QUALI,
     "quali_time_seconds": Availability.POST_QUALI,
     "quali_gap_to_pole": Availability.POST_QUALI,

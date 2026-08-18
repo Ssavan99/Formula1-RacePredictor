@@ -47,6 +47,7 @@ RAW_COLUMNS = [
     "sprint_points",
     "weather_temp_max", "weather_precipitation", "weather_windspeed_max",
     "weather_is_wet",
+    "practice_best_gap", "practice_long_run_gap", "practice_laps",
 ]
 
 

@@ -140,3 +140,7 @@ models/*.joblib
 
 # Local editor/preview config
 .claude/
+
+# FastF1 session cache (large, rebuildable)
+data/cache/fastf1/
+data/cache/*.log

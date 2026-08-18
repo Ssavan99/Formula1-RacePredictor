@@ -119,6 +119,28 @@ class OriginalSVM(_PerDriverClassifier):
         return SVC(probability=True, gamma=0.1, C=10.0, kernel="sigmoid", random_state=1)
 
 
+class OriginalSVMTuned(_PerDriverClassifier):
+    """The original SVM approach, retuned for the rebuilt feature space.
+
+    The shipped `gamma=0.1, C=10.0, kernel='sigmoid'` were grid-searched against
+    the original 88-column mostly-sparse matrix. In the rebuilt 25-column dense
+    space they collapse: top-1 falls to 0.107 while rank correlation stays at
+    0.54, which is the signature of a kernel mismatch rather than a method that
+    does not work.
+
+    Re-searching over 21 configurations on 2020-21 (seasons >= 2022 never
+    loaded) selects `rbf, C=10.0, gamma='scale'`, which scores 0.538 against
+    0.107 on the same inner validation. The original SVM is *kept unchanged* as
+    `OriginalSVM`; this is the same approach improved in place, reported beside
+    it rather than in place of it.
+    """
+
+    name = "original: SVM (retuned)"
+
+    def _make_estimator(self):
+        return SVC(probability=True, kernel="rbf", C=10.0, gamma="scale", random_state=1)
+
+
 class LeakyOriginalSVM(RaceModel):
     """The original SVM *with the post-race leak reinstated*.
 

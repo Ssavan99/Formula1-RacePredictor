@@ -34,9 +34,19 @@ def build_models(groups: set[str], view: str) -> list[RaceModel]:
     if "baselines" in groups:
         models.extend(build_baselines(view=view))
     if "original" in groups:
-        from ..models.original import LeakyOriginalSVM, OriginalMLP, OriginalSVM
+        from ..models.original import (
+            LeakyOriginalSVM,
+            OriginalMLP,
+            OriginalSVM,
+            OriginalSVMTuned,
+        )
 
-        models.extend([OriginalMLP(view=view), OriginalSVM(view=view)])
+        # The original SVM is kept exactly as specified AND retuned alongside
+        # it, so "the method was fine, the kernel was wrong" is a claim the
+        # table supports rather than an assertion.
+        models.extend(
+            [OriginalMLP(view=view), OriginalSVM(view=view), OriginalSVMTuned(view=view)]
+        )
         # The leak needs qualifying-era features to be comparable to the
         # original setup; it is an artifact either way, never a candidate.
         if view == "post_quali":
@@ -46,6 +56,15 @@ def build_models(groups: set[str], view: str) -> list[RaceModel]:
         from ..models.ranker import LambdaRankModel
 
         models.extend([LambdaRankModel(view=view), PlackettLuceModel(view=view)])
+    if "reliability" in groups:
+        from ..models.ranker import LambdaRankModel
+        from ..models.reliability import ReliabilityAdjusted
+
+        models.append(
+            ReliabilityAdjusted(
+                LambdaRankModel(view=view), name="lambdarank + reliability"
+            )
+        )
     if "ensemble" in groups:
         from ..models.ensemble import build_ensemble
 
