@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T11:43:51.743044+00:00",
+  "generated_at": "2026-08-18T21:15:41.210191+00:00",
   "view": "pre_quali",
   "race": {
     "season": 2026,
@@ -9,9 +9,9 @@
     "circuit": "zandvoort"
   },
   "weather": {
-    "weather_temp_max": 17.9,
+    "weather_temp_max": 18.2,
     "weather_precipitation": 0.0,
-    "weather_windspeed_max": 11.7,
+    "weather_windspeed_max": 15.7,
     "weather_is_wet": 0.0
   },
   "predictions": [
@@ -23,19 +23,19 @@
           "position": 1,
           "driver_id": "leclerc",
           "constructor_id": "ferrari",
-          "win_probability": 0.5254
+          "win_probability": 0.6666
         },
         {
           "position": 2,
           "driver_id": "antonelli",
           "constructor_id": "mercedes",
-          "win_probability": 0.4705
+          "win_probability": 0.3015
         },
         {
           "position": 3,
           "driver_id": "norris",
           "constructor_id": "mclaren",
-          "win_probability": 0.0041
+          "win_probability": 0.0319
         },
         {
           "position": 4,
@@ -161,73 +161,73 @@
           "position": 1,
           "driver_id": "antonelli",
           "constructor_id": "mercedes",
-          "win_probability": 0.1467
+          "win_probability": 0.1474
         },
         {
           "position": 2,
           "driver_id": "russell",
           "constructor_id": "mercedes",
-          "win_probability": 0.1362
+          "win_probability": 0.1368
         },
         {
           "position": 3,
           "driver_id": "hamilton",
           "constructor_id": "ferrari",
-          "win_probability": 0.1136
+          "win_probability": 0.1141
         },
         {
           "position": 4,
           "driver_id": "norris",
           "constructor_id": "mclaren",
-          "win_probability": 0.0986
+          "win_probability": 0.0977
         },
         {
           "position": 5,
           "driver_id": "max_verstappen",
           "constructor_id": "red_bull",
-          "win_probability": 0.0882
+          "win_probability": 0.0863
         },
         {
           "position": 6,
           "driver_id": "hadjar",
           "constructor_id": "red_bull",
-          "win_probability": 0.0845
+          "win_probability": 0.0826
         },
         {
           "position": 7,
           "driver_id": "leclerc",
           "constructor_id": "ferrari",
-          "win_probability": 0.0713
+          "win_probability": 0.0743
         },
         {
           "position": 8,
           "driver_id": "piastri",
           "constructor_id": "mclaren",
-          "win_probability": 0.0681
+          "win_probability": 0.0667
         },
         {
           "position": 9,
           "driver_id": "arvid_lindblad",
           "constructor_id": "rb",
-          "win_probability": 0.0248
+          "win_probability": 0.0249
         },
         {
           "position": 10,
-          "driver_id": "lawson",
-          "constructor_id": "rb",
-          "win_probability": 0.0245
+          "driver_id": "gasly",
+          "constructor_id": "alpine",
+          "win_probability": 0.0248
         },
         {
           "position": 11,
-          "driver_id": "gasly",
-          "constructor_id": "alpine",
-          "win_probability": 0.0241
+          "driver_id": "lawson",
+          "constructor_id": "rb",
+          "win_probability": 0.0246
         },
         {
           "position": 12,
           "driver_id": "colapinto",
           "constructor_id": "alpine",
-          "win_probability": 0.0198
+          "win_probability": 0.0199
         },
         {
           "position": 13,
@@ -239,7 +239,7 @@
           "position": 14,
           "driver_id": "bearman",
           "constructor_id": "haas",
-          "win_probability": 0.0132
+          "win_probability": 0.0133
         },
         {
           "position": 15,
@@ -257,7 +257,7 @@
           "position": 17,
           "driver_id": "albon",
           "constructor_id": "williams",
-          "win_probability": 0.0086
+          "win_probability": 0.0087
         },
         {
           "position": 18,
@@ -281,13 +281,13 @@
           "position": 21,
           "driver_id": "stroll",
           "constructor_id": "aston_martin",
-          "win_probability": 0.0074
+          "win_probability": 0.0075
         },
         {
           "position": 22,
           "driver_id": "bottas",
           "constructor_id": "cadillac",
-          "win_probability": 0.0072
+          "win_probability": 0.0073
         }
       ]
     },
@@ -439,61 +439,61 @@
           "position": 1,
           "driver_id": "antonelli",
           "constructor_id": "mercedes",
-          "win_probability": 0.241
+          "win_probability": 0.2417
         },
         {
           "position": 2,
           "driver_id": "russell",
           "constructor_id": "mercedes",
-          "win_probability": 0.1922
+          "win_probability": 0.1928
         },
         {
           "position": 3,
           "driver_id": "leclerc",
           "constructor_id": "ferrari",
-          "win_probability": 0.1108
+          "win_probability": 0.1102
         },
         {
           "position": 4,
           "driver_id": "hamilton",
           "constructor_id": "ferrari",
-          "win_probability": 0.1051
+          "win_probability": 0.1054
         },
         {
           "position": 5,
           "driver_id": "norris",
           "constructor_id": "mclaren",
-          "win_probability": 0.0824
+          "win_probability": 0.0819
         },
         {
           "position": 6,
           "driver_id": "piastri",
           "constructor_id": "mclaren",
-          "win_probability": 0.0567
+          "win_probability": 0.0563
         },
         {
           "position": 7,
           "driver_id": "hadjar",
           "constructor_id": "red_bull",
-          "win_probability": 0.0545
+          "win_probability": 0.0542
         },
         {
           "position": 8,
           "driver_id": "max_verstappen",
           "constructor_id": "red_bull",
-          "win_probability": 0.0375
+          "win_probability": 0.0372
         },
         {
           "position": 9,
           "driver_id": "lawson",
           "constructor_id": "rb",
-          "win_probability": 0.0221
+          "win_probability": 0.0222
         },
         {
           "position": 10,
           "driver_id": "arvid_lindblad",
           "constructor_id": "rb",
-          "win_probability": 0.0193
+          "win_probability": 0.0194
         },
         {
           "position": 11,
@@ -505,7 +505,7 @@
           "position": 12,
           "driver_id": "colapinto",
           "constructor_id": "alpine",
-          "win_probability": 0.0133
+          "win_probability": 0.0134
         },
         {
           "position": 13,
@@ -565,7 +565,7 @@
           "position": 22,
           "driver_id": "stroll",
           "constructor_id": "aston_martin",
-          "win_probability": 0.0029
+          "win_probability": 0.003
         }
       ]
     },

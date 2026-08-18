@@ -16,21 +16,6 @@ if not parts:
 
 frames = [pd.read_parquet(p) for p in parts]
 
-# Models whose code did not change in this round keep their existing results
-# rather than being re-run: the MLP, the original SVM, the leaky artifact and
-# the ensemble are byte-identical to the run that produced them, and that run
-# already used the corrected, tie-invariant metrics.
-CARRIED = ["original: MLP", "original: SVM", "original: SVM (leaky, artifact)", "ensemble"]
-archive = "results/per_race_post_quali_all.parquet"
-try:
-    old = pd.read_parquet(archive)
-    carried = old[old["model"].isin(CARRIED)]
-    if not carried.empty:
-        frames.append(carried)
-        print(f"carried forward {carried['model'].nunique()} unchanged models from {archive}")
-except FileNotFoundError:
-    pass
-
 per_race = pd.concat(frames, ignore_index=True)
 per_race = per_race.drop_duplicates(subset=["model", "season", "round"], keep="last")
 table = summarise(per_race)

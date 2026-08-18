@@ -1,462 +1,123 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>F1 Race Predictor</title>
-<meta name="description" content="Formula 1 pole, winner and podium predictions from free public data — every number measured against naive baselines.">
-<style>
-:root{
-  --bg:#07080a; --panel:#0e1014; --panel-2:#121519; --ink:#f2f4f7; --muted:#7d8593;
-  --line:#1e222a; --accent:#ff1e3c; --accent-2:#ff7a18;
-  --good:#3ddc84; --bad:#ff5252; --carbon:#040507;
-  --chip:#15181e; --glow:rgba(255,30,60,.28);
-  --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,"Liberation Mono",monospace;
-  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
-}
-/* A single committed look: this is a timing screen, and timing screens are dark. */
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
-  line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-/* faint carbon-weave + vignette, keeps flat black from looking empty */
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    repeating-linear-gradient(45deg,rgba(255,255,255,.014) 0 1px,transparent 1px 4px),
-    repeating-linear-gradient(-45deg,rgba(255,255,255,.014) 0 1px,transparent 1px 4px),
-    radial-gradient(120% 80% at 50% 0%,rgba(255,30,60,.07),transparent 60%)}
-.wrap{max-width:1140px;margin:0 auto;padding:0 20px 90px;position:relative;z-index:1}
-
-/* ---------- technical label motif ---------- */
-.tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--muted)}
-.tag b{color:var(--accent);font-weight:600}
-
-/* ---------- hero ---------- */
-.hero{padding:26px 0 0}
-.hero-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
-h1{margin:6px 0 0;font-size:clamp(1.7rem,5.5vw,3.1rem);letter-spacing:-.045em;
-  font-weight:800;line-height:.98;text-transform:uppercase}
-h1 em{font-style:normal;color:var(--accent)}
-.tagline{margin:12px 0 0;color:var(--muted);font-size:.92rem;max-width:46ch}
-.hero-stat{text-align:right;font-family:var(--mono)}
-.hero-stat b{display:block;font-size:clamp(1.6rem,5vw,2.4rem);letter-spacing:-.03em;line-height:1}
-.hero-stat span{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-
-/* ---------- the stage: car + track ---------- */
-.stage{position:relative;height:300px;margin:20px 0 0;cursor:crosshair;
-  border:1px solid var(--line);border-radius:16px;overflow:hidden;
-  background:linear-gradient(180deg,var(--panel) 0%,var(--carbon) 100%)}
-.stage .hint{position:absolute;top:12px;left:14px;z-index:4}
-.stage .hint kbd{font-family:var(--mono);font-size:.6rem;background:var(--chip);
-  border:1px solid var(--line);border-radius:4px;padding:2px 5px;color:var(--muted)}
-/* horizon + moving asphalt */
-.asphalt{position:absolute;left:0;right:0;bottom:0;height:64px;
-  background:linear-gradient(180deg,#0a0c10,#040507)}
-.asphalt::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--line) 12%,var(--line) 88%,transparent)}
-.dashes{position:absolute;left:0;bottom:26px;width:200%;height:3px;
-  background:repeating-linear-gradient(90deg,var(--muted) 0 34px,transparent 34px 78px);
-  opacity:.32;animation:slide 1.1s linear infinite}
-@keyframes slide{to{transform:translateX(-78px)}}
-/* kerb stripe */
-.kerb{position:absolute;left:0;bottom:0;width:200%;height:7px;
-  background:repeating-linear-gradient(90deg,var(--accent) 0 22px,#e9edf2 22px 44px);
-  opacity:.5;animation:slide 1.5s linear infinite}
-.carhost{position:absolute;inset:0;z-index:3}
-.carhost canvas{display:block}
-@media (prefers-reduced-motion:reduce){ .dashes,.kerb{animation:none} }
-
-/* ---------- tabs ---------- */
-.tabs{display:flex;gap:0;margin:26px 0 0;border-bottom:1px solid var(--line);
-  overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{appearance:none;border:0;background:transparent;color:var(--muted);
-  font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.16em;
-  text-transform:uppercase;padding:14px 20px;cursor:pointer;position:relative;
-  white-space:nowrap;transition:color .18s}
-.tab::before{content:"[";opacity:0;margin-right:4px;transition:opacity .18s}
-.tab::after{content:"]";opacity:0;margin-left:4px;transition:opacity .18s}
-.tab:hover{color:var(--ink)}
-.tab[aria-selected="true"]{color:var(--accent)}
-.tab[aria-selected="true"]::before,.tab[aria-selected="true"]::after{opacity:1}
-.panelview{display:none;animation:fade .3s ease}
-.panelview.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-/* ---------- generic ---------- */
-h2{font-family:var(--mono);font-size:.68rem;margin:34px 0 12px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--muted);font-weight:600;
-  display:flex;align-items:center;gap:10px}
-h2::after{content:"";flex:1;height:1px;background:var(--line)}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px}
-.pad{padding:18px}
-.empty{color:var(--muted);font-style:italic;padding:14px 0;font-size:.88rem}
-.scroll{overflow-x:auto}
-a{color:var(--accent)}
-
-/* ---------- race banner ---------- */
-.racebar{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;
-  background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);
-  border-radius:14px;padding:18px 22px;margin-top:8px}
-.rb-name{font-size:clamp(1.2rem,3.4vw,1.9rem);font-weight:800;letter-spacing:-.03em;
-  margin:4px 0 8px;text-transform:uppercase}
-.metaline{display:flex;flex-wrap:wrap;gap:6px}
-.chip{background:var(--chip);border:1px solid var(--line);border-radius:6px;
-  padding:4px 9px;font-size:.72rem;color:var(--muted);font-family:var(--mono)}
-.chip b{color:var(--ink);font-weight:600}
-.countdown{text-align:right;font-family:var(--mono);line-height:1.05}
-.cd-num{font-size:clamp(1.5rem,4.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;color:var(--accent)}
-.cd-lab{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:3px}
-
-/* ---------- house picks ---------- */
-.picks{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));margin-top:8px}
-.pick{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px 19px;
-  position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s}
-.pick:hover{transform:translateY(-3px);border-color:var(--team,var(--accent));
-  box-shadow:0 10px 34px var(--glow)}
-.pick::after{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--team,var(--accent))}
-.pick-driver{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin:8px 0 2px;
-  text-transform:uppercase}
-.pick-team{font-size:.74rem;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
-.pick-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;
-  padding-top:13px;border-top:1px solid var(--line)}
-.pick-prob{font-family:var(--mono);font-size:1.15rem;font-weight:700}
-.tiny{font-size:.6rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
-.podium-row{display:flex;gap:7px;margin:10px 0 0}
-.pod{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
-  padding:9px;border-top:2px solid var(--team,var(--accent))}
-.pod-p{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em}
-.pod-d{font-size:.84rem;font-weight:700;text-transform:uppercase;margin-top:2px;letter-spacing:-.01em}
-.ring{width:44px;height:44px;flex:0 0 44px}
-.ring circle{fill:none;stroke-width:5}
-.ring .bg{stroke:var(--line)}
-.ring .fg{stroke:var(--accent);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;
-  transition:stroke-dasharray 1s cubic-bezier(.2,.7,.3,1)}
-
-/* ---------- timing tower ---------- */
-.tower{list-style:none;margin:0;padding:0}
-.tower li{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:10px;
-  padding:7px 0;border-bottom:1px solid var(--line);font-size:.9rem;transition:background .15s}
-.tower li:last-child{border-bottom:0}
-.tower li:hover{background:var(--panel-2)}
-.tw-pos{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:center;
-  border-left:3px solid var(--team,var(--line));padding-left:6px}
-.tw-name{text-transform:uppercase;font-weight:600;font-size:.86rem;letter-spacing:-.01em}
-.tw-bar{height:3px;background:var(--team,var(--accent));border-radius:2px;margin-top:4px;
-  width:0;transition:width .9s cubic-bezier(.2,.7,.3,1)}
-.tw-prob{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
-
-.models{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(276px,1fr))}
-.mcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 17px}
-.mname{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--accent);font-weight:600}
-.mmeta{font-size:.66rem;color:var(--muted);margin:3px 0 11px;font-family:var(--mono);
-  letter-spacing:.1em;text-transform:uppercase}
-
-table{border-collapse:collapse;width:100%;font-size:.85rem;min-width:620px}
-th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap}
-th{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;
-  color:var(--muted);font-weight:600}
-td.num{font-family:var(--mono);text-align:right}
-tr.baseline td{color:var(--muted)}
-tr.house td{background:rgba(255,30,60,.09);font-weight:600}
-.ci{color:var(--muted);font-size:.72rem;font-family:var(--mono)}
-.callout{border-left:3px solid var(--accent);padding:14px 18px;margin:16px 0;
-  background:var(--panel);border-radius:0 12px 12px 0;font-size:.88rem}
-.callout p{margin:0 0 8px} .callout p:last-child{margin:0}
-.kpi{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(146px,1fr));margin-top:8px}
-.kpi div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.kpi b{display:block;font-family:var(--mono);font-size:1.5rem;letter-spacing:-.03em}
-footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);
-  color:var(--muted);font-size:.8rem}
-footer p{margin:0 0 9px}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f6f2e9">
+  <meta name="description" content="Honest Formula 1 pole, winner and podium forecasts, updated before every race and scored in public.">
+  <title>F1 Forecast Pitwall</title>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<div class="wrap">
+  <a class="skip-link" href="#main-content">Skip to predictions</a>
 
-<div class="hero">
-  <div class="hero-head">
-    <div>
-      <div class="tag"><b>[01]</b> Predictor</div>
-      <h1>F1 Race<br><em>Predictor</em></h1>
-      <p class="tagline">Pole, winner and podium for the next Grand Prix. Published before the race, scored after it, and measured against rules a one-liner could beat us with.</p>
+  <div class="page-confetti" aria-hidden="true">
+    <span class="confetti confetti-a"></span><span class="confetti confetti-b"></span>
+    <span class="confetti confetti-c"></span><span class="confetti confetti-d"></span>
+  </div>
+
+  <div class="drive-layer" id="drive-layer"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#weekend" aria-label="F1 Forecast Pitwall home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M7 31h22l6-8h6l-4 13H7z"/><circle cx="15" cy="36" r="5"/><circle cx="34" cy="36" r="5"/><path d="M17 27l4-9h10l4 9" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+      </span>
+      <span><strong>F1 Forecast</strong><small>race-day intelligence, scored in public</small></span>
+    </a>
+    <div class="live-badge" aria-label="Prediction status"><span class="live-dot" aria-hidden="true"></span><span id="header-status">Loading race week…</span></div>
+    <nav class="tabs" role="tablist" aria-label="Forecast views">
+      <button class="tab is-active" id="tab-weekend" role="tab" aria-selected="true" aria-controls="weekend" data-tab="weekend">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V5m0 1h11l-2.5 3L16 12H5"/></svg>Race weekend
+      </button>
+      <button class="tab" id="tab-models" role="tab" aria-selected="false" aria-controls="models" data-tab="models" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18V8m6 10V4m6 14v-7m4 7H2"/></svg>Model paddock
+      </button>
+      <button class="tab" id="tab-numbers" role="tab" aria-selected="false" aria-controls="numbers" data-tab="numbers" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16M8 3v18"/></svg>The numbers
+      </button>
+    </nav>
+    <div class="start-gantry" aria-hidden="true">
+      <span>Start procedure</span>
+      <div class="start-housing"><i style="--light:0"></i><i style="--light:1"></i><i style="--light:2"></i><i style="--light:3"></i><i style="--light:4"></i></div>
     </div>
-    <div class="hero-stat">
-      <b id="hero-num">—</b>
-      <span>winner called right</span>
-    </div>
-  </div>
+  </header>
 
-  <div class="stage" id="stage">
-    <div class="hint tag">[ Drive ] <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or move your cursor</div>
-    <div class="asphalt"><div class="dashes"></div><div class="kerb"></div></div>
-    <div class="carhost" id="carhost" aria-label="3D Formula 1 car"></div>
-    <noscript><div class="tag" style="position:absolute;bottom:14px;left:14px">[ car needs JavaScript ]</div></noscript>
-  </div>
+  <main id="main-content">
+    <section class="tab-panel is-active" id="weekend" role="tabpanel" aria-labelledby="tab-weekend" tabindex="0">
+      <div class="weekend-shell">
+        <section class="forecast-hero paper-card" aria-labelledby="race-title">
+          <div class="forecast-copy">
+            <div class="eyebrow-row"><p class="eyebrow"><span aria-hidden="true">●</span> Next up</p><span class="race-round" id="race-round">Round —</span></div>
+            <h1 id="race-title">Loading the next Grand Prix…</h1>
+            <div class="race-meta" id="race-meta" aria-live="polite"><span class="skeleton-line"></span></div>
+            <div class="countdown" aria-label="Time until race start"><span class="countdown-label">Lights out in</span><strong id="countdown">—d —h —m</strong></div>
+          </div>
+          <aside class="house-score" aria-labelledby="house-score-title">
+            <div class="score-dial" id="score-dial" style="--score:0"><span id="score-value">—</span></div>
+            <div><p class="mini-label" id="house-score-title">House form</p><strong id="score-label">Backtest accuracy</strong><p id="score-note">Measured race by race, never shuffled through time.</p></div>
+          </aside>
+        </section>
 
-  <div class="tabs" role="tablist">
-    <button class="tab" role="tab" aria-selected="true"  data-view="v-weekend">Race weekend</button>
-    <button class="tab" role="tab" aria-selected="false" data-view="v-models">Models</button>
-    <button class="tab" role="tab" aria-selected="false" data-view="v-numbers">The numbers</button>
-  </div>
-</div>
+        <section class="prediction-section" aria-labelledby="our-call-title">
+          <div class="section-heading">
+            <div><p class="eyebrow">Our final call</p><h2 id="our-call-title">One call. One grid. No hedging.</h2></div>
+            <button class="explain-button" type="button" aria-expanded="false" aria-controls="confidence-note" id="explain-confidence">How confidence works<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 10 4 4 4-4"/></svg></button>
+          </div>
+          <p class="confidence-note" id="confidence-note" hidden>Each card separates the model's confidence in this specific call from its historical walk-forward accuracy. Neither is a promise; together they show how strongly the model leans and how often that type of call has held up.</p>
+          <div class="house-grid" id="house-grid" aria-live="polite" aria-busy="true"><div class="pick-card skeleton-card"></div><div class="pick-card skeleton-card"></div><div class="pick-card skeleton-card"></div></div>
+        </section>
 
-<div class="panelview active" id="v-weekend" role="tabpanel">
-  <div id="racebar"><div class="empty">Loading…</div></div>
-  <h2>Our call</h2>
-  <div class="picks" id="house-picks"><div class="empty">Loading…</div></div>
-  <h2>How we have done</h2>
-  <div class="kpi" id="headline-kpi"><div class="empty">Loading…</div></div>
-  <h2>Last race</h2>
-  <div class="card pad" id="last-race"><div class="empty">Loading…</div></div>
-</div>
+        <section class="support-grid">
+          <article class="weather-card paper-card" aria-labelledby="weather-title">
+            <div class="card-title-row"><div><p class="eyebrow">Trackside</p><h2 id="weather-title">Race-day weather</h2></div><div class="weather-art" aria-hidden="true"><span class="weather-sun"></span><span class="weather-cloud"></span></div></div>
+            <div class="weather-stats" id="weather-stats"><span class="skeleton-line"></span></div>
+          </article>
+          <article class="last-result paper-card" aria-labelledby="last-result-title">
+            <div class="card-title-row"><div><p class="eyebrow">Scrutineering</p><h2 id="last-result-title">Last call, checked</h2></div><span class="stamp" id="result-stamp">Pending</span></div>
+            <div id="last-result" class="empty-state">The public record starts with the first race after launch.</div>
+          </article>
+        </section>
 
-<div class="panelview" id="v-models" role="tabpanel">
-  <div class="callout"><p>The home tab shows one call per question. This is what each model said on its own — they disagree more often than you would expect, which is the honest texture of the problem.</p></div>
-  <h2>Pole prediction</h2>
-  <div class="models" id="m-quali"><div class="empty">Not published yet.</div></div>
-  <h2>Race — before qualifying</h2>
-  <div class="models" id="m-pre"><div class="empty">Not published yet.</div></div>
-  <h2>Race — after qualifying, real grid</h2>
-  <div class="models" id="m-post"><div class="empty">Not published yet.</div></div>
-  <h2>Live record, per model</h2>
-  <div class="card scroll" id="m-record"><div class="empty">Loading…</div></div>
-</div>
+        <section class="garage drive-dock paper-card" aria-labelledby="garage-title">
+          <div class="garage-copy">
+            <p class="eyebrow">Open pit lane</p><h2 id="garage-title">Drive the forecast</h2>
+            <p>The scarlet car now runs across the whole site. Build speed, steer through the margins, and it will carry the page with it when you reach the top or bottom edge.</p>
+          </div>
+          <div class="drive-console">
+            <div class="garage-controls" role="group" aria-label="Site-wide car controls">
+              <button class="garage-button is-active" type="button" data-car-toggle aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16h14l-2-6H7zM7 16v3m10-3v3M9 13h6"/></svg><span data-car-toggle-label>Driving armed</span></button>
+              <button class="garage-button" type="button" data-car-reset><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7v5h5M5.8 12A7 7 0 1 0 8 6.8L5 9"/></svg>Find car</button>
+            </div>
+            <p class="garage-hint" id="garage-hint" aria-live="polite"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>or arrows to drive · <kbd>Esc</kbd> parks</span></p>
+          </div>
+          <noscript><p class="garage-fallback">The car needs JavaScript, but every prediction remains readable.</p></noscript>
+        </section>
+        <p class="data-note">Predictions are committed before each race and settled afterward. Git history is the receipt.</p>
+      </div>
+    </section>
 
-<div class="panelview" id="v-numbers" role="tabpanel">
-  <div class="callout">
-    <p><b>No model here beats "assume the pole sitter wins."</b> That one-line rule is in the table below and it is the first number to look at.</p>
-    <p>Intervals are 95% bootstrap, resampling races. At ~22 races a season a single-season accuracy carries a standard error near 10 points — which is why this spans five seasons, not one.</p>
-  </div>
-  <h2>Backtest — grid known</h2>
-  <div class="card scroll" id="bt-post"><div class="empty">Loading…</div></div>
-  <h2>Backtest — before qualifying</h2>
-  <div class="card scroll" id="bt-pre"><div class="empty">Loading…</div></div>
-  <h2>Method</h2>
-  <div class="card pad" style="font-size:.88rem">
-    <p style="margin-top:0"><b>Walk-forward.</b> For each of the 103 races in 2022–2026, every model is fitted only on races dated strictly before it, then asked to predict that one race.</p>
-    <p><b>Leak guard.</b> Every column is registered with the point in time at which it becomes knowable; unregistered columns are rejected rather than admitted. It exists because the original pipeline fed the finishing status of the race being predicted into the model.</p>
-    <p style="margin-bottom:0"><b>Where the headroom is.</b> 88% of winners start in the top three, so the real task is discriminating between front-runners, not finding a winner among twenty.</p>
-  </div>
-</div>
+    <section class="tab-panel" id="models" role="tabpanel" aria-labelledby="tab-models" tabindex="0" hidden>
+      <div class="content-shell">
+        <header class="page-heading"><p class="eyebrow">Under the bodywork</p><h1>Every model’s call</h1><p>Home shows one house forecast. Here you can inspect the disagreements, probabilities and full predicted order.</p></header>
+        <div class="model-toolbar" aria-label="Prediction timing"><button class="pill-toggle is-active" type="button" data-model-view="pre" aria-pressed="true">Before qualifying</button><button class="pill-toggle" type="button" data-model-view="post" aria-pressed="false">After qualifying</button><span id="model-view-note">The grid is not known yet.</span></div>
+        <div class="model-grid" id="model-grid" aria-live="polite"><div class="model-card skeleton-card"></div><div class="model-card skeleton-card"></div></div>
+        <section class="qualifying-models" aria-labelledby="quali-model-title"><div class="section-heading compact"><div><p class="eyebrow">Saturday forecast</p><h2 id="quali-model-title">Qualifying models</h2></div></div><div class="model-grid" id="quali-model-grid"></div></section>
+      </div>
+    </section>
 
-<footer>
-  <p><b>Data.</b> <a href="https://github.com/jolpica/jolpica-f1">Jolpica-F1</a> (successor to Ergast, shut down early 2025), weather from <a href="https://open-meteo.com/">Open-Meteo</a>, practice pace from <a href="https://docs.fastf1.dev/">FastF1</a>. All free, no API keys.</p>
-  <p><b>Why the record is trustworthy.</b> Predictions are committed to git before the race runs, so commit history is the evidence nothing was fitted after the fact.</p>
-  <p><b>Honest limitation.</b> Backtest weather is reanalysis — what actually happened during the race — while a live prediction has only a forecast. Figures involving weather are an upper bound on live performance.</p>
-  <p id="updated"></p>
-</footer>
+    <section class="tab-panel" id="numbers" role="tabpanel" aria-labelledby="tab-numbers" tabindex="0" hidden>
+      <div class="content-shell">
+        <header class="page-heading numbers-heading"><div><p class="eyebrow">No victory laps for vibes</p><h1>The backtest table</h1><p>Walk-forward results over 103 races. Every prediction uses only information available before that race.</p></div><aside class="baseline-callout"><span>Hard truth</span><strong id="baseline-headline">The pole-sitter rule remains unbeaten.</strong></aside></header>
+        <div class="numbers-toolbar"><div class="segmented" role="group" aria-label="Backtest timing"><button type="button" class="is-active" data-backtest-view="post" aria-pressed="true">After qualifying</button><button type="button" data-backtest-view="pre" aria-pressed="false">Before qualifying</button></div><p>Click a column heading to sort.</p></div>
+        <div class="table-wrap"><table class="results-table" id="results-table"><caption>Model performance on held-out Formula 1 races</caption><thead><tr><th scope="col"><button data-sort="model">Approach</button></th><th scope="col" aria-sort="descending"><button data-sort="top1_accuracy">Winner <span aria-hidden="true">↓</span></button></th><th scope="col"><button data-sort="podium_hit_rate">Podium</button></th><th scope="col"><button data-sort="spearman_rho">Order ρ</button></th><th scope="col"><button data-sort="winner_log_loss">Log-loss</button></th><th scope="col"><button data-sort="n_races">Races</button></th></tr></thead><tbody id="results-body"><tr><td colspan="6">Loading results…</td></tr></tbody></table></div>
+        <div class="method-cards"><article><span class="method-number">01</span><h2>Walk forward</h2><p>Train on the past, predict the next race, then move forward one race and repeat.</p></article><article><span class="method-number">02</span><h2>Keep the baselines</h2><p>A model only matters if it beats simple rules such as choosing the pole sitter.</p></article><article><span class="method-number">03</span><h2>Show uncertainty</h2><p>Intervals are bootstrapped over races—the independent unit—not over twenty correlated driver rows.</p></article></div>
+      </div>
+    </section>
+  </main>
 
-</div>
-
-<script>
-const TEAM={ferrari:"#ff2800",mclaren:"#ff8000",mercedes:"#00d7b6",red_bull:"#3671c6",
-  aston_martin:"#229971",alpine:"#00a1e8",williams:"#1868db",rb:"#6692ff",racing_bulls:"#6692ff",
-  alphatauri:"#6692ff",sauber:"#52e252",kick_sauber:"#52e252",audi:"#52e252",haas:"#b6babd",
-  cadillac:"#c8102e",alfa:"#900000"};
-const teamColour=t=>TEAM[String(t||"").toLowerCase()]||"var(--accent)";
-const NAME=id=>String(id||"").replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-const pct=v=>(v==null||isNaN(v))?"–":(100*v).toFixed(1)+"%";
-const num=(v,d=2)=>(v==null||isNaN(v))?"–":Number(v).toFixed(d);
-const getJSON=async p=>{try{const r=await fetch(p,{cache:"no-store"});return r.ok?await r.json():null}catch(e){return null}};
-
-/* ---- interactive car: cursor + arrow keys, with lean and bob ---- */
-(function(){
-  const stage=document.getElementById("stage"), box=document.getElementById("carbox");
-  if(!stage||!box) return;
-  let target=0, current=0, keyVel=0;
-  const reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
-
-  stage.addEventListener("pointermove",e=>{
-    const r=stage.getBoundingClientRect();
-    target=((e.clientX-r.left)/r.width-.5)*2;          // -1 .. 1
-  });
-  stage.addEventListener("pointerleave",()=>{target=0});
-  addEventListener("keydown",e=>{
-    if(e.key==="ArrowLeft"){keyVel=-1;e.preventDefault();}
-    if(e.key==="ArrowRight"){keyVel=1;e.preventDefault();}
-  });
-  addEventListener("keyup",e=>{ if(e.key.startsWith("Arrow")) keyVel=0; });
-
-  let t=0;
-  (function frame(){
-    t+=0.016;
-    const want=Math.max(-1,Math.min(1,target+keyVel));
-    current+=(want-current)*0.09;                       // easing
-    const x=current*120;                                // travel
-    const lean=current*7;                               // body roll into the turn
-    const bob=reduced?0:Math.sin(t*7)*1.6;              // suspension
-    box.style.transform=`translateX(${x}px) rotate(${lean*0.28}deg) translateY(${bob}px)`;
-    requestAnimationFrame(frame);
-  })();
-})();
-
-/* ---- tabs ---- */
-document.querySelectorAll(".tab").forEach(tab=>{
-  tab.addEventListener("click",()=>{
-    document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t===tab));
-    document.querySelectorAll(".panelview").forEach(v=>v.classList.toggle("active",v.id===tab.dataset.view));
-    requestAnimationFrame(animateBars);
-  });
-});
-const animateBars=()=>document.querySelectorAll(".tw-bar[data-w]").forEach(b=>b.style.width=b.dataset.w+"%");
-
-/* ---- race banner + countdown ---- */
-let raceDate=null;
-function renderRaceBar(p){
-  const el=document.getElementById("racebar");
-  if(!p){el.innerHTML='<div class="card pad"><div class="empty">No upcoming race published yet.</div></div>';return;}
-  const r=p.race,w=p.weather||{};
-  raceDate=new Date(r.date+"T13:00:00Z");
-  const chips=[];
-  if(w.weather_temp_max!=null)chips.push(`<span class="chip">AIR <b>${num(w.weather_temp_max,1)}°C</b></span>`);
-  if(w.weather_precipitation!=null)chips.push(`<span class="chip">RAIN <b>${num(w.weather_precipitation,1)}MM</b></span>`);
-  if(w.weather_is_wet!=null)chips.push(`<span class="chip"><b>${w.weather_is_wet?"WET":"DRY"}</b></span>`);
-  if(w.weather_windspeed_max!=null)chips.push(`<span class="chip">WIND <b>${num(w.weather_windspeed_max,0)}</b></span>`);
-  el.innerHTML=`<div class="racebar"><div>
-      <div class="tag"><b>[R${String(r.round).padStart(2,"0")}]</b> ${r.season} season</div>
-      <div class="rb-name">${r.name}</div>
-      <div class="metaline"><span class="chip">${raceDate.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"}).toUpperCase()}</span>${chips.join("")}</div>
-    </div>
-    <div class="countdown"><div class="cd-num" id="cd">—</div><div class="cd-lab">to lights out</div></div></div>`;
-  tickCountdown();
-}
-function tickCountdown(){
-  const el=document.getElementById("cd"); if(!el||!raceDate)return;
-  const ms=raceDate-new Date();
-  if(ms<=0){el.textContent="LIVE";return;}
-  const d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60;
-  el.textContent=d>0?`${d}D ${h}H`:`${h}H ${m}M`;
-}
-setInterval(tickCountdown,30000);
-
-/* ---- house picks ---- */
-function ring(v){const c=2*Math.PI*18,f=Math.max(0,Math.min(1,v||0))*c;
-  return `<svg class="ring" viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="18"/>
-  <circle class="fg" cx="22" cy="22" r="18" stroke-dasharray="${f} ${c}"/></svg>`;}
-function pickCard(label,entry,conf){
-  if(!entry)return"";
-  const col=teamColour(entry.constructor_id);
-  return `<div class="pick" style="--team:${col}">
-    <div class="tag"><b>[${label.slice(0,3).toUpperCase()}]</b> ${label}</div>
-    <div class="pick-driver">${NAME(entry.driver_id)}</div>
-    <div class="pick-team">${NAME(entry.constructor_id)}</div>
-    <div class="pick-foot">
-      <div><div class="pick-prob" style="color:${col}">${pct(entry.win_probability)}</div>
-        <div class="tiny">model probability</div></div>
-      ${conf?`<div style="display:flex;align-items:center;gap:9px">${ring(conf.value)}
-        <div style="text-align:right"><div style="font-family:var(--mono);font-weight:700">${pct(conf.value)}</div>
-        <div class="tiny">over ${conf.n_races} races</div></div></div>`:""}
-    </div></div>`;
-}
-function renderHouse(pre,post,bt){
-  const el=document.getElementById("house-picks");
-  const src=post||pre;
-  if(!src||!src.predictions||!src.predictions.length){el.innerHTML='<div class="empty">No prediction published yet.</div>';return;}
-  const house=(bt&&bt.house)||{};
-  const byName=(payload,n)=>{const m=payload&&payload.predictions&&(payload.predictions.find(p=>p.model===n)||payload.predictions[0]);return m?m.ranking:null;};
-  const raceRank=byName(src,house.winner&&house.winner.model);
-  const qualiRank=pre&&pre.qualifying_predictions&&pre.qualifying_predictions.length?pre.qualifying_predictions[0].ranking:null;
-  const cards=[];
-  if(qualiRank)cards.push(pickCard("Pole position",qualiRank[0],null));
-  if(raceRank)cards.push(pickCard("Race winner",raceRank[0],house.winner));
-  if(raceRank){
-    const pods=raceRank.slice(0,3).map((d,i)=>`<div class="pod" style="--team:${teamColour(d.constructor_id)}">
-      <div class="pod-p">P${i+1}</div><div class="pod-d">${NAME(d.driver_id)}</div></div>`).join("");
-    cards.push(`<div class="pick" style="--team:var(--accent)">
-      <div class="tag"><b>[POD]</b> Podium</div><div class="podium-row">${pods}</div>
-      <div class="pick-foot"><div><div class="pick-prob">TOP 3</div><div class="tiny">predicted order</div></div>
-      ${house.podium?`<div style="display:flex;align-items:center;gap:9px">${ring(house.podium.value)}
-        <div style="text-align:right"><div style="font-family:var(--mono);font-weight:700">${pct(house.podium.value)}</div>
-        <div class="tiny">slots correct</div></div></div>`:""}</div></div>`);
-  }
-  el.innerHTML=cards.join("")||'<div class="empty">No prediction available.</div>';
-}
-
-function renderKPI(bt,record){
-  const el=document.getElementById("headline-kpi");
-  if(!bt){el.innerHTML='<div class="empty">Unavailable.</div>';return;}
-  const h=bt.house||{},b=bt.baselines||{};
-  const live=(record&&record.summary&&record.summary.length)?record.summary[0]:null;
-  const out=[];
-  if(h.winner){out.push(`<div><b>${pct(h.winner.value)}</b><span class="tiny">winner called right</span></div>`);
-    document.getElementById("hero-num").textContent=pct(h.winner.value);}
-  if(h.podium)out.push(`<div><b>${pct(h.podium.value)}</b><span class="tiny">podium slots right</span></div>`);
-  if(b.winner)out.push(`<div><b>${pct(b.winner.value)}</b><span class="tiny">best naive rule</span></div>`);
-  out.push(`<div><b>${bt.n_races||103}</b><span class="tiny">races tested</span></div>`);
-  if(live&&live.top1_accuracy!=null)out.push(`<div><b>${pct(live.top1_accuracy)}</b><span class="tiny">live · ${live.races} races</span></div>`);
-  el.innerHTML=out.join("");
-}
-function renderLast(record){
-  const el=document.getElementById("last-race");
-  if(!record||!record.settled||!record.settled.length){
-    el.innerHTML='<div class="empty">Nothing settled yet — the record starts with the first race after go-live.</div>';return;}
-  const l=record.settled[record.settled.length-1],ok=l.top1_correct===1;
-  el.innerHTML=`<div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center">
-    <div><div class="tag"><b>[LAST]</b> ${l.race_name}</div>
-    <div style="margin-top:6px;font-size:.9rem">We said <b style="text-transform:uppercase">${NAME(l.predicted_winner)}</b> · winner was <b style="text-transform:uppercase">${NAME(l.actual_winner)}</b></div></div>
-    <div style="font-family:var(--mono);font-weight:800;letter-spacing:.1em;color:${ok?"var(--good)":"var(--bad)"}">${ok?"CALLED IT":"MISSED"}</div></div>`;
-}
-function towerRows(r,n=5){
-  const max=Math.max(...r.slice(0,n).map(d=>d.win_probability||0),.0001);
-  return r.slice(0,n).map(d=>`<li style="--team:${teamColour(d.constructor_id)}">
-    <span class="tw-pos">${d.position}</span>
-    <span><span class="tw-name">${NAME(d.driver_id)}</span>
-      <div class="tw-bar" data-w="${Math.max(3,100*(d.win_probability||0)/max).toFixed(0)}"></div></span>
-    <span class="tw-prob">${pct(d.win_probability)}</span></li>`).join("");
-}
-function renderModels(id,payload,key="predictions"){
-  const el=document.getElementById(id),preds=payload&&payload[key];
-  if(!preds||!preds.length){el.innerHTML='<div class="empty">Not published yet.</div>';return;}
-  el.innerHTML=preds.map(p=>`<div class="mcard"><div class="mname">${p.model}</div>
-    <div class="mmeta">${p.view==="pre_quali"?"no grid known":"real grid"}</div>
-    <ul class="tower">${towerRows(p.ranking)}</ul></div>`).join("");
-}
-function renderRecord(record){
-  const el=document.getElementById("m-record");
-  if(!record||!record.summary||!record.summary.length){el.innerHTML='<div class="pad"><div class="empty">No races settled yet.</div></div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Model</th><th>When</th><th>Races</th><th>Winner</th><th>Podium</th><th>Log-loss</th></tr></thead><tbody>
-    ${record.summary.map(r=>`<tr><td>${r.model}</td><td>${r.view}</td><td class="num">${r.races}</td>
-    <td class="num">${pct(r.top1_accuracy)}</td><td class="num">${num(r.podium_hits_per_race)}</td>
-    <td class="num">${num(r.winner_log_loss)}</td></tr>`).join("")}</tbody></table>`;
-}
-function btTable(rows,houseModel){
-  if(!rows||!rows.length)return'<div class="pad"><div class="empty">Unavailable.</div></div>';
-  return `<table><thead><tr><th>Model</th><th>Winner</th><th>Podium</th><th>Spearman ρ</th><th>Log-loss</th><th>Races</th></tr></thead><tbody>
-  ${rows.map(r=>{const cls=[r.model.startsWith("naive")?"baseline":"",r.model===houseModel?"house":""].filter(Boolean).join(" ");
-    return `<tr class="${cls}"><td>${r.model}</td>
-    <td class="num">${pct(r.top1_accuracy)}<div class="ci">[${pct(r.top1_accuracy_lo)}, ${pct(r.top1_accuracy_hi)}]</div></td>
-    <td class="num">${num(r.podium_hit_rate)}</td><td class="num">${num(r.spearman_rho)}</td>
-    <td class="num">${num(r.winner_log_loss)}</td><td class="num">${r.n_races}</td></tr>`}).join("")}</tbody></table>`;
-}
-
-/* the car is decoration: load it after the data, and never let it break the page */
-(function(){
-  const host=document.getElementById("carhost");
-  if(!host) return;
-  const start=()=>import("./car.js")
-    .then(m=>m.mountCar(host))
-    .catch(()=>{ host.innerHTML='<div class="tag" style="position:absolute;bottom:14px;left:14px">[ 3D unavailable ]</div>'; });
-  if("requestIdleCallback" in window) requestIdleCallback(start,{timeout:2500}); else setTimeout(start,600);
-})();
-
-(async function(){
-  const [pre,post,record,bt]=await Promise.all([
-    getJSON("data/latest_pre_quali.json"),getJSON("data/latest_post_quali.json"),
-    getJSON("data/track_record.json"),getJSON("data/backtest.json")]);
-  renderRaceBar(post||pre); renderHouse(pre,post,bt); renderKPI(bt,record); renderLast(record);
-  renderModels("m-quali",pre,"qualifying_predictions"); renderModels("m-pre",pre); renderModels("m-post",post);
-  renderRecord(record);
-  if(bt){
-    document.getElementById("bt-post").innerHTML=btTable(bt.post_quali,bt.house&&bt.house.winner&&bt.house.winner.model);
-    document.getElementById("bt-pre").innerHTML=btTable(bt.pre_quali,bt.house&&bt.house.winner_pre_quali&&bt.house.winner_pre_quali.model);
-  }
-  const stamp=(post||pre||{}).generated_at||(record||{}).updated_at;
-  if(stamp)document.getElementById("updated").textContent="Last updated "+new Date(stamp).toLocaleString();
-  requestAnimationFrame(animateBars);
-})();
-</script>
+  <footer class="site-footer"><p><strong>Free data, public record.</strong> Jolpica-F1 · Open-Meteo · FastF1</p><p id="last-updated">Waiting for the latest forecast…</p></footer>
+  <script type="module" src="./app.js?v=6"></script>
 </body>
 </html>

@@ -77,6 +77,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--models", default="baselines,original")
     parser.add_argument("--view", default="post_quali", choices=sorted(VIEWS))
     parser.add_argument("--refit-every", type=int, default=1)
+    parser.add_argument(
+        "--min-season", type=int, default=None,
+        help="drop training rows before this season (practice pace starts 2018)")
     parser.add_argument("--tag", default=None, help="suffix for output filenames")
     parser.add_argument(
         "--drop-weather",
@@ -110,7 +113,8 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit(f"no models selected from {sorted(groups)}")
 
     per_race = walk_forward(
-        df, models, test_seasons=DEFAULT_TEST_SEASONS, refit_every=args.refit_every
+        df, models, test_seasons=DEFAULT_TEST_SEASONS,
+        refit_every=args.refit_every, min_season=args.min_season,
     )
     table = summarise(per_race)
 

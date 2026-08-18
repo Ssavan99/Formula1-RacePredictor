@@ -40,6 +40,13 @@ TEST_WINDOW_START = 2022
 INNER_TRAIN_END = 2019
 INNER_VALID = (2020, 2021)
 
+#: Practice-pace features only exist from 2018 (FastF1 coverage). When they are
+#: in play the tuning window shrinks to the seasons where they are real, because
+#: median-filling four absent seasons would tune against fabricated values.
+PRACTICE_TRAIN_END = 2020
+PRACTICE_VALID = (2021,)
+PRACTICE_FIRST_SEASON = 2018
+
 
 def _score_on_races(model, valid: pd.DataFrame) -> dict:
     """Top-1 and podium hit rate over the inner validation races."""
@@ -134,13 +141,25 @@ def main() -> int:
 
     # Hard guarantee: the backtest window is never seen by the search.
     df = df[df["season"] < TEST_WINDOW_START]
-    train = df[df["season"] <= INNER_TRAIN_END]
-    valid = df[df["season"].isin(INNER_VALID)]
+
+    has_practice = (
+        "practice_long_run_gap" in df.columns
+        and df["practice_long_run_gap"].notna().any()
+    )
+    if has_practice:
+        df = df[df["season"] >= PRACTICE_FIRST_SEASON]
+        train_end, valid_seasons = PRACTICE_TRAIN_END, PRACTICE_VALID
+    else:
+        train_end, valid_seasons = INNER_TRAIN_END, INNER_VALID
+
+    train = df[df["season"] <= train_end]
+    valid = df[df["season"].isin(valid_seasons)]
 
     print(
-        f"search space: train <= {INNER_TRAIN_END} ({len(train)} rows), "
-        f"validate {INNER_VALID} ({valid.groupby(['season','round']).ngroups} races). "
-        f"Seasons >= {TEST_WINDOW_START} not loaded."
+        f"search space: train <= {train_end} ({len(train)} rows), "
+        f"validate {valid_seasons} ({valid.groupby(['season','round']).ngroups} races). "
+        f"Seasons >= {TEST_WINDOW_START} not loaded. "
+        f"practice features: {'yes' if has_practice else 'no'}."
     )
 
     out = {}

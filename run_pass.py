@@ -11,7 +11,13 @@ import sys, pandas as pd
 from f1predict.evaluate.backtest import walk_forward
 from f1predict.evaluate.metrics import summarise
 
-tag, names = sys.argv[1], sys.argv[2:]
+args = sys.argv[1:]
+min_season = None
+if "--min-season" in args:
+    i = args.index("--min-season")
+    min_season = int(args[i + 1])
+    del args[i:i + 2]
+tag, names = args[0], args[1:]
 df = pd.read_parquet("data/processed/races.parquet")
 
 def build(name):
@@ -31,6 +37,6 @@ def build(name):
     }[name]()
 
 models = [build(n) for n in names]
-per_race = walk_forward(df, models, refit_every=1)
+per_race = walk_forward(df, models, refit_every=1, min_season=min_season)
 per_race.to_parquet(f"results/per_race_{tag}.parquet", index=False)
 print(summarise(per_race)[["model","top1_accuracy","podium_hit_rate","spearman_rho","winner_log_loss","n_races"]].to_string(index=False))

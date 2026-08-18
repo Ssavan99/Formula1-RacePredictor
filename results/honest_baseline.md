@@ -295,3 +295,68 @@ break is much harder than predicting which car is fast.
 - **Podium** is now reported as a first-class column for every model rather than
   a footnote; LambdaRank leads the models at 0.631, still behind the pole-sitter
   rule at 0.663.
+
+---
+
+# Round 3 — FastF1 practice pace joined in
+
+Backfill completed: **184 races, 2018–2026**, 99.7% best-lap and 89.6% long-run
+coverage across the test window. FastF1 has no usable timing before 2018, so
+training is restricted to 2018+ — median-filling four absent seasons injects a
+large block of fabricated values, and measuring showed it costs more than the
+extra history is worth.
+
+**One consistent configuration** (practice features present, training from 2018):
+
+| Model | Top-1 | Podium | Spearman ρ | Log-loss |
+|---|---|---|---|---|
+| **naive: pole sitter wins** | **0.573** [0.48, 0.67] | **0.663** | 0.628 | 1.757 |
+| lightgbm: lambdarank | 0.544 [0.45, 0.64] | **0.654** | **0.664** | 1.576 |
+| plackett-luce | 0.495 [0.40, 0.59] | 0.628 | 0.646 | 1.651 |
+| original: MLP | 0.476 [0.38, 0.57] | 0.544 | 0.577 | 5.023 |
+| original: SVM (retuned) | 0.447 [0.35, 0.54] | 0.498 | 0.277 | 2.053 |
+| original: SVM (2023 config) | 0.087 [0.04, 0.15] | 0.372 | 0.494 | 2.503 |
+| naive: random | 0.039 [0.01, 0.08] | 0.172 | 0.009 | 3.017 |
+
+## Did practice pace help? Partly, and not where expected
+
+Measured across three configurations on identical folds:
+
+| Configuration | LambdaRank top-1 | Plackett-Luce top-1 | LambdaRank podium |
+|---|---|---|---|
+| no practice, train 2014+ | **0.553** | 0.456 | 0.631 |
+| practice, train 2014+ | 0.534 | 0.466 | 0.647 |
+| practice, train 2018+ | 0.544 | **0.495** | **0.654** |
+
+* **Podium improved materially**: 0.631 → 0.654, now within a point of the
+  pole-sitter rule (0.663) where it had been three points behind.
+* **Plackett-Luce gained the most**: 0.456 → 0.495. A linear choice model has no
+  way to synthesise "who is quick this weekend" from standings alone, so a
+  direct pace measurement is worth more to it than to a tree ensemble that can
+  approximate it from interactions.
+* **LambdaRank's top-1 did not improve** — 0.553 → 0.544, a difference far
+  inside the noise at n=103 (the intervals overlap almost entirely).
+
+The honest summary: practice pace helps the *ordering* tasks and the weaker
+model, and does nothing measurable for the strongest model's top pick. It is
+kept because two of those three effects are real and none is negative.
+
+## Why the practice-era hyperparameters were not adopted
+
+Re-tuning on the practice-inclusive feature space is the right instinct — it is
+what fixed the SVM. But practice starts in 2018 and the test window starts in
+2022, leaving **one clean validation season (22 races)**. Selecting the best of
+81 configurations against 22 races is precisely the small-sample overfitting this
+project exists to avoid: it would pick the configuration luckiest on 22 races,
+not the best one.
+
+So the earlier settings, validated on 39 races, are kept. This is a case where
+the correct move was to *decline* an apparent improvement because the evidence
+for it was too thin to trust.
+
+## Still open
+
+- **LLM entrant** — implemented in `f1predict/models/llm.py`, with an empirical
+  knowledge-cutoff probe rather than a trusted docs figure, because an LLM
+  cannot honestly enter a backtest over races it was trained on. Awaiting a run
+  of the probe to establish the clean window.
