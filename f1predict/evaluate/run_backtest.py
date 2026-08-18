@@ -46,6 +46,10 @@ def build_models(groups: set[str], view: str) -> list[RaceModel]:
         from ..models.ranker import LambdaRankModel
 
         models.extend([LambdaRankModel(view=view), PlackettLuceModel(view=view)])
+    if "ensemble" in groups:
+        from ..models.ensemble import build_ensemble
+
+        models.append(build_ensemble(view=view))
     return models
 
 
@@ -55,6 +59,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--view", default="post_quali", choices=sorted(VIEWS))
     parser.add_argument("--refit-every", type=int, default=1)
     parser.add_argument("--tag", default=None, help="suffix for output filenames")
+    parser.add_argument(
+        "--drop-weather",
+        action="store_true",
+        help=(
+            "exclude weather features. Historical weather comes from ERA5 "
+            "reanalysis (what actually happened over the race window) while a "
+            "live prediction only has a forecast, so backtest weather is "
+            "optimistic. This flag measures how much that is worth."
+        ),
+    )
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args(argv)
 
@@ -69,6 +83,8 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     df = pd.read_parquet(DATASET)
+    if args.drop_weather:
+        df = df.drop(columns=[c for c in df.columns if c.startswith("weather_")])
     groups = {g.strip() for g in args.models.split(",") if g.strip()}
     models = build_models(groups, args.view)
     if not models:
@@ -120,14 +136,17 @@ def _print_table(table, reference, comparisons, per_race) -> None:
     print(f"Walk-forward backtest over {races} races (2022-2026)")
     print(f"Reference baseline: {reference}")
     print()
-    header = f"{'model':38s} {'top-1':>16s} {'podium':>8s} {'rho':>7s} {'logloss':>8s}"
+    header = (
+        f"{'model':38s} {'top-1':>16s} {'podium':>8s} {'rho':>7s} "
+        f"{'logloss':>8s} {'races':>6s}"
+    )
     print(header)
     print("-" * len(header))
     for row in table.itertuples(index=False):
         ci = f"{row.top1_accuracy:.3f} [{row.top1_accuracy_lo:.2f},{row.top1_accuracy_hi:.2f}]"
         print(
             f"{row.model:38s} {ci:>16s} {row.podium_hit_rate:8.3f} "
-            f"{row.spearman_rho:7.3f} {row.winner_log_loss:8.3f}"
+            f"{row.spearman_rho:7.3f} {row.winner_log_loss:8.3f} {row.n_races:6d}"
         )
     print()
     print(f"Paired difference in top-1 vs {reference}:")

@@ -269,7 +269,11 @@ def add_form_features(df: pd.DataFrame) -> pd.DataFrame:
         df, ["constructor_id"], "finish_position", 5
     )
 
-    # Career experience: races started before this one.
+    # Races started before this one, counted from the earliest fetched season
+    # (start_season - WARMUP_SEASONS), NOT from a driver's true debut. For
+    # drivers whose career predates the fetch window this understates
+    # experience, and the value shifts if WARMUP_SEASONS changes. It is a
+    # within-window experience proxy, not a career total.
     df["driver_career_starts"] = (
         df.groupby("driver_id", sort=False).cumcount().astype(float)
     )

@@ -23,29 +23,75 @@ from scipy.stats import spearmanr
 EPS = 1e-15
 
 
+def _rankable(predicted_scores: np.ndarray) -> np.ndarray:
+    """Scores with non-finite values pushed below the field.
+
+    ``np.argmax`` on an array containing NaN returns the index of the first NaN,
+    which would silently nominate the driver the model knows *least* about. A
+    missing score must never win.
+    """
+    scores = np.asarray(predicted_scores, dtype=float)
+    return np.where(np.isfinite(scores), scores, -np.inf)
+
+
+def _descending_tie_groups(scores: np.ndarray) -> list[np.ndarray]:
+    """Indices grouped by equal score, best group first."""
+    levels = np.unique(scores)[::-1]
+    return [np.where(scores == level)[0] for level in levels]
+
+
 def top1_correct(predicted_scores: np.ndarray, actual_positions: np.ndarray) -> float:
-    """1.0 if the highest-scored driver actually won, else 0.0."""
+    """Probability the model's top pick won, under random tie-breaking.
+
+    With a unique maximum this is 1.0 or 0.0 as expected. With an *m*-way tie
+    at the top it is 1/m rather than an accident of row order. Returning the
+    expectation keeps the metric deterministic and independent of how the rows
+    happen to be sorted -- and the dataset is sorted by finishing position, so
+    index-based tie-breaking would hand the answer to any model that ties.
+    """
     if len(predicted_scores) == 0:
         return np.nan
-    picked = int(np.argmax(predicted_scores))
-    return float(actual_positions[picked] == 1)
+    scores = _rankable(predicted_scores)
+    if not np.isfinite(scores).any():
+        return np.nan
+    best = scores.max()
+    tied = np.where(scores == best)[0]
+    return float(np.mean(actual_positions[tied] == 1))
 
 
 def podium_hit_rate(
     predicted_scores: np.ndarray, actual_positions: np.ndarray, k: int = 3
 ) -> float:
-    """Fraction of the actual top-k that appear in the predicted top-k."""
+    """Fraction of the top-k slots filled by drivers who actually finished top-k.
+
+    Denominator is ``k``, not the number of drivers who happen to have a finite
+    finishing position. Dividing by the latter would score 1.0 for finding one
+    of one known podium finisher, inflating the metric exactly when the data is
+    sparsest.
+    """
     n = len(predicted_scores)
     if n == 0:
         return np.nan
     k = min(k, n)
-    predicted_top = set(np.argsort(-predicted_scores)[:k])
+    scores = _rankable(predicted_scores)
     actual_top = {
         i for i in range(n) if np.isfinite(actual_positions[i]) and actual_positions[i] <= k
     }
     if not actual_top:
         return np.nan
-    return len(predicted_top & actual_top) / len(actual_top)
+
+    # Expected overlap under random tie-breaking: a tie group of t candidates
+    # contributing `take` of the k slots, of which `a` are truly top-k, is
+    # expected to contribute take * a / t.
+    expected, filled = 0.0, 0
+    for group in _descending_tie_groups(scores):
+        take = min(len(group), k - filled)
+        if take <= 0:
+            break
+        in_actual = sum(1 for i in group if i in actual_top)
+        expected += take * in_actual / len(group)
+        filled += take
+    return expected / k
 
 
 def spearman_rho(predicted_scores: np.ndarray, actual_positions: np.ndarray) -> float:
@@ -68,10 +114,19 @@ def ndcg_at_k(
     relevance = np.where(
         np.isfinite(actual_positions), np.maximum(0.0, 21.0 - actual_positions), 0.0
     )
-    order = np.argsort(-predicted_scores)[:k]
-    gains = relevance[order]
-    discounts = 1.0 / np.log2(np.arange(2, len(gains) + 2))
-    dcg = float((gains * discounts).sum())
+    scores = _rankable(predicted_scores)
+
+    # Expected DCG under random tie-breaking: every position filled from a tie
+    # group draws, in expectation, that group's mean relevance.
+    discounts = 1.0 / np.log2(np.arange(2, min(k, n) + 2))
+    dcg, filled = 0.0, 0
+    for group in _descending_tie_groups(scores):
+        take = min(len(group), min(k, n) - filled)
+        if take <= 0:
+            break
+        mean_relevance = float(relevance[group].mean())
+        dcg += mean_relevance * float(discounts[filled : filled + take].sum())
+        filled += take
 
     ideal = np.sort(relevance)[::-1][:k]
     idiscounts = 1.0 / np.log2(np.arange(2, len(ideal) + 2))

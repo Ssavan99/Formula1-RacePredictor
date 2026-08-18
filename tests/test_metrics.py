@@ -158,3 +158,62 @@ class TestSummarise:
         assert len(table) == 2
         assert table.iloc[0]["model"] == "a"  # sorted by top-1 descending
         assert "top1_accuracy_lo" in table.columns
+
+
+class TestRowOrderInvariance:
+    """Metrics must not read the answer out of row order.
+
+    The dataset is stored sorted by finishing position, so row 0 of every race
+    is its winner. Any metric that breaks ties by index would score a model with
+    tied predictions as if it had ranked the field perfectly. This is the
+    regression test for that.
+    """
+
+    @staticmethod
+    def _shuffled(scores, positions, seed):
+        rng = np.random.default_rng(seed)
+        order = rng.permutation(len(scores))
+        return scores[order], positions[order]
+
+    def test_top1_is_invariant_under_row_permutation(self):
+        scores = np.array([1.0, 0.0, 0.0, 0.0, 0.0])  # 4-way tie at the bottom
+        positions = np.array([3.0, 1.0, 2.0, 4.0, 5.0])
+        base = top1_correct(scores, positions)
+        for seed in range(25):
+            assert top1_correct(*self._shuffled(scores, positions, seed)) == base
+
+    def test_podium_is_invariant_under_row_permutation(self):
+        """A one-hot prediction must not inherit the podium from row order."""
+        scores = np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        positions = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+        base = podium_hit_rate(scores, positions)
+        for seed in range(25):
+            assert podium_hit_rate(*self._shuffled(scores, positions, seed)) == base
+
+    def test_ndcg_is_invariant_under_row_permutation(self):
+        scores = np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        positions = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+        base = ndcg_at_k(scores, positions)
+        for seed in range(25):
+            assert ndcg_at_k(*self._shuffled(scores, positions, seed)) == pytest.approx(base)
+
+    def test_all_tied_scores_do_not_score_a_perfect_podium(self):
+        """Predicting nothing must not look like predicting everything."""
+        scores = np.zeros(6)
+        positions = np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+        assert podium_hit_rate(scores, positions) < 1.0
+
+
+class TestMissingScoresNeverWin:
+    def test_nan_score_does_not_become_the_pick(self):
+        scores = np.array([np.nan, 0.4, 0.9])
+        positions = np.array([2.0, 3.0, 1.0])
+        assert top1_correct(scores, positions) == 1.0
+
+    def test_nan_score_excluded_from_podium(self):
+        scores = np.array([np.nan, 0.9, 0.8, 0.7])
+        positions = np.array([4.0, 1.0, 2.0, 3.0])
+        assert podium_hit_rate(scores, positions) == pytest.approx(1.0)
+
+    def test_all_nan_scores_give_nan_not_a_pick(self):
+        assert np.isnan(top1_correct(np.array([np.nan, np.nan]), np.array([1.0, 2.0])))

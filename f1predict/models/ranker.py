@@ -53,6 +53,7 @@ class LambdaRankModel(RaceModel):
         min_child_samples: int = 30,
         random_state: int = 1,
         name: str | None = None,
+        target: str = "finish_position",
     ):
         if lgb is None:  # pragma: no cover
             raise ImportError("lightgbm is required for LambdaRankModel")
@@ -62,6 +63,7 @@ class LambdaRankModel(RaceModel):
         self.num_leaves = num_leaves
         self.min_child_samples = min_child_samples
         self.random_state = random_state
+        self.target = target
         if name:
             self.name = name
         self.encoder: FieldEncoder | None = None
@@ -82,7 +84,7 @@ class LambdaRankModel(RaceModel):
             ordered.groupby(["season", "round"], sort=False).size().to_numpy()
         )
         positions = pd.to_numeric(
-            ordered["finish_position"], errors="coerce"
+            ordered[self.target], errors="coerce"
         ).to_numpy(float)
         y = relevance_from_position(positions)
 

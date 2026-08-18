@@ -63,12 +63,21 @@ class TestChampionshipStateIsShifted:
         assert alice["driver_points_before"] == 25.0
         assert alice["driver_wins_before"] == 1.0
 
-    def test_points_before_never_includes_current_race(self):
-        """The decisive property: prior points < total points at every round."""
-        df = add_championship_state(make_races(n_rounds=4))
+    def test_points_before_equals_independently_summed_prior_rounds(self):
+        """Checked against a separate computation, not against itself.
+
+        Asserting `points_before < points_before + points` is a tautology
+        whenever points > 0, and would pass against a fully leaky
+        implementation. This sums the prior rounds directly instead.
+        """
+        df = add_championship_state(make_races(n_rounds=5))
+        raw = make_races(n_rounds=5)
         for _, row in df.iterrows():
-            cumulative_through_now = row["driver_points_before"] + row["points"]
-            assert row["driver_points_before"] < cumulative_through_now
+            prior = raw[
+                (raw["driver_id"] == row["driver_id"])
+                & (raw["round"] < row["round"])
+            ]["points"].sum()
+            assert row["driver_points_before"] == pytest.approx(prior)
 
     def test_constructor_points_shifted_too(self):
         df = add_championship_state(make_races())

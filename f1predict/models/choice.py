@@ -47,6 +47,7 @@ class PlackettLuceModel(RaceModel):
         depth: int = DEFAULT_DEPTH,
         max_iter: int = 300,
         name: str | None = None,
+        target: str = "finish_position",
     ):
         """
         Args:
@@ -58,6 +59,7 @@ class PlackettLuceModel(RaceModel):
         self.alpha = alpha
         self.depth = depth
         self.max_iter = max_iter
+        self.target = target
         if name:
             self.name = name
         self.encoder: FieldEncoder | None = None
@@ -114,7 +116,7 @@ class PlackettLuceModel(RaceModel):
 
     def _races_from(self, df: pd.DataFrame, X: np.ndarray) -> list:
         races = []
-        positions = pd.to_numeric(df["finish_position"], errors="coerce").to_numpy(float)
+        positions = pd.to_numeric(df[self.target], errors="coerce").to_numpy(float)
         offset = 0
         for _, group in df.groupby(["season", "round"], sort=False):
             size = len(group)

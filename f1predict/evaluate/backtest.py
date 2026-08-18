@@ -82,9 +82,9 @@ def walk_forward(
     )
 
     rows: list[dict] = []
-    fitted: dict[str, RaceModel] = {}
-    since_fit: dict[str, int] = {m.name: 10**9 for m in models}
+    last_fit_at: dict[str, int] = {}
     started = time.monotonic()
+    shuffler = np.random.default_rng(20260817)
 
     for counter, race in enumerate(test_races.itertuples(index=False), start=1):
         race_date = race.race_date
@@ -94,18 +94,30 @@ def walk_forward(
         if len(race_keys(train)) < min_train_races or current.empty:
             continue
 
+        # The dataset is stored sorted by finishing position, so row 0 of every
+        # race is its winner. Any metric that breaks a tie by index would then
+        # read the answer off the row order rather than the prediction -- a
+        # baseline that scores 1.0 for one driver and 0.0 for nineteen would
+        # appear to rank the rest of the field perfectly. Shuffle each race
+        # before scoring, with a fixed seed so runs stay reproducible.
+        current = current.sample(frac=1.0, random_state=shuffler.integers(0, 2**31 - 1))
+
         actual = pd.to_numeric(current[target], errors="coerce").to_numpy(float)
         if not np.isfinite(actual).any():
             continue
 
         for model in models:
             try:
-                if model.requires_fit and since_fit[model.name] >= refit_every:
-                    model.fit(train)
-                    fitted[model.name] = model
-                    since_fit[model.name] = 0
-                elif model.requires_fit:
-                    since_fit[model.name] += 1
+                # Refit when this model has not been fitted for `refit_every`
+                # races. Tracking the race index rather than a counter that is
+                # only incremented on the non-fitting branch: that pattern
+                # refits every `refit_every + 1` races, so refit_every=1 would
+                # silently score half the season with a one-race-stale model.
+                if model.requires_fit:
+                    previous = last_fit_at.get(model.name)
+                    if previous is None or (counter - previous) >= refit_every:
+                        model.fit(train)
+                        last_fit_at[model.name] = counter
 
                 scores = np.asarray(model.predict_scores(current), dtype=float)
                 if len(scores) != len(current):
@@ -115,6 +127,9 @@ def walk_forward(
                     )
                 probabilities = np.asarray(model.predict_proba(current), dtype=float)
             except Exception as exc:  # a broken model must not abort the sweep
+                # Skipped races make a model's mean an average over only the
+                # races it survived. `n_races` in the summary exposes that;
+                # never compare two models without checking it.
                 log.warning(
                     "%s failed on %s R%s: %s", model.name, race.season, race.round, exc
                 )
@@ -129,7 +144,9 @@ def walk_forward(
                 "race_name": race.race_name,
                 "n_drivers": int(len(current)),
                 "predicted_winner": str(
-                    current.iloc[int(np.argmax(scores))]["driver_id"]
+                    current.iloc[
+                        int(np.argmax(np.where(np.isfinite(scores), scores, -np.inf)))
+                    ]["driver_id"]
                 ),
                 "actual_winner": _actual_winner(current, actual),
             }

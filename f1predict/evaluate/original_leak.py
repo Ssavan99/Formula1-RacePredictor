@@ -133,13 +133,23 @@ def run() -> dict:
         )
 
     # The naive rule to beat, on the same 2022 test season.
-    pole = test.groupby("round").apply(
-        lambda g: int(
-            g.loc[g["grid"].idxmin()]["driver"]
-            == (g[g["podium"] == 1].iloc[0]["driver"] if (g["podium"] == 1).any() else None)
-        ),
-        include_groups=False,
-    )
+    #
+    # `Data/Final.csv` is raw Ergast, where a pit-lane start is grid == 0. Using
+    # idxmin directly would nominate the pit-lane starter as the pole sitter --
+    # 9 of the 22 races in 2022 have such an entry. That understates the
+    # baseline as 0.364 when it is really 0.455, which is the difference between
+    # the original SVM appearing to clear the bar and not clearing it.
+    def pole_hits(group: pd.DataFrame) -> int:
+        grid = pd.to_numeric(group["grid"], errors="coerce")
+        starters = group[grid > 0]
+        if starters.empty or not (group["podium"] == 1).any():
+            return 0
+        pole_sitter = starters.loc[
+            pd.to_numeric(starters["grid"], errors="coerce").idxmin()
+        ]["driver"]
+        return int(pole_sitter == group[group["podium"] == 1].iloc[0]["driver"])
+
+    pole = test.groupby("round").apply(pole_hits, include_groups=False)
     results["naive: pole sitter wins"] = float(pole.mean())
     results["_n_test_races"] = int(test["round"].nunique())
     results["_n_features_with_leak"] = int(

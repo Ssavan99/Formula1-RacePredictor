@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>F1 Race Predictor</title>
+<meta name="description" content="Formula 1 qualifying and race predictions from free public data, with every model scored against naive baselines.">
+<style>
+:root{
+  --bg:#fbfbfd; --panel:#ffffff; --ink:#16181d; --muted:#5f6672;
+  --line:#e4e6ec; --accent:#c8102e; --good:#1a7f4b; --bad:#9a2c2c;
+  --chip:#f1f2f6;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1013; --panel:#171a20; --ink:#e9ebf0; --muted:#9aa2b1;
+    --line:#272b34; --accent:#ff4d6a; --good:#4ade80; --bad:#f87171;
+    --chip:#20242c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1013; --panel:#171a20; --ink:#e9ebf0; --muted:#9aa2b1;
+  --line:#272b34; --accent:#ff4d6a; --good:#4ade80; --bad:#f87171;
+  --chip:#20242c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 20px 72px}
+header{border-bottom:3px solid var(--accent);padding-bottom:18px;margin-bottom:28px}
+h1{margin:0 0 6px;font-size:clamp(1.6rem,4vw,2.3rem);letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0;font-size:.98rem}
+h2{font-size:1.16rem;margin:36px 0 12px;letter-spacing:-.01em}
+h2 .note{font-weight:400;color:var(--muted);font-size:.85rem}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.race-head{display:flex;flex-wrap:wrap;gap:16px;align-items:baseline;justify-content:space-between}
+.race-name{font-size:1.3rem;font-weight:650}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{background:var(--chip);border-radius:999px;padding:5px 12px;font-size:.83rem;color:var(--muted)}
+.chip b{color:var(--ink);font-weight:600}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:14px}
+.model-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.model-name{font-family:var(--mono);font-size:.8rem;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+ol.rank{list-style:none;margin:0;padding:0}
+ol.rank li{display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+ol.rank li:last-child{border-bottom:0}
+.pos{font-family:var(--mono);color:var(--muted);width:1.3em;font-size:.82rem}
+.drv{flex:1;text-transform:capitalize}
+.prob{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+.bar{height:3px;background:var(--accent);border-radius:2px;margin-top:3px;opacity:.75}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:520px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+td.num{font-family:var(--mono);text-align:right}
+tr.baseline td{color:var(--muted)}
+tr.best td{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.ci{color:var(--muted);font-size:.82rem}
+.callout{border-left:3px solid var(--accent);padding:12px 16px;margin:18px 0;
+  background:var(--panel);border-radius:0 10px 10px 0}
+.callout p{margin:0 0 8px} .callout p:last-child{margin:0}
+footer{margin-top:52px;padding-top:20px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:.86rem}
+a{color:var(--accent)}
+.empty{color:var(--muted);font-style:italic;padding:10px 0}
+code{font-family:var(--mono);font-size:.86em;background:var(--chip);padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>F1 Race Predictor</h1>
+  <p class="sub">Three approaches predicting the same race, scored against naive baselines. Every prediction is committed before the race runs.</p>
+</header>
+
+<section>
+  <h2>Next race</h2>
+  <div class="panel" id="next-race"><div class="empty">Loading…</div></div>
+</section>
+
+<section>
+  <h2>Predictions <span class="note">— before qualifying</span></h2>
+  <div id="pre-quali" class="grid"><div class="empty">Loading…</div></div>
+</section>
+
+<section>
+  <h2>Predictions <span class="note">— after qualifying, using the real grid</span></h2>
+  <div id="post-quali" class="grid"><div class="empty">Loading…</div></div>
+</section>
+
+<section>
+  <h2>Live track record <span class="note">— predictions made before the race, scored after</span></h2>
+  <div class="panel scroll" id="track-record"><div class="empty">Loading…</div></div>
+</section>
+
+<section>
+  <h2>Backtest <span class="note">— 103 races, 2022–2026, walk-forward</span></h2>
+  <div class="callout">
+    <p><b>No model beats "the pole sitter wins."</b> That naive rule scores 0.573 top-1 over 103 races. It is on the table below, and it is the number to look at first.</p>
+    <p>Intervals are 95% bootstrap, resampling races. At roughly 22 races a season, a single-season accuracy carries a standard error near 10 points — which is why this spans five seasons rather than one.</p>
+  </div>
+  <div class="panel scroll" id="backtest"><div class="empty">Loading…</div></div>
+</section>
+
+<footer>
+  <p><b>How it works.</b> Data comes from the <a href="https://github.com/jolpica/jolpica-f1">Jolpica-F1</a> API (the successor to Ergast, which shut down in early 2025) and weather from <a href="https://open-meteo.com/">Open-Meteo</a>. Both are free and need no API key. A scheduled job refetches the calendar every run, refreshes the dataset, settles finished races, and predicts the next one.</p>
+  <p><b>Why you can trust the track record.</b> Predictions are committed to git before the race takes place, so the commit history is the evidence that nothing was fitted after the fact.</p>
+  <p><b>Honest limitation.</b> Backtest weather comes from reanalysis — what actually happened during the race — while a live prediction only has a forecast. Backtest figures involving weather are therefore an upper bound on what is achievable at prediction time.</p>
+  <p id="updated"></p>
+</footer>
+
+</div>
+
+<script>
+const DRIVER = id => id.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+const pct = v => (v==null || isNaN(v)) ? "–" : (100*v).toFixed(1)+"%";
+const num = (v,d=3) => (v==null || isNaN(v)) ? "–" : Number(v).toFixed(d);
+
+async function getJSON(path){
+  try{
+    const r = await fetch(path, {cache:"no-store"});
+    if(!r.ok) return null;
+    return await r.json();
+  }catch(e){ return null; }
+}
+
+function renderRace(payload){
+  const el = document.getElementById("next-race");
+  if(!payload){ el.innerHTML = '<div class="empty">No upcoming race published yet.</div>'; return; }
+  const r = payload.race, w = payload.weather || {};
+  const when = new Date(r.date + "T12:00:00Z");
+  const days = Math.ceil((when - new Date())/86400000);
+  const chips = [];
+  chips.push(`<span class="chip">Round <b>${r.round}</b></span>`);
+  chips.push(`<span class="chip">${when.toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"})}</span>`);
+  if(days > 0) chips.push(`<span class="chip"><b>${days}</b> day${days===1?"":"s"} away</span>`);
+  if(w.weather_temp_max != null) chips.push(`<span class="chip">Max <b>${num(w.weather_temp_max,1)}°C</b></span>`);
+  if(w.weather_precipitation != null) chips.push(`<span class="chip">Rain <b>${num(w.weather_precipitation,1)} mm</b></span>`);
+  if(w.weather_is_wet != null) chips.push(`<span class="chip"><b>${w.weather_is_wet ? "Wet" : "Dry"}</b> expected</span>`);
+  el.innerHTML = `<div class="race-head"><span class="race-name">${r.name}</span>
+    <span class="chip">${r.season}</span></div><div class="chips">${chips.join("")}</div>`;
+}
+
+function renderPredictions(containerId, payload){
+  const el = document.getElementById(containerId);
+  if(!payload || !payload.predictions || !payload.predictions.length){
+    el.innerHTML = '<div class="empty">Not published yet for this race.</div>'; return;
+  }
+  el.innerHTML = payload.predictions.map(p=>{
+    const top = p.ranking.slice(0,5);
+    const max = Math.max(...top.map(x=>x.win_probability||0), 0.0001);
+    const rows = top.map(d=>`<li>
+        <span class="pos">${d.position}</span>
+        <span class="drv">${DRIVER(d.driver_id)}
+          <div class="bar" style="width:${Math.max(2,100*(d.win_probability||0)/max)}%"></div>
+        </span>
+        <span class="prob">${pct(d.win_probability)}</span>
+      </li>`).join("");
+    return `<div class="model-card"><div class="model-name">${p.model}</div>
+      <ol class="rank">${rows}</ol></div>`;
+  }).join("");
+}
+
+function renderTrackRecord(record){
+  const el = document.getElementById("track-record");
+  if(!record || !record.summary || !record.summary.length){
+    el.innerHTML = '<div class="empty">No races settled yet. The record starts with the first race after go-live, and grows from there.</div>';
+    return;
+  }
+  const rows = record.summary.map(r=>`<tr>
+      <td>${r.model}</td><td>${r.view}</td>
+      <td class="num">${r.races}</td>
+      <td class="num">${pct(r.top1_accuracy)}</td>
+      <td class="num">${num(r.podium_hits_per_race,2)}</td>
+      <td class="num">${num(r.winner_log_loss,2)}</td>
+    </tr>`).join("");
+  el.innerHTML = `<table><thead><tr>
+      <th>Model</th><th>When</th><th>Races</th><th>Winner correct</th>
+      <th>Podium hits</th><th>Log-loss</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderBacktest(data){
+  const el = document.getElementById("backtest");
+  if(!data || !data.summary){ el.innerHTML = '<div class="empty">Backtest results unavailable.</div>'; return; }
+  const best = Math.max(...data.summary.map(r=>r.top1_accuracy||0));
+  const rows = data.summary.map(r=>{
+    const isBaseline = r.model.startsWith("naive");
+    const cls = [isBaseline?"baseline":"", r.top1_accuracy===best?"best":""].filter(Boolean).join(" ");
+    return `<tr class="${cls}">
+      <td>${r.model}</td>
+      <td class="num">${pct(r.top1_accuracy)}<div class="ci">[${pct(r.top1_accuracy_lo)}, ${pct(r.top1_accuracy_hi)}]</div></td>
+      <td class="num">${num(r.podium_hit_rate,2)}</td>
+      <td class="num">${num(r.spearman_rho,2)}</td>
+      <td class="num">${num(r.winner_log_loss,2)}</td>
+      <td class="num">${r.n_races}</td></tr>`;
+  }).join("");
+  el.innerHTML = `<table><thead><tr>
+      <th>Model</th><th>Top-1 winner</th><th>Podium</th>
+      <th>Spearman ρ</th><th>Log-loss</th><th>Races</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+(async function(){
+  const [pre, post, record, backtest] = await Promise.all([
+    getJSON("data/latest_pre_quali.json"),
+    getJSON("data/latest_post_quali.json"),
+    getJSON("data/track_record.json"),
+    getJSON("data/backtest.json"),
+  ]);
+  renderRace(post || pre);
+  renderPredictions("pre-quali", pre);
+  renderPredictions("post-quali", post);
+  renderTrackRecord(record);
+  renderBacktest(backtest);
+  const stamp = (post||pre||{}).generated_at || (record||{}).updated_at;
+  if(stamp) document.getElementById("updated").textContent =
+    "Last updated " + new Date(stamp).toLocaleString();
+})();
+</script>
+</body>
+</html>

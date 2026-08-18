@@ -1,0 +1,25 @@
+name: Tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # The leak-guard and row-order-invariance tests are the ones that matter
+      # here: they are what stops a future change quietly reintroducing a
+      # post-race feature or a metric that reads the answer out of row order.
+      - name: Run tests
+        run: python -m pytest tests/ -q

@@ -1,0 +1,56 @@
+name: Post-qualifying prediction
+
+# Qualifying is the single strongest legitimate pre-race feature, but it only
+# exists from Saturday. Rather than choose between "predict early with less
+# information" and "predict accurately but late", the project publishes both and
+# scores them separately -- the gap between the two records is itself a result.
+#
+# This job is the Saturday half. It is a no-op unless qualifying has actually
+# run for a race in the next day and a half.
+on:
+  schedule:
+    - cron: "0 20 * * 6"   # Saturdays, 20:00 UTC, after qualifying
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: f1-refresh          # never race the weekly job for the same commit
+  cancel-in-progress: false
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - name: Restore API cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: f1-api-cache-${{ github.run_id }}
+          restore-keys: f1-api-cache-
+
+      - run: pip install -r requirements.txt
+
+      - name: Predict using the real starting grid
+        run: python -m f1predict.cli predict --view post_quali --within-days 2
+
+      - name: Commit
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash || true
+          git add docs/data
+          if git diff --staged --quiet; then
+            echo "no prediction produced (qualifying may not have run)"
+          else
+            git commit -m "Post-qualifying prediction: $(date -u +%Y-%m-%d)"
+            git push
+          fi

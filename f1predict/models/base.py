@@ -97,3 +97,28 @@ class FunctionBaseline(RaceModel):
             return np.zeros(len(race))
         values = pd.to_numeric(race[self.column], errors="coerce").to_numpy(dtype=float)
         return values if self.higher_is_better else -values
+
+    def predict_proba(self, race: pd.DataFrame) -> np.ndarray:
+        """Rank-based probabilities, so units do not masquerade as confidence.
+
+        Softmaxing the raw column would make the probability metrics a statement
+        about that column's scale rather than about the rule's behaviour:
+        ranking by championship points (0-400) and by points/100 give identical
+        orderings but log-losses of 13.7 and 2.1. Converting to ranks first
+        makes every baseline comparable, at the cost of these being ordinal
+        confidences rather than calibrated estimates -- which is all a naive
+        rule can honestly claim anyway.
+        """
+        scores = np.asarray(self.predict_scores(race), dtype=float)
+        n = len(scores)
+        if n == 0:
+            return scores
+        finite = np.isfinite(scores)
+        if not finite.any():
+            return np.full(n, 1.0 / n)
+        ranks = pd.Series(np.where(finite, scores, -np.inf)).rank(
+            method="average", ascending=False
+        )
+        # Zipf-like decay over positions: plausible shape, no scale dependence.
+        weights = 1.0 / ranks.to_numpy(dtype=float)
+        return weights / weights.sum()
