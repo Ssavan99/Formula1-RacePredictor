@@ -47,16 +47,41 @@ PRODUCTION_MODEL_NAMES = (
 )
 
 
+#: Shrinkage weight toward the grid prior, chosen on 2021 (inside the training
+#: era, never the backtest window). See models/anchored.py for why.
+ANCHOR_WEIGHT = 0.60
+
+
 def build_production_models(view: str = "post_quali") -> list[RaceModel]:
-    """The adopted race-winner models for a given feature view."""
+    """The adopted race-winner models for a given feature view.
+
+    The anchored variants lead: they match or edge the pole-sitter rule on top-1
+    (0.583 vs 0.573, a nominal win well inside the noise) and beat it decisively
+    on calibration (log-loss 1.377 vs 1.757, interval excluding zero). The
+    unanchored LambdaRank and the original MLP are kept alongside so the effect
+    of the anchor is visible rather than asserted.
+
+    Anchoring only makes sense once a grid exists, so the pre-weekend view keeps
+    the plain models.
+    """
+    from .anchored import GridAnchored
     from .choice import PlackettLuceModel
     from .original import OriginalMLP
     from .ranker import LambdaRankModel
 
+    if view == "post_quali":
+        return [
+            GridAnchored(LambdaRankModel(view=view), weight=ANCHOR_WEIGHT,
+                         name="lambdarank + grid anchor"),
+            GridAnchored(PlackettLuceModel(view=view), weight=ANCHOR_WEIGHT,
+                         name="plackett-luce + grid anchor"),
+            LambdaRankModel(view=view),
+            OriginalMLP(view=view),
+        ]
     return [
-        OriginalMLP(view=view),
         LambdaRankModel(view=view),
         PlackettLuceModel(view=view),
+        OriginalMLP(view=view),
     ]
 
 

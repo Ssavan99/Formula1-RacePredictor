@@ -26,7 +26,15 @@ def build(name):
     from f1predict.models.ranker import LambdaRankModel
     from f1predict.models.reliability import ReliabilityAdjusted
     from f1predict.models.ensemble import build_ensemble
+    from f1predict.models.anchored import GridAnchored
     return {
+        "anchored": lambda: GridAnchored(
+            LambdaRankModel(view="post_quali"), weight=0.60,
+            name="lambdarank + grid anchor"),
+        "anchored_pl": lambda: GridAnchored(
+            __import__("f1predict.models.choice", fromlist=["PlackettLuceModel"]
+                       ).PlackettLuceModel(view="post_quali"), weight=0.60,
+            name="plackett-luce + grid anchor"),
         "mlp": lambda: OriginalMLP(view="post_quali"),
         "svm": lambda: OriginalSVM(view="post_quali"),
         "svmtuned": lambda: OriginalSVMTuned(view="post_quali"),

@@ -360,3 +360,75 @@ for it was too thin to trust.
   knowledge-cutoff probe rather than a trusted docs figure, because an LLM
   cannot honestly enter a backtest over races it was trained on. Awaiting a run
   of the probe to establish the clean window.
+
+---
+
+# Round 4 — beating the baseline, and being precise about by how much
+
+The goal was to get a model past "assume the pole sitter wins" (0.573). The route
+turned out to be a diagnostic rather than a bigger model.
+
+## The diagnostic
+
+Splitting the 103 backtest races by whether LambdaRank agreed with the pole
+sitter:
+
+| | Races | Top-1 correct |
+|---|---|---|
+| Model **agrees** with pole sitter | 47 | **0.809** |
+| Model **backs someone else** | 56 | **0.321** |
+| ...where taking pole would have given | 56 | 0.375 |
+
+The model was never weak at picking winners — it was **over-confident about
+deviating**. Every departure from pole cost about 5.4 points of accuracy. It has
+`grid` as a feature and still under-weights it, because a tree ensemble splits on
+whatever reduces training loss and grid is only decisive for the very top slot.
+
+## The fix
+
+`models/anchored.py` blends the model's within-race distribution with an
+empirical prior over starting slots:
+
+    p_final  ∝  (1 - w) * p_model  +  w * P(win | grid slot)
+
+`P(win | grid)` is estimated on the training fold only and smoothed so a rarely
+seen slot cannot dominate. `w` was swept on **2021 alone** — inside the training
+era, never the backtest window — and 0.60 chosen at the start of a plateau rather
+than at an isolated spike.
+
+## Result
+
+| Model | Top-1 | Podium | Spearman ρ | Log-loss |
+|---|---|---|---|---|
+| **lambdarank + grid anchor** | **0.583** [0.49, 0.68] | 0.660 | 0.661 | **1.377** |
+| **plackett-luce + grid anchor** | **0.583** [0.49, 0.68] | **0.673** | 0.651 | 1.399 |
+| naive: pole sitter wins | 0.573 [0.48, 0.67] | 0.663 | 0.628 | 1.757 |
+| lightgbm: lambdarank | 0.544 [0.45, 0.64] | 0.654 | 0.664 | 1.576 |
+| plackett-luce | 0.495 [0.40, 0.59] | 0.628 | 0.646 | 1.651 |
+| original: MLP | 0.476 [0.38, 0.57] | 0.544 | 0.577 | 5.023 |
+
+Paired against the baseline, over the races both scored:
+
+| Metric | Δ vs pole-sitter rule | Verdict |
+|---|---|---|
+| top-1 | **+0.0097** [−0.019, +0.039] | **tie** — nominal win only |
+| podium (PL-anchored) | +0.0097 [−0.003, +0.026] | tie, leaning better (p=0.91) |
+| **winner log-loss** | **−0.380** [−0.430, −0.329] | **decisively better** |
+
+### What that honestly means
+
+**On accuracy we edge it and no more.** +0.0097 is *one race in 103*, and the
+interval spans zero. Anyone reporting "our model beats the baseline" on that
+number would be repeating the mistake this project was built to expose. The
+correct claim is that the anchored models are the first here to **match** the
+pole-sitter rule on accuracy.
+
+**On probability quality the win is real.** Log-loss 1.377 against 1.757, with an
+interval nowhere near zero. That difference matters for what this site actually
+does: the baseline is a rule that cannot express doubt, while the anchored model
+publishes a calibrated distribution and is now at least as accurate.
+
+The useful lesson is that the gain came from making the model *less* willing to
+back its own marginal opinions, not from more capacity. Its confident calls were
+already excellent (0.809 when it agreed with pole); the losses were all in the
+margin.

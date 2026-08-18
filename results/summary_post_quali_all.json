@@ -11,6 +11,50 @@
   "reference_baseline": "naive: pole sitter wins",
   "summary": [
     {
+      "model": "lambdarank + grid anchor",
+      "n_races": 103,
+      "top1_accuracy": 0.5825242718446602,
+      "top1_accuracy_lo": 0.4854368932038835,
+      "top1_accuracy_hi": 0.6796116504854369,
+      "podium_hit_rate": 0.6601941747572816,
+      "podium_hit_rate_lo": 0.6181229773462782,
+      "podium_hit_rate_hi": 0.7022653721682849,
+      "spearman_rho": 0.6612198757208182,
+      "spearman_rho_lo": 0.6253287836706345,
+      "spearman_rho_hi": 0.6958386193996174,
+      "ndcg_at_10": 0.8838324931600203,
+      "ndcg_at_10_lo": 0.8679680428446778,
+      "ndcg_at_10_hi": 0.8993006309707011,
+      "winner_log_loss": 1.3770685701283627,
+      "winner_log_loss_lo": 1.2433686520978036,
+      "winner_log_loss_hi": 1.520049481264322,
+      "winner_brier": 0.031029849742928377,
+      "winner_brier_lo": 0.028605087685957625,
+      "winner_brier_hi": 0.03349781336056082
+    },
+    {
+      "model": "plackett-luce + grid anchor",
+      "n_races": 103,
+      "top1_accuracy": 0.5825242718446602,
+      "top1_accuracy_lo": 0.4854368932038835,
+      "top1_accuracy_hi": 0.6796116504854369,
+      "podium_hit_rate": 0.6731391585760519,
+      "podium_hit_rate_lo": 0.6310679611650486,
+      "podium_hit_rate_hi": 0.7119741100323628,
+      "spearman_rho": 0.6508805687806376,
+      "spearman_rho_lo": 0.6143183676794349,
+      "spearman_rho_hi": 0.6867696222597248,
+      "ndcg_at_10": 0.8842307296598928,
+      "ndcg_at_10_lo": 0.8679761502693213,
+      "ndcg_at_10_hi": 0.9000587521474726,
+      "winner_log_loss": 1.3992809312022167,
+      "winner_log_loss_lo": 1.273052104760634,
+      "winner_log_loss_hi": 1.5359431484041988,
+      "winner_brier": 0.031482197076019486,
+      "winner_brier_lo": 0.029176337165816937,
+      "winner_brier_hi": 0.03383002141453746
+    },
+    {
       "model": "naive: pole sitter wins",
       "n_races": 103,
       "top1_accuracy": 0.5728155339805825,
@@ -298,6 +342,20 @@
     }
   ],
   "vs_reference_top1": {
+    "lambdarank + grid anchor": {
+      "delta": 0.009708737864077669,
+      "lower": -0.019417475728155338,
+      "upper": 0.038834951456310676,
+      "p_better": 0.6165,
+      "n_races": 103
+    },
+    "plackett-luce + grid anchor": {
+      "delta": 0.009708737864077669,
+      "lower": 0.0,
+      "upper": 0.02912621359223301,
+      "p_better": 0.6378,
+      "n_races": 103
+    },
     "lightgbm: lambdarank": {
       "delta": -0.02912621359223301,
       "lower": -0.14563106796116504,
