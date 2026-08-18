@@ -1,5 +1,42 @@
 {
-  "generated_from": "walk-forward backtest, 103 races, 2022-2026",
+  "house": {
+    "winner": {
+      "model": "lightgbm: lambdarank",
+      "metric": "top1_accuracy",
+      "value": 0.5533980582524272,
+      "lo": 0.4563106796116505,
+      "hi": 0.6504854368932039,
+      "n_races": 103
+    },
+    "podium": {
+      "model": "lightgbm: lambdarank",
+      "metric": "podium_hit_rate",
+      "value": 0.6310679611650486,
+      "lo": 0.5922330097087377,
+      "hi": 0.6699029126213595,
+      "n_races": 103
+    },
+    "winner_pre_quali": {
+      "model": "lightgbm: lambdarank",
+      "metric": "top1_accuracy",
+      "value": 0.4563106796116505,
+      "lo": 0.3592233009708738,
+      "hi": 0.5533980582524272,
+      "n_races": 103
+    }
+  },
+  "baselines": {
+    "winner": {
+      "model": "naive: pole sitter wins",
+      "metric": "top1_accuracy",
+      "value": 0.5728155339805825
+    },
+    "podium": {
+      "model": "naive: pole sitter wins",
+      "metric": "podium_hit_rate",
+      "value": 0.6634304207119742
+    }
+  },
   "post_quali": [
     {
       "model": "naive: pole sitter wins",
@@ -26,24 +63,46 @@
     {
       "model": "lightgbm: lambdarank",
       "n_races": 103,
-      "top1_accuracy": 0.5145631067961165,
-      "top1_accuracy_lo": 0.4174757281553398,
-      "top1_accuracy_hi": 0.6116504854368932,
-      "podium_hit_rate": 0.5954692556634303,
-      "podium_hit_rate_lo": 0.5501618122977346,
-      "podium_hit_rate_hi": 0.640776699029126,
-      "spearman_rho": 0.6530240755963356,
-      "spearman_rho_lo": 0.6160670292139265,
-      "spearman_rho_hi": 0.6894622132290704,
-      "ndcg_at_10": 0.8805249035391318,
-      "ndcg_at_10_lo": 0.8634474965402918,
-      "ndcg_at_10_hi": 0.8972480723015746,
-      "winner_log_loss": 1.4747844239318304,
-      "winner_log_loss_lo": 1.3127996382328555,
-      "winner_log_loss_hi": 1.642112012122798,
-      "winner_brier": 0.03280218603505348,
-      "winner_brier_lo": 0.029143481043935146,
-      "winner_brier_hi": 0.03647213665956812
+      "top1_accuracy": 0.5533980582524272,
+      "top1_accuracy_lo": 0.4563106796116505,
+      "top1_accuracy_hi": 0.6504854368932039,
+      "podium_hit_rate": 0.6310679611650486,
+      "podium_hit_rate_lo": 0.5922330097087377,
+      "podium_hit_rate_hi": 0.6699029126213595,
+      "spearman_rho": 0.6643758186911943,
+      "spearman_rho_lo": 0.6289174232987926,
+      "spearman_rho_hi": 0.6986447177936517,
+      "ndcg_at_10": 0.8857780624913301,
+      "ndcg_at_10_lo": 0.8705123873606847,
+      "ndcg_at_10_hi": 0.9010140250085208,
+      "winner_log_loss": 1.5295750320841088,
+      "winner_log_loss_lo": 1.431303936562081,
+      "winner_log_loss_hi": 1.6252333189480141,
+      "winner_brier": 0.033617670318713176,
+      "winner_brier_lo": 0.03158093553410935,
+      "winner_brier_hi": 0.03558866234604837
+    },
+    {
+      "model": "lambdarank + reliability",
+      "n_races": 103,
+      "top1_accuracy": 0.5436893203883495,
+      "top1_accuracy_lo": 0.44660194174757284,
+      "top1_accuracy_hi": 0.6407766990291263,
+      "podium_hit_rate": 0.6245954692556633,
+      "podium_hit_rate_lo": 0.5857605177993527,
+      "podium_hit_rate_hi": 0.6634304207119743,
+      "spearman_rho": 0.6626496784191571,
+      "spearman_rho_lo": 0.6273594069020743,
+      "spearman_rho_hi": 0.6970270735167093,
+      "ndcg_at_10": 0.8849785907519155,
+      "ndcg_at_10_lo": 0.8695813006324756,
+      "ndcg_at_10_hi": 0.9001127803204456,
+      "winner_log_loss": 1.5016594054657346,
+      "winner_log_loss_lo": 1.3999464065769756,
+      "winner_log_loss_hi": 1.6020376616689014,
+      "winner_brier": 0.03335727148791759,
+      "winner_brier_lo": 0.031204867224763306,
+      "winner_brier_hi": 0.03542158733574548
     },
     {
       "model": "ensemble",
@@ -154,6 +213,28 @@
       "winner_brier": 0.03628067186020413,
       "winner_brier_lo": 0.034626341479607976,
       "winner_brier_hi": 0.03784362195139746
+    },
+    {
+      "model": "original: SVM (retuned)",
+      "n_races": 103,
+      "top1_accuracy": 0.42718446601941745,
+      "top1_accuracy_lo": 0.3300970873786408,
+      "top1_accuracy_hi": 0.5242718446601942,
+      "podium_hit_rate": 0.511326860841424,
+      "podium_hit_rate_lo": 0.4595469255663431,
+      "podium_hit_rate_hi": 0.5631067961165048,
+      "spearman_rho": 0.32937002123867554,
+      "spearman_rho_lo": 0.290897481192909,
+      "spearman_rho_hi": 0.3665900103207095,
+      "ndcg_at_10": 0.7695636771033987,
+      "ndcg_at_10_lo": 0.7518918950956988,
+      "ndcg_at_10_hi": 0.7870500809661228,
+      "winner_log_loss": 2.025891925808321,
+      "winner_log_loss_lo": 1.846609103042111,
+      "winner_log_loss_hi": 2.2096121901098607,
+      "winner_brier": 0.0378539841447648,
+      "winner_brier_lo": 0.03517174808692864,
+      "winner_brier_hi": 0.04046101665898777
     },
     {
       "model": "naive: best recent form",
@@ -466,13 +547,19 @@
       "winner_brier_hi": 0.04758737232703858
     }
   ],
-  "reference_baseline": "naive: pole sitter wins",
   "vs_reference_top1": {
     "lightgbm: lambdarank": {
-      "delta": -0.05825242718446602,
-      "lower": -0.1553398058252427,
-      "upper": 0.038834951456310676,
-      "p_better": 0.1167,
+      "delta": -0.019417475728155338,
+      "lower": -0.11650485436893204,
+      "upper": 0.08737864077669903,
+      "p_better": 0.323,
+      "n_races": 103
+    },
+    "lambdarank + reliability": {
+      "delta": -0.02912621359223301,
+      "lower": -0.1262135922330097,
+      "upper": 0.07766990291262135,
+      "p_better": 0.2633,
       "n_races": 103
     },
     "ensemble": {
@@ -508,6 +595,13 @@
       "lower": -0.22330097087378642,
       "upper": -0.009708737864077669,
       "p_better": 0.0119,
+      "n_races": 103
+    },
+    "original: SVM (retuned)": {
+      "delta": -0.14563106796116504,
+      "lower": -0.2621359223300971,
+      "upper": -0.02912621359223301,
+      "p_better": 0.0064,
       "n_races": 103
     },
     "naive: best recent form": {
@@ -553,6 +647,7 @@
       "n_races": 103
     }
   },
+  "reference_baseline": "naive: pole sitter wins",
   "original_leak_analysis": {
     "MLP (with leak)": 0.3181818181818182,
     "SVM (with leak)": 0.4090909090909091,
@@ -565,5 +660,13 @@
     "naive: pole sitter wins": 0.45454545454545453,
     "_n_test_races": 22,
     "_n_features_with_leak": 85
-  }
+  },
+  "n_races": 103,
+  "test_seasons": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ]
 }

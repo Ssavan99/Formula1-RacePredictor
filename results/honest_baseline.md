@@ -200,3 +200,98 @@ feature pipeline had itself produced.
 4. None of those were detectable without baselines, confidence intervals, and
    an adversarial read of the harness. Adding all three was the highest-value
    change in this repository.
+
+---
+
+# Round 2 — after tuning, a retuned SVM, and a reliability model
+
+Re-run 2026-08-18. Same protocol, same 103 races, same tie-invariant metrics.
+
+| Model | Top-1 | Podium | Spearman ρ | Log-loss |
+|---|---|---|---|---|
+| **naive: pole sitter wins** | **0.573** [0.48, 0.67] | **0.663** | 0.628 | 1.757 |
+| lightgbm: lambdarank *(tuned)* | 0.553 [0.46, 0.65] | 0.631 | **0.664** | 1.530 |
+| lambdarank + reliability | 0.544 [0.45, 0.64] | 0.625 | 0.663 | **1.502** |
+| ensemble *(rejected)* | 0.485 [0.39, 0.58] | 0.605 | 0.658 | 1.448 |
+| original: MLP | 0.476 [0.38, 0.57] | 0.573 | 0.567 | 5.789 |
+| plackett-luce | 0.456 [0.36, 0.55] | 0.628 | 0.652 | 1.702 |
+| **original: SVM (retuned)** | **0.427** [0.33, 0.52] | 0.511 | 0.329 | 2.026 |
+| original: SVM (2023 config) | 0.107 [0.05, 0.17] | 0.366 | 0.536 | 2.487 |
+| naive: random | 0.039 [0.01, 0.08] | 0.172 | 0.009 | 3.017 |
+
+## Where the headroom actually is
+
+Measured on the same window, before any modelling:
+
+| | |
+|---|---|
+| Winner started on pole | 57.3% |
+| **Winner started top-3** | **88.3%** |
+| Winner started outside top-5 | 6.8% |
+| Mean winning grid slot | 2.17 |
+| Pole sitter finished outside top-10 | 9.7% |
+
+The task is not "find one driver in twenty" — it is "pick correctly among the
+front three", which is where 88% of winners come from. That reframes 0.553 from
+"barely better than a coin flip" to "roughly two thirds of the way to a ceiling
+of about 0.88".
+
+## Tuning
+
+`f1predict/models/tuning.py`, 81 configurations, fit on ≤2019 and validated on
+2020–21. **Seasons ≥2022 are never loaded**, so the backtest above remains a
+clean estimate rather than something the hyperparameters were chosen to
+maximise.
+
+LightGBM's shipped settings (300 / 0.05 / 15 / 30) were guesses that had never
+been tested against this data. Tuning moved them to 300 / 0.02 / 7 / 30 and lifted
+top-1 from **0.515 → 0.553**, closing most of the gap to the pole baseline. The
+two are now statistically indistinguishable.
+
+## The SVM was never the problem — its kernel was
+
+The 2023 configuration (`gamma=0.1, C=10.0, kernel='sigmoid'`) scores 0.107 top-1
+in the rebuilt feature space while keeping ρ = 0.536. A model that orders the
+field respectably but cannot pick its top entry is showing a kernel mismatched to
+the feature space, not a method that does not work — those settings were searched
+against the original 88-column mostly-sparse matrix.
+
+Re-searching over 21 configurations selects `rbf, C=10.0, gamma='scale'`:
+
+| | Top-1 | Spearman ρ |
+|---|---|---|
+| SVM, 2023 configuration | 0.107 | 0.536 |
+| SVM, retuned | **0.427** | 0.329 |
+
+A four-fold improvement in picking winners — and, interestingly, *worse* ordering
+of the rest of the field. The 2023 configuration is kept unchanged in the code
+and the table; this is the same approach improved in place, reported beside it
+rather than replacing it.
+
+## Reliability model — measured, and rejected
+
+The pole sitter fails to finish in the top ten in 9.7% of races, so modelling
+retirement separately from pace looked worth trying. Paired against its own base
+model:
+
+| Metric | reliability − lambdarank |
+|---|---|
+| top-1 | −0.0097 [−0.0291, +0.0000] |
+| podium | −0.0065 [−0.0194, +0.0065] |
+| Spearman ρ | −0.0017 [−0.0064, +0.0031] |
+| **log-loss** | **−0.0279 [−0.0363, −0.0189]** |
+
+It genuinely improves calibration — that interval excludes zero — and does not
+improve *who you pick* at all. Since the adoption rule is about beating the base
+model, it does not ship. The finding is the useful part: at this feature
+resolution retirement is close to irreducible noise. Predicting *that* a car will
+break is much harder than predicting which car is fast.
+
+## Still outstanding
+
+- **FastF1 practice pace** is built and verified but only partially backfilled
+  (~90s per race, ~180 races). Not yet joined into the dataset, so none of the
+  numbers above are affected by it either way.
+- **Podium** is now reported as a first-class column for every model rather than
+  a footnote; LambdaRank leads the models at 0.631, still behind the pole-sitter
+  rule at 0.663.

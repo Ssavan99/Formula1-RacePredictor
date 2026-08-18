@@ -16,24 +16,32 @@ race, every model's prediction side by side, and a public track record.
 Walk-forward over 103 races, 2022–2026. Top-1 winner accuracy, 95% bootstrap
 intervals over races:
 
-| Model | Top-1 winner | Spearman ρ | Winner log-loss |
-|---|---|---|---|
-| **naive: pole sitter wins** | **0.573** [0.48, 0.67] | 0.628 | 1.757 |
-| lightgbm: lambdarank | 0.515 [0.42, 0.61] | **0.653** | **1.475** |
-| original: MLP | 0.476 [0.38, 0.57] | 0.567 | 5.789 |
-| plackett-luce | 0.456 [0.36, 0.55] | 0.652 | 1.702 |
-| naive: random | 0.039 [0.01, 0.08] | 0.009 | 3.017 |
+| Model | Top-1 winner | Podium | Spearman ρ | Log-loss |
+|---|---|---|---|---|
+| **naive: pole sitter wins** | **0.573** [0.48, 0.67] | **0.663** | 0.628 | 1.757 |
+| lightgbm: lambdarank | 0.553 [0.46, 0.65] | 0.631 | **0.664** | 1.530 |
+| original: MLP | 0.476 [0.38, 0.57] | 0.573 | 0.567 | 5.789 |
+| plackett-luce | 0.456 [0.36, 0.55] | 0.628 | 0.652 | 1.702 |
+| original: SVM (retuned) | 0.427 [0.33, 0.52] | 0.511 | 0.329 | 2.026 |
+| original: SVM (as shipped in 2023) | 0.107 [0.05, 0.17] | 0.366 | 0.536 | 2.487 |
+| naive: random | 0.039 [0.01, 0.08] | 0.172 | 0.009 | 3.017 |
 
 At n=103 the intervals are wide enough that no model is statistically
 separable from the pole-sitter rule in either direction. That is the honest
 state of the problem, and it is stated first because it is the most useful
 thing on this page.
 
-Where the models *do* separate: **ordering the full field and calibrating
-probabilities**. LambdaRank beats the original by +0.086 Spearman ρ
-[+0.063, +0.107] and −4.31 log-loss [−5.87, −2.86], intervals excluding zero.
-The original MLP emits ≈0.99 for its pick and ≈0 for everyone else, so it is
-catastrophically wrong whenever it is wrong.
+LambdaRank closed most of the gap once its hyperparameters were actually tuned
+(0.515 → 0.553; the shipped values had never been tested against this data), and
+it now leads every model on ordering (ρ 0.664) and is far better calibrated than
+the original, whose log-loss of 5.79 reflects emitting ≈0.99 for its pick and
+≈0 for everyone else.
+
+**The original SVM was never the problem — its kernel was.** `sigmoid` scores
+0.107 here while keeping ρ = 0.536, the signature of a kernel mismatched to the
+feature space rather than a method that does not work. Re-searching selects
+`rbf`, which lifts it to **0.427**. The 2023 configuration is kept unchanged
+alongside it, because the comparison is the point.
 
 Full methodology, adoption decisions, and limitations: **[results/honest_baseline.md](results/honest_baseline.md)**.
 

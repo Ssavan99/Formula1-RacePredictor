@@ -4,225 +4,196 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>F1 Race Predictor</title>
-<meta name="description" content="Formula 1 pole, winner and podium predictions from free public data — with every number measured against naive baselines.">
+<meta name="description" content="Formula 1 pole, winner and podium predictions from free public data — every number measured against naive baselines.">
 <style>
 :root{
-  --bg:#f7f7fa; --panel:#fff; --panel-2:#fbfbfd; --ink:#14161b; --muted:#606775;
-  --line:#e3e5eb; --accent:#e8002d; --accent-2:#ff6b00;
-  --good:#1a7f4b; --bad:#c02626; --track:#2a2d35;
-  --chip:#eef0f4; --glow:rgba(232,0,45,.16);
-  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --bg:#07080a; --panel:#0e1014; --panel-2:#121519; --ink:#f2f4f7; --muted:#7d8593;
+  --line:#1e222a; --accent:#ff1e3c; --accent-2:#ff7a18;
+  --good:#3ddc84; --bad:#ff5252; --carbon:#040507;
+  --chip:#15181e; --glow:rgba(255,30,60,.28);
+  --mono:"SFMono-Regular",ui-monospace,Menlo,Consolas,"Liberation Mono",monospace;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0b0d11; --panel:#14171d; --panel-2:#191d24; --ink:#eef0f5; --muted:#98a0b0;
-    --line:#252a33; --accent:#ff1e46; --accent-2:#ff8c2b;
-    --good:#4ade80; --bad:#f87171; --track:#0f1216;
-    --chip:#1e222a; --glow:rgba(255,30,70,.22);
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0b0d11; --panel:#14171d; --panel-2:#191d24; --ink:#eef0f5; --muted:#98a0b0;
-  --line:#252a33; --accent:#ff1e46; --accent-2:#ff8c2b;
-  --good:#4ade80; --bad:#f87171; --track:#0f1216;
-  --chip:#1e222a; --glow:rgba(255,30,70,.22);
-}
+/* A single committed look: this is a timing screen, and timing screens are dark. */
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
-  line-height:1.5;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1120px;margin:0 auto;padding:0 18px 80px}
+  line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* faint carbon-weave + vignette, keeps flat black from looking empty */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.014) 0 1px,transparent 1px 4px),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.014) 0 1px,transparent 1px 4px),
+    radial-gradient(120% 80% at 50% 0%,rgba(255,30,60,.07),transparent 60%)}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px 90px;position:relative;z-index:1}
 
-/* ---------- header + car ---------- */
-.hero{position:relative;padding:30px 0 0;overflow:hidden}
-.hero-top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-mark{width:8px;height:42px;background:linear-gradient(180deg,var(--accent),var(--accent-2));border-radius:2px}
-h1{margin:0;font-size:clamp(1.5rem,4.4vw,2.4rem);letter-spacing:-.03em;font-weight:800}
-h1 span{color:var(--accent)}
-.tagline{margin:4px 0 0;color:var(--muted);font-size:.92rem;max-width:52ch}
+/* ---------- technical label motif ---------- */
+.tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted)}
+.tag b{color:var(--accent);font-weight:600}
 
-/* the track strip + car */
-.track{position:relative;height:54px;margin:14px 0 0;
-  border-bottom:2px solid var(--line)}
-.track::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;
-  background:repeating-linear-gradient(90deg,var(--line) 0 14px,transparent 14px 28px)}
-.car{position:absolute;bottom:2px;left:-140px;width:112px;
-  animation:drive 16s cubic-bezier(.4,0,.5,1) infinite;will-change:transform}
-@keyframes drive{
-  0%   {transform:translateX(0)}
-  8%   {transform:translateX(0)}
-  55%  {transform:translateX(calc(100vw + 160px))}
-  100% {transform:translateX(calc(100vw + 160px))}
-}
-.car .wheel{transform-origin:center;animation:spin .35s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.speedlines{position:absolute;bottom:16px;left:-190px;width:60px;height:22px;opacity:.5;
-  animation:drive 16s cubic-bezier(.4,0,.5,1) infinite}
-@media (prefers-reduced-motion:reduce){
-  .car,.speedlines{animation:none;left:24px}
-  .car .wheel{animation:none}
-}
+/* ---------- hero ---------- */
+.hero{padding:26px 0 0}
+.hero-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+h1{margin:6px 0 0;font-size:clamp(1.7rem,5.5vw,3.1rem);letter-spacing:-.045em;
+  font-weight:800;line-height:.98;text-transform:uppercase}
+h1 em{font-style:normal;color:var(--accent)}
+.tagline{margin:12px 0 0;color:var(--muted);font-size:.92rem;max-width:46ch}
+.hero-stat{text-align:right;font-family:var(--mono)}
+.hero-stat b{display:block;font-size:clamp(1.6rem,5vw,2.4rem);letter-spacing:-.03em;line-height:1}
+.hero-stat span{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- the stage: car + track ---------- */
+.stage{position:relative;height:300px;margin:20px 0 0;cursor:crosshair;
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg,var(--panel) 0%,var(--carbon) 100%)}
+.stage .hint{position:absolute;top:12px;left:14px;z-index:4}
+.stage .hint kbd{font-family:var(--mono);font-size:.6rem;background:var(--chip);
+  border:1px solid var(--line);border-radius:4px;padding:2px 5px;color:var(--muted)}
+/* horizon + moving asphalt */
+.asphalt{position:absolute;left:0;right:0;bottom:0;height:64px;
+  background:linear-gradient(180deg,#0a0c10,#040507)}
+.asphalt::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--line) 12%,var(--line) 88%,transparent)}
+.dashes{position:absolute;left:0;bottom:26px;width:200%;height:3px;
+  background:repeating-linear-gradient(90deg,var(--muted) 0 34px,transparent 34px 78px);
+  opacity:.32;animation:slide 1.1s linear infinite}
+@keyframes slide{to{transform:translateX(-78px)}}
+/* kerb stripe */
+.kerb{position:absolute;left:0;bottom:0;width:200%;height:7px;
+  background:repeating-linear-gradient(90deg,var(--accent) 0 22px,#e9edf2 22px 44px);
+  opacity:.5;animation:slide 1.5s linear infinite}
+.carhost{position:absolute;inset:0;z-index:3}
+.carhost canvas{display:block}
+@media (prefers-reduced-motion:reduce){ .dashes,.kerb{animation:none} }
 
 /* ---------- tabs ---------- */
-.tabs{display:flex;gap:2px;margin:22px 0 0;border-bottom:2px solid var(--line);
-  overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs{display:flex;gap:0;margin:26px 0 0;border-bottom:1px solid var(--line);
+  overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{appearance:none;border:0;background:transparent;color:var(--muted);
-  font-family:var(--sans);font-size:.82rem;font-weight:700;letter-spacing:.08em;
-  text-transform:uppercase;padding:12px 18px;cursor:pointer;position:relative;
+  font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;padding:14px 20px;cursor:pointer;position:relative;
   white-space:nowrap;transition:color .18s}
+.tab::before{content:"[";opacity:0;margin-right:4px;transition:opacity .18s}
+.tab::after{content:"]";opacity:0;margin-left:4px;transition:opacity .18s}
 .tab:hover{color:var(--ink)}
-.tab[aria-selected="true"]{color:var(--ink)}
-.tab[aria-selected="true"]::after{content:"";position:absolute;left:10px;right:10px;bottom:-2px;
-  height:3px;background:var(--accent);border-radius:2px 2px 0 0}
-.panelview{display:none;animation:fade .28s ease}
+.tab[aria-selected="true"]{color:var(--accent)}
+.tab[aria-selected="true"]::before,.tab[aria-selected="true"]::after{opacity:1}
+.panelview{display:none;animation:fade .3s ease}
 .panelview.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* ---------- generic ---------- */
-h2{font-size:.8rem;margin:30px 0 12px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--muted);font-weight:700}
+h2{font-family:var(--mono);font-size:.68rem;margin:34px 0 12px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);font-weight:600;
+  display:flex;align-items:center;gap:10px}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px}
 .pad{padding:18px}
-.empty{color:var(--muted);font-style:italic;padding:14px 0;font-size:.9rem}
-.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.empty{color:var(--muted);font-style:italic;padding:14px 0;font-size:.88rem}
+.scroll{overflow-x:auto}
 a{color:var(--accent)}
 
 /* ---------- race banner ---------- */
-.racebar{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;
-  background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);
-  border-radius:14px;padding:18px 20px;margin-top:6px}
-.rb-round{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--accent);
-  text-transform:uppercase;font-weight:700}
-.rb-name{font-size:clamp(1.15rem,3vw,1.7rem);font-weight:800;letter-spacing:-.02em;margin:2px 0 6px}
-.metaline{display:flex;flex-wrap:wrap;gap:7px}
-.chip{background:var(--chip);border-radius:8px;padding:5px 10px;font-size:.78rem;color:var(--muted)}
-.chip b{color:var(--ink);font-weight:700}
-.countdown{text-align:right;font-family:var(--mono);line-height:1.1}
-.cd-num{font-size:clamp(1.4rem,4vw,2rem);font-weight:800;letter-spacing:-.02em;color:var(--ink)}
-.cd-lab{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.racebar{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;
+  background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);
+  border-radius:14px;padding:18px 22px;margin-top:8px}
+.rb-name{font-size:clamp(1.2rem,3.4vw,1.9rem);font-weight:800;letter-spacing:-.03em;
+  margin:4px 0 8px;text-transform:uppercase}
+.metaline{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:6px;
+  padding:4px 9px;font-size:.72rem;color:var(--muted);font-family:var(--mono)}
+.chip b{color:var(--ink);font-weight:600}
+.countdown{text-align:right;font-family:var(--mono);line-height:1.05}
+.cd-num{font-size:clamp(1.5rem,4.5vw,2.3rem);font-weight:800;letter-spacing:-.03em;color:var(--accent)}
+.cd-lab{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:3px}
 
 /* ---------- house picks ---------- */
-.picks{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));margin-top:8px}
-.pick{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
-  position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s}
-.pick:hover{transform:translateY(-2px);box-shadow:0 8px 26px var(--glow)}
-.pick::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--team,var(--accent))}
-.pick-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--muted);font-weight:700}
-.pick-driver{font-size:1.42rem;font-weight:800;letter-spacing:-.02em;margin:6px 0 2px;text-transform:capitalize}
-.pick-team{font-size:.8rem;color:var(--muted);text-transform:capitalize}
-.pick-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;
-  padding-top:12px;border-top:1px solid var(--line)}
-.pick-prob{font-family:var(--mono);font-size:1.05rem;font-weight:700}
-.pick-conf{text-align:right;font-size:.7rem;color:var(--muted);line-height:1.35}
-.pick-conf b{display:block;font-family:var(--mono);font-size:.92rem;color:var(--ink)}
-.podium-row{display:flex;gap:8px;margin:8px 0 0;flex-wrap:wrap}
-.pod{flex:1;min-width:74px;background:var(--panel-2);border:1px solid var(--line);
-  border-radius:9px;padding:8px 9px;border-top:3px solid var(--team,var(--accent))}
-.pod-p{font-family:var(--mono);font-size:.64rem;color:var(--muted);letter-spacing:.1em}
-.pod-d{font-size:.86rem;font-weight:700;text-transform:capitalize;margin-top:1px}
-
-/* confidence ring */
+.picks{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));margin-top:8px}
+.pick{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px 19px;
+  position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s}
+.pick:hover{transform:translateY(-3px);border-color:var(--team,var(--accent));
+  box-shadow:0 10px 34px var(--glow)}
+.pick::after{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--team,var(--accent))}
+.pick-driver{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin:8px 0 2px;
+  text-transform:uppercase}
+.pick-team{font-size:.74rem;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.pick-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;
+  padding-top:13px;border-top:1px solid var(--line)}
+.pick-prob{font-family:var(--mono);font-size:1.15rem;font-weight:700}
+.tiny{font-size:.6rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.podium-row{display:flex;gap:7px;margin:10px 0 0}
+.pod{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:9px;border-top:2px solid var(--team,var(--accent))}
+.pod-p{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em}
+.pod-d{font-size:.84rem;font-weight:700;text-transform:uppercase;margin-top:2px;letter-spacing:-.01em}
 .ring{width:44px;height:44px;flex:0 0 44px}
 .ring circle{fill:none;stroke-width:5}
 .ring .bg{stroke:var(--line)}
-.ring .fg{stroke:var(--accent);stroke-linecap:round;
-  transform:rotate(-90deg);transform-origin:50% 50%;
-  transition:stroke-dasharray .9s cubic-bezier(.2,.7,.3,1)}
+.ring .fg{stroke:var(--accent);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;
+  transition:stroke-dasharray 1s cubic-bezier(.2,.7,.3,1)}
 
 /* ---------- timing tower ---------- */
 .tower{list-style:none;margin:0;padding:0}
-.tower li{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:10px;
-  padding:7px 0;border-bottom:1px solid var(--line);font-size:.92rem;
-  transition:background .15s}
+.tower li{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:10px;
+  padding:7px 0;border-bottom:1px solid var(--line);font-size:.9rem;transition:background .15s}
 .tower li:last-child{border-bottom:0}
 .tower li:hover{background:var(--panel-2)}
-.tw-pos{font-family:var(--mono);font-size:.76rem;color:var(--muted);text-align:center;
-  border-left:3px solid var(--team,var(--line));padding-left:7px}
-.tw-name{text-transform:capitalize;font-weight:600}
+.tw-pos{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:center;
+  border-left:3px solid var(--team,var(--line));padding-left:6px}
+.tw-name{text-transform:uppercase;font-weight:600;font-size:.86rem;letter-spacing:-.01em}
 .tw-bar{height:3px;background:var(--team,var(--accent));border-radius:2px;margin-top:4px;
-  width:0;transition:width .8s cubic-bezier(.2,.7,.3,1)}
-.tw-prob{font-family:var(--mono);font-size:.82rem;color:var(--muted)}
+  width:0;transition:width .9s cubic-bezier(.2,.7,.3,1)}
+.tw-prob{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
 
-/* ---------- model cards ---------- */
-.models{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(272px,1fr))}
-.mcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px 16px}
-.mname{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--accent);font-weight:700;margin-bottom:4px}
-.mmeta{font-size:.72rem;color:var(--muted);margin-bottom:10px}
+.models{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(276px,1fr))}
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 17px}
+.mname{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);font-weight:600}
+.mmeta{font-size:.66rem;color:var(--muted);margin:3px 0 11px;font-family:var(--mono);
+  letter-spacing:.1em;text-transform:uppercase}
 
-/* ---------- tables ---------- */
-table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:600px}
+table{border-collapse:collapse;width:100%;font-size:.85rem;min-width:620px}
 th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap}
-th{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700}
+th{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--muted);font-weight:600}
 td.num{font-family:var(--mono);text-align:right}
 tr.baseline td{color:var(--muted)}
-tr.house td{background:color-mix(in srgb,var(--accent) 9%,transparent);font-weight:600}
-.ci{color:var(--muted);font-size:.76rem;font-family:var(--mono)}
-.callout{border-left:4px solid var(--accent);padding:13px 17px;margin:16px 0;
-  background:var(--panel);border-radius:0 12px 12px 0;font-size:.9rem}
+tr.house td{background:rgba(255,30,60,.09);font-weight:600}
+.ci{color:var(--muted);font-size:.72rem;font-family:var(--mono)}
+.callout{border-left:3px solid var(--accent);padding:14px 18px;margin:16px 0;
+  background:var(--panel);border-radius:0 12px 12px 0;font-size:.88rem}
 .callout p{margin:0 0 8px} .callout p:last-child{margin:0}
-.kpi{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:8px 0 0}
-.kpi div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
-.kpi b{display:block;font-family:var(--mono);font-size:1.45rem;letter-spacing:-.02em}
-.kpi span{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-footer{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
-  color:var(--muted);font-size:.82rem}
+.kpi{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(146px,1fr));margin-top:8px}
+.kpi div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font-family:var(--mono);font-size:1.5rem;letter-spacing:-.03em}
+footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:.8rem}
 footer p{margin:0 0 9px}
-code{font-family:var(--mono);font-size:.85em;background:var(--chip);padding:1px 5px;border-radius:4px}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <div class="hero">
-  <div class="hero-top">
-    <div class="brand">
-      <div class="brand-mark"></div>
-      <div>
-        <h1>F1 <span>Race Predictor</span></h1>
-        <p class="tagline">Pole, winner and podium for the next Grand Prix — published before the race, scored after it, and measured against rules a one-liner could beat us with.</p>
-      </div>
+  <div class="hero-head">
+    <div>
+      <div class="tag"><b>[01]</b> Predictor</div>
+      <h1>F1 Race<br><em>Predictor</em></h1>
+      <p class="tagline">Pole, winner and podium for the next Grand Prix. Published before the race, scored after it, and measured against rules a one-liner could beat us with.</p>
+    </div>
+    <div class="hero-stat">
+      <b id="hero-num">—</b>
+      <span>winner called right</span>
     </div>
   </div>
 
-  <div class="track" aria-hidden="true">
-    <svg class="speedlines" viewBox="0 0 60 22">
-      <g stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity=".55">
-        <line x1="0" y1="6"  x2="26" y2="6"/>
-        <line x1="10" y1="12" x2="44" y2="12"/>
-        <line x1="2" y1="18" x2="30" y2="18"/>
-      </g>
-    </svg>
-    <svg class="car" viewBox="0 0 220 62" role="img" aria-label="Formula 1 car">
-      <!-- floor + rear wing -->
-      <path d="M14 44 H196 v-5 H14 z" fill="var(--accent)"/>
-      <path d="M186 16 h26 v5 h-26 z" fill="var(--accent)"/>
-      <path d="M196 21 h7 v18 h-7 z" fill="var(--accent)" opacity=".85"/>
-      <!-- sidepod / body -->
-      <path d="M62 39 q6-16 30-16 h34 q22 0 30 16 z" fill="var(--accent)"/>
-      <!-- nose -->
-      <path d="M6 40 q18-3 40-2 l22 1 v6 H10 z" fill="var(--accent)"/>
-      <!-- front wing -->
-      <path d="M0 46 h34 v5 H0 z" fill="var(--accent)" opacity=".9"/>
-      <!-- halo + cockpit -->
-      <path d="M96 23 q14-11 30-2" stroke="var(--track)" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <circle cx="112" cy="27" r="5" fill="var(--track)"/>
-      <!-- wheels -->
-      <g class="wheel" style="transform-box:fill-box">
-        <circle cx="48" cy="45" r="13" fill="var(--track)"/>
-        <circle cx="48" cy="45" r="5" fill="var(--accent)" opacity=".55"/>
-        <line x1="48" y1="34" x2="48" y2="56" stroke="var(--bg)" stroke-width="1.6" opacity=".5"/>
-      </g>
-      <g class="wheel" style="transform-box:fill-box">
-        <circle cx="168" cy="45" r="15" fill="var(--track)"/>
-        <circle cx="168" cy="45" r="6" fill="var(--accent)" opacity=".55"/>
-        <line x1="168" y1="32" x2="168" y2="58" stroke="var(--bg)" stroke-width="1.6" opacity=".5"/>
-      </g>
-    </svg>
+  <div class="stage" id="stage">
+    <div class="hint tag">[ Drive ] <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or move your cursor</div>
+    <div class="asphalt"><div class="dashes"></div><div class="kerb"></div></div>
+    <div class="carhost" id="carhost" aria-label="3D Formula 1 car"></div>
+    <noscript><div class="tag" style="position:absolute;bottom:14px;left:14px">[ car needs JavaScript ]</div></noscript>
   </div>
 
   <div class="tabs" role="tablist">
@@ -232,63 +203,48 @@ code{font-family:var(--mono);font-size:.85em;background:var(--chip);padding:1px 
   </div>
 </div>
 
-<!-- ================= TAB 1 ================= -->
 <div class="panelview active" id="v-weekend" role="tabpanel">
   <div id="racebar"><div class="empty">Loading…</div></div>
-
   <h2>Our call</h2>
   <div class="picks" id="house-picks"><div class="empty">Loading…</div></div>
-
   <h2>How we have done</h2>
   <div class="kpi" id="headline-kpi"><div class="empty">Loading…</div></div>
-
   <h2>Last race</h2>
   <div class="card pad" id="last-race"><div class="empty">Loading…</div></div>
 </div>
 
-<!-- ================= TAB 2 ================= -->
 <div class="panelview" id="v-models" role="tabpanel">
-  <div class="callout">
-    <p>The home tab shows one call per question. This is what each model said on its own — they disagree more often than you might expect, which is the honest texture of the problem.</p>
-  </div>
-
+  <div class="callout"><p>The home tab shows one call per question. This is what each model said on its own — they disagree more often than you would expect, which is the honest texture of the problem.</p></div>
   <h2>Pole prediction</h2>
   <div class="models" id="m-quali"><div class="empty">Not published yet.</div></div>
-
   <h2>Race — before qualifying</h2>
   <div class="models" id="m-pre"><div class="empty">Not published yet.</div></div>
-
   <h2>Race — after qualifying, real grid</h2>
   <div class="models" id="m-post"><div class="empty">Not published yet.</div></div>
-
   <h2>Live record, per model</h2>
   <div class="card scroll" id="m-record"><div class="empty">Loading…</div></div>
 </div>
 
-<!-- ================= TAB 3 ================= -->
 <div class="panelview" id="v-numbers" role="tabpanel">
   <div class="callout">
     <p><b>No model here beats "assume the pole sitter wins."</b> That one-line rule is in the table below and it is the first number to look at.</p>
     <p>Intervals are 95% bootstrap, resampling races. At ~22 races a season a single-season accuracy carries a standard error near 10 points — which is why this spans five seasons, not one.</p>
   </div>
-
-  <h2>Backtest — grid known (after qualifying)</h2>
+  <h2>Backtest — grid known</h2>
   <div class="card scroll" id="bt-post"><div class="empty">Loading…</div></div>
-
   <h2>Backtest — before qualifying</h2>
   <div class="card scroll" id="bt-pre"><div class="empty">Loading…</div></div>
-
   <h2>Method</h2>
-  <div class="card pad" style="font-size:.9rem">
-    <p style="margin-top:0"><b>Walk-forward.</b> For each of the 103 races in 2022–2026, every model is fitted only on races dated strictly before it, then asked to predict that one race. No model ever sees a row dated on or after the race it predicts.</p>
-    <p><b>Leak guard.</b> Every column is registered with the point in time at which it becomes knowable, and unregistered columns are rejected rather than admitted. This exists because the project's original pipeline fed the finishing status of the race being predicted into the model.</p>
+  <div class="card pad" style="font-size:.88rem">
+    <p style="margin-top:0"><b>Walk-forward.</b> For each of the 103 races in 2022–2026, every model is fitted only on races dated strictly before it, then asked to predict that one race.</p>
+    <p><b>Leak guard.</b> Every column is registered with the point in time at which it becomes knowable; unregistered columns are rejected rather than admitted. It exists because the original pipeline fed the finishing status of the race being predicted into the model.</p>
     <p style="margin-bottom:0"><b>Where the headroom is.</b> 88% of winners start in the top three, so the real task is discriminating between front-runners, not finding a winner among twenty.</p>
   </div>
 </div>
 
 <footer>
-  <p><b>Data.</b> <a href="https://github.com/jolpica/jolpica-f1">Jolpica-F1</a> (successor to Ergast, which shut down in early 2025), weather from <a href="https://open-meteo.com/">Open-Meteo</a>, practice pace from <a href="https://docs.fastf1.dev/">FastF1</a>. All free, no API keys.</p>
-  <p><b>Why the record is trustworthy.</b> Predictions are committed to git before the race runs, so the commit history is the evidence that nothing was fitted after the fact.</p>
+  <p><b>Data.</b> <a href="https://github.com/jolpica/jolpica-f1">Jolpica-F1</a> (successor to Ergast, shut down early 2025), weather from <a href="https://open-meteo.com/">Open-Meteo</a>, practice pace from <a href="https://docs.fastf1.dev/">FastF1</a>. All free, no API keys.</p>
+  <p><b>Why the record is trustworthy.</b> Predictions are committed to git before the race runs, so commit history is the evidence nothing was fitted after the fact.</p>
   <p><b>Honest limitation.</b> Backtest weather is reanalysis — what actually happened during the race — while a live prediction has only a forecast. Figures involving weather are an upper bound on live performance.</p>
   <p id="updated"></p>
 </footer>
@@ -296,229 +252,209 @@ code{font-family:var(--mono);font-size:.85em;background:var(--chip);padding:1px 
 </div>
 
 <script>
-const TEAM = {
-  ferrari:"#E8002D", mclaren:"#FF8000", mercedes:"#00D7B6", red_bull:"#3671C6",
-  aston_martin:"#229971", alpine:"#00A1E8", williams:"#1868DB", rb:"#6692FF",
-  racing_bulls:"#6692FF", alphatauri:"#6692FF", sauber:"#52E252", kick_sauber:"#52E252",
-  audi:"#52E252", haas:"#9CA3AF", cadillac:"#C8102E", alfa:"#900000"
-};
-const teamColour = t => TEAM[String(t||"").toLowerCase()] || "var(--accent)";
-const NAME = id => String(id||"").replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-const pct = v => (v==null||isNaN(v)) ? "–" : (100*v).toFixed(1)+"%";
-const num = (v,d=2) => (v==null||isNaN(v)) ? "–" : Number(v).toFixed(d);
+const TEAM={ferrari:"#ff2800",mclaren:"#ff8000",mercedes:"#00d7b6",red_bull:"#3671c6",
+  aston_martin:"#229971",alpine:"#00a1e8",williams:"#1868db",rb:"#6692ff",racing_bulls:"#6692ff",
+  alphatauri:"#6692ff",sauber:"#52e252",kick_sauber:"#52e252",audi:"#52e252",haas:"#b6babd",
+  cadillac:"#c8102e",alfa:"#900000"};
+const teamColour=t=>TEAM[String(t||"").toLowerCase()]||"var(--accent)";
+const NAME=id=>String(id||"").replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+const pct=v=>(v==null||isNaN(v))?"–":(100*v).toFixed(1)+"%";
+const num=(v,d=2)=>(v==null||isNaN(v))?"–":Number(v).toFixed(d);
+const getJSON=async p=>{try{const r=await fetch(p,{cache:"no-store"});return r.ok?await r.json():null}catch(e){return null}};
 
-async function getJSON(p){ try{ const r=await fetch(p,{cache:"no-store"}); return r.ok? await r.json():null; }catch(e){ return null; } }
+/* ---- interactive car: cursor + arrow keys, with lean and bob ---- */
+(function(){
+  const stage=document.getElementById("stage"), box=document.getElementById("carbox");
+  if(!stage||!box) return;
+  let target=0, current=0, keyVel=0;
+  const reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
 
-/* ---------- tabs ---------- */
+  stage.addEventListener("pointermove",e=>{
+    const r=stage.getBoundingClientRect();
+    target=((e.clientX-r.left)/r.width-.5)*2;          // -1 .. 1
+  });
+  stage.addEventListener("pointerleave",()=>{target=0});
+  addEventListener("keydown",e=>{
+    if(e.key==="ArrowLeft"){keyVel=-1;e.preventDefault();}
+    if(e.key==="ArrowRight"){keyVel=1;e.preventDefault();}
+  });
+  addEventListener("keyup",e=>{ if(e.key.startsWith("Arrow")) keyVel=0; });
+
+  let t=0;
+  (function frame(){
+    t+=0.016;
+    const want=Math.max(-1,Math.min(1,target+keyVel));
+    current+=(want-current)*0.09;                       // easing
+    const x=current*120;                                // travel
+    const lean=current*7;                               // body roll into the turn
+    const bob=reduced?0:Math.sin(t*7)*1.6;              // suspension
+    box.style.transform=`translateX(${x}px) rotate(${lean*0.28}deg) translateY(${bob}px)`;
+    requestAnimationFrame(frame);
+  })();
+})();
+
+/* ---- tabs ---- */
 document.querySelectorAll(".tab").forEach(tab=>{
   tab.addEventListener("click",()=>{
-    document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t===tab));
-    document.querySelectorAll(".panelview").forEach(v=>v.classList.toggle("active", v.id===tab.dataset.view));
+    document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t===tab));
+    document.querySelectorAll(".panelview").forEach(v=>v.classList.toggle("active",v.id===tab.dataset.view));
     requestAnimationFrame(animateBars);
   });
 });
-function animateBars(){
-  document.querySelectorAll(".tw-bar[data-w]").forEach(b=>{ b.style.width = b.dataset.w+"%"; });
-}
+const animateBars=()=>document.querySelectorAll(".tw-bar[data-w]").forEach(b=>b.style.width=b.dataset.w+"%");
 
-/* ---------- race banner + countdown ---------- */
+/* ---- race banner + countdown ---- */
 let raceDate=null;
 function renderRaceBar(p){
   const el=document.getElementById("racebar");
-  if(!p){ el.innerHTML='<div class="card pad"><div class="empty">No upcoming race published yet.</div></div>'; return; }
-  const r=p.race, w=p.weather||{};
+  if(!p){el.innerHTML='<div class="card pad"><div class="empty">No upcoming race published yet.</div></div>';return;}
+  const r=p.race,w=p.weather||{};
   raceDate=new Date(r.date+"T13:00:00Z");
   const chips=[];
-  if(w.weather_temp_max!=null) chips.push(`<span class="chip">Air <b>${num(w.weather_temp_max,1)}°C</b></span>`);
-  if(w.weather_precipitation!=null) chips.push(`<span class="chip">Rain <b>${num(w.weather_precipitation,1)}mm</b></span>`);
-  if(w.weather_is_wet!=null) chips.push(`<span class="chip"><b>${w.weather_is_wet? "Wet":"Dry"}</b> expected</span>`);
-  if(w.weather_windspeed_max!=null) chips.push(`<span class="chip">Wind <b>${num(w.weather_windspeed_max,0)}km/h</b></span>`);
-  el.innerHTML=`<div class="racebar">
-    <div>
-      <div class="rb-round">Round ${r.round} · ${r.season}</div>
+  if(w.weather_temp_max!=null)chips.push(`<span class="chip">AIR <b>${num(w.weather_temp_max,1)}°C</b></span>`);
+  if(w.weather_precipitation!=null)chips.push(`<span class="chip">RAIN <b>${num(w.weather_precipitation,1)}MM</b></span>`);
+  if(w.weather_is_wet!=null)chips.push(`<span class="chip"><b>${w.weather_is_wet?"WET":"DRY"}</b></span>`);
+  if(w.weather_windspeed_max!=null)chips.push(`<span class="chip">WIND <b>${num(w.weather_windspeed_max,0)}</b></span>`);
+  el.innerHTML=`<div class="racebar"><div>
+      <div class="tag"><b>[R${String(r.round).padStart(2,"0")}]</b> ${r.season} season</div>
       <div class="rb-name">${r.name}</div>
-      <div class="metaline">
-        <span class="chip">${raceDate.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"long"})}</span>
-        ${chips.join("")}
-      </div>
+      <div class="metaline"><span class="chip">${raceDate.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"}).toUpperCase()}</span>${chips.join("")}</div>
     </div>
-    <div class="countdown"><div class="cd-num" id="cd">—</div><div class="cd-lab" id="cdl">to lights out</div></div>
-  </div>`;
+    <div class="countdown"><div class="cd-num" id="cd">—</div><div class="cd-lab">to lights out</div></div></div>`;
   tickCountdown();
 }
 function tickCountdown(){
-  const el=document.getElementById("cd"); if(!el||!raceDate) return;
+  const el=document.getElementById("cd"); if(!el||!raceDate)return;
   const ms=raceDate-new Date();
-  if(ms<=0){ el.textContent="LIVE"; document.getElementById("cdl").textContent="race weekend"; return; }
-  const d=Math.floor(ms/864e5), h=Math.floor(ms/36e5)%24, m=Math.floor(ms/6e4)%60;
-  el.textContent = d>0 ? `${d}d ${h}h` : `${h}h ${m}m`;
+  if(ms<=0){el.textContent="LIVE";return;}
+  const d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60;
+  el.textContent=d>0?`${d}D ${h}H`:`${h}H ${m}M`;
 }
 setInterval(tickCountdown,30000);
 
-/* ---------- house picks ---------- */
-function ring(v){
-  const c=2*Math.PI*18, filled=Math.max(0,Math.min(1,v||0))*c;
+/* ---- house picks ---- */
+function ring(v){const c=2*Math.PI*18,f=Math.max(0,Math.min(1,v||0))*c;
   return `<svg class="ring" viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="18"/>
-    <circle class="fg" cx="22" cy="22" r="18" stroke-dasharray="${filled} ${c}"/></svg>`;
-}
-function pickCard(label, entry, conf, extra=""){
-  if(!entry) return "";
+  <circle class="fg" cx="22" cy="22" r="18" stroke-dasharray="${f} ${c}"/></svg>`;}
+function pickCard(label,entry,conf){
+  if(!entry)return"";
   const col=teamColour(entry.constructor_id);
   return `<div class="pick" style="--team:${col}">
-    <div class="pick-label">${label}</div>
+    <div class="tag"><b>[${label.slice(0,3).toUpperCase()}]</b> ${label}</div>
     <div class="pick-driver">${NAME(entry.driver_id)}</div>
     <div class="pick-team">${NAME(entry.constructor_id)}</div>
-    ${extra}
     <div class="pick-foot">
-      <div>
-        <div class="pick-prob" style="color:${col}">${pct(entry.win_probability)}</div>
-        <div style="font-size:.66rem;color:var(--muted)">model probability</div>
-      </div>
-      ${conf ? `<div style="display:flex;align-items:center;gap:9px">
-        ${ring(conf.value)}
-        <div class="pick-conf"><b>${pct(conf.value)}</b>hit rate over<br>${conf.n_races} races</div>
-      </div>`:""}
+      <div><div class="pick-prob" style="color:${col}">${pct(entry.win_probability)}</div>
+        <div class="tiny">model probability</div></div>
+      ${conf?`<div style="display:flex;align-items:center;gap:9px">${ring(conf.value)}
+        <div style="text-align:right"><div style="font-family:var(--mono);font-weight:700">${pct(conf.value)}</div>
+        <div class="tiny">over ${conf.n_races} races</div></div></div>`:""}
     </div></div>`;
 }
-function renderHouse(pre, post, bt){
+function renderHouse(pre,post,bt){
   const el=document.getElementById("house-picks");
-  const src = post || pre;
-  if(!src || !src.predictions || !src.predictions.length){
-    el.innerHTML='<div class="empty">No prediction published yet for this race.</div>'; return;
-  }
-  const house = (bt&&bt.house) || {};
-  const pick = (payload, modelName) => {
-    if(!payload||!payload.predictions) return null;
-    const m = payload.predictions.find(p=>p.model===modelName) || payload.predictions[0];
-    return m ? m.ranking : null;
-  };
-  const raceRank  = pick(src, house.winner && house.winner.model);
-  const qualiRank = pre && pre.qualifying_predictions && pre.qualifying_predictions.length
-      ? pre.qualifying_predictions[0].ranking : null;
-
+  const src=post||pre;
+  if(!src||!src.predictions||!src.predictions.length){el.innerHTML='<div class="empty">No prediction published yet.</div>';return;}
+  const house=(bt&&bt.house)||{};
+  const byName=(payload,n)=>{const m=payload&&payload.predictions&&(payload.predictions.find(p=>p.model===n)||payload.predictions[0]);return m?m.ranking:null;};
+  const raceRank=byName(src,house.winner&&house.winner.model);
+  const qualiRank=pre&&pre.qualifying_predictions&&pre.qualifying_predictions.length?pre.qualifying_predictions[0].ranking:null;
   const cards=[];
-  if(qualiRank) cards.push(pickCard("Pole position", qualiRank[0], null));
-  if(raceRank)  cards.push(pickCard("Race winner", raceRank[0], house.winner));
+  if(qualiRank)cards.push(pickCard("Pole position",qualiRank[0],null));
+  if(raceRank)cards.push(pickCard("Race winner",raceRank[0],house.winner));
   if(raceRank){
-    const pods = raceRank.slice(0,3).map((d,i)=>
-      `<div class="pod" style="--team:${teamColour(d.constructor_id)}">
-        <div class="pod-p">P${i+1}</div><div class="pod-d">${NAME(d.driver_id)}</div></div>`).join("");
+    const pods=raceRank.slice(0,3).map((d,i)=>`<div class="pod" style="--team:${teamColour(d.constructor_id)}">
+      <div class="pod-p">P${i+1}</div><div class="pod-d">${NAME(d.driver_id)}</div></div>`).join("");
     cards.push(`<div class="pick" style="--team:var(--accent)">
-      <div class="pick-label">Podium</div>
-      <div class="podium-row">${pods}</div>
-      <div class="pick-foot">
-        <div><div class="pick-prob">top 3</div>
-        <div style="font-size:.66rem;color:var(--muted)">predicted finishing order</div></div>
-        ${house.podium ? `<div style="display:flex;align-items:center;gap:9px">${ring(house.podium.value)}
-          <div class="pick-conf"><b>${pct(house.podium.value)}</b>of podium slots<br>called correctly</div></div>`:""}
-      </div></div>`);
+      <div class="tag"><b>[POD]</b> Podium</div><div class="podium-row">${pods}</div>
+      <div class="pick-foot"><div><div class="pick-prob">TOP 3</div><div class="tiny">predicted order</div></div>
+      ${house.podium?`<div style="display:flex;align-items:center;gap:9px">${ring(house.podium.value)}
+        <div style="text-align:right"><div style="font-family:var(--mono);font-weight:700">${pct(house.podium.value)}</div>
+        <div class="tiny">slots correct</div></div></div>`:""}</div></div>`);
   }
-  el.innerHTML = cards.join("") || '<div class="empty">No prediction available.</div>';
+  el.innerHTML=cards.join("")||'<div class="empty">No prediction available.</div>';
 }
 
-/* ---------- headline KPIs ---------- */
-function renderKPI(bt, record){
+function renderKPI(bt,record){
   const el=document.getElementById("headline-kpi");
-  if(!bt){ el.innerHTML='<div class="empty">Unavailable.</div>'; return; }
-  const h=bt.house||{}, b=bt.baselines||{};
-  const live=(record&&record.summary&&record.summary.length)? record.summary[0] : null;
+  if(!bt){el.innerHTML='<div class="empty">Unavailable.</div>';return;}
+  const h=bt.house||{},b=bt.baselines||{};
+  const live=(record&&record.summary&&record.summary.length)?record.summary[0]:null;
   const out=[];
-  if(h.winner) out.push(`<div><b>${pct(h.winner.value)}</b><span>winner called right</span></div>`);
-  if(h.podium) out.push(`<div><b>${pct(h.podium.value)}</b><span>podium slots right</span></div>`);
-  if(b.winner) out.push(`<div><b>${pct(b.winner.value)}</b><span>best naive rule</span></div>`);
-  out.push(`<div><b>${bt.n_races||103}</b><span>races tested</span></div>`);
-  if(live && live.top1_accuracy!=null)
-    out.push(`<div><b>${pct(live.top1_accuracy)}</b><span>live, ${live.races} races</span></div>`);
+  if(h.winner){out.push(`<div><b>${pct(h.winner.value)}</b><span class="tiny">winner called right</span></div>`);
+    document.getElementById("hero-num").textContent=pct(h.winner.value);}
+  if(h.podium)out.push(`<div><b>${pct(h.podium.value)}</b><span class="tiny">podium slots right</span></div>`);
+  if(b.winner)out.push(`<div><b>${pct(b.winner.value)}</b><span class="tiny">best naive rule</span></div>`);
+  out.push(`<div><b>${bt.n_races||103}</b><span class="tiny">races tested</span></div>`);
+  if(live&&live.top1_accuracy!=null)out.push(`<div><b>${pct(live.top1_accuracy)}</b><span class="tiny">live · ${live.races} races</span></div>`);
   el.innerHTML=out.join("");
 }
-
-/* ---------- last race ---------- */
 function renderLast(record){
   const el=document.getElementById("last-race");
   if(!record||!record.settled||!record.settled.length){
-    el.innerHTML='<div class="empty">Nothing settled yet — the record starts with the first race after go-live.</div>';
-    return;
-  }
-  const last=record.settled[record.settled.length-1];
-  const ok=last.top1_correct===1;
+    el.innerHTML='<div class="empty">Nothing settled yet — the record starts with the first race after go-live.</div>';return;}
+  const l=record.settled[record.settled.length-1],ok=l.top1_correct===1;
   el.innerHTML=`<div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center">
-    <div><div class="rb-round">${last.race_name}</div>
-      <div style="margin-top:5px;font-size:.92rem">We said <b style="text-transform:capitalize">${NAME(last.predicted_winner)}</b>
-      · winner was <b style="text-transform:capitalize">${NAME(last.actual_winner)}</b></div></div>
-    <div style="font-weight:800;font-size:1.05rem;color:${ok?"var(--good)":"var(--bad)"}">${ok?"CALLED IT":"MISSED"}</div>
-  </div>`;
+    <div><div class="tag"><b>[LAST]</b> ${l.race_name}</div>
+    <div style="margin-top:6px;font-size:.9rem">We said <b style="text-transform:uppercase">${NAME(l.predicted_winner)}</b> · winner was <b style="text-transform:uppercase">${NAME(l.actual_winner)}</b></div></div>
+    <div style="font-family:var(--mono);font-weight:800;letter-spacing:.1em;color:${ok?"var(--good)":"var(--bad)"}">${ok?"CALLED IT":"MISSED"}</div></div>`;
 }
-
-/* ---------- model cards ---------- */
-function towerRows(ranking, n=5){
-  const max=Math.max(...ranking.slice(0,n).map(d=>d.win_probability||0),.0001);
-  return ranking.slice(0,n).map(d=>{
-    const col=teamColour(d.constructor_id);
-    return `<li style="--team:${col}"><span class="tw-pos">${d.position}</span>
-      <span><span class="tw-name">${NAME(d.driver_id)}</span>
-        <div class="tw-bar" data-w="${Math.max(3,100*(d.win_probability||0)/max).toFixed(0)}"></div></span>
-      <span class="tw-prob">${pct(d.win_probability)}</span></li>`;
-  }).join("");
+function towerRows(r,n=5){
+  const max=Math.max(...r.slice(0,n).map(d=>d.win_probability||0),.0001);
+  return r.slice(0,n).map(d=>`<li style="--team:${teamColour(d.constructor_id)}">
+    <span class="tw-pos">${d.position}</span>
+    <span><span class="tw-name">${NAME(d.driver_id)}</span>
+      <div class="tw-bar" data-w="${Math.max(3,100*(d.win_probability||0)/max).toFixed(0)}"></div></span>
+    <span class="tw-prob">${pct(d.win_probability)}</span></li>`).join("");
 }
-function renderModels(id, payload, key="predictions"){
-  const el=document.getElementById(id);
-  const preds = payload && payload[key];
-  if(!preds||!preds.length){ el.innerHTML='<div class="empty">Not published yet.</div>'; return; }
-  el.innerHTML = preds.map(p=>`<div class="mcard">
-      <div class="mname">${p.model}</div>
-      <div class="mmeta">${p.view==="pre_quali"?"no grid known":"using real grid"}</div>
-      <ul class="tower">${towerRows(p.ranking)}</ul></div>`).join("");
+function renderModels(id,payload,key="predictions"){
+  const el=document.getElementById(id),preds=payload&&payload[key];
+  if(!preds||!preds.length){el.innerHTML='<div class="empty">Not published yet.</div>';return;}
+  el.innerHTML=preds.map(p=>`<div class="mcard"><div class="mname">${p.model}</div>
+    <div class="mmeta">${p.view==="pre_quali"?"no grid known":"real grid"}</div>
+    <ul class="tower">${towerRows(p.ranking)}</ul></div>`).join("");
 }
 function renderRecord(record){
   const el=document.getElementById("m-record");
-  if(!record||!record.summary||!record.summary.length){
-    el.innerHTML='<div class="pad"><div class="empty">No races settled yet.</div></div>'; return;
-  }
-  el.innerHTML=`<table><thead><tr><th>Model</th><th>When</th><th>Races</th>
-    <th>Winner</th><th>Podium hits</th><th>Log-loss</th></tr></thead><tbody>
-    ${record.summary.map(r=>`<tr><td>${r.model}</td><td>${r.view}</td>
-      <td class="num">${r.races}</td><td class="num">${pct(r.top1_accuracy)}</td>
-      <td class="num">${num(r.podium_hits_per_race)}</td>
-      <td class="num">${num(r.winner_log_loss)}</td></tr>`).join("")}
-    </tbody></table>`;
+  if(!record||!record.summary||!record.summary.length){el.innerHTML='<div class="pad"><div class="empty">No races settled yet.</div></div>';return;}
+  el.innerHTML=`<table><thead><tr><th>Model</th><th>When</th><th>Races</th><th>Winner</th><th>Podium</th><th>Log-loss</th></tr></thead><tbody>
+    ${record.summary.map(r=>`<tr><td>${r.model}</td><td>${r.view}</td><td class="num">${r.races}</td>
+    <td class="num">${pct(r.top1_accuracy)}</td><td class="num">${num(r.podium_hits_per_race)}</td>
+    <td class="num">${num(r.winner_log_loss)}</td></tr>`).join("")}</tbody></table>`;
+}
+function btTable(rows,houseModel){
+  if(!rows||!rows.length)return'<div class="pad"><div class="empty">Unavailable.</div></div>';
+  return `<table><thead><tr><th>Model</th><th>Winner</th><th>Podium</th><th>Spearman ρ</th><th>Log-loss</th><th>Races</th></tr></thead><tbody>
+  ${rows.map(r=>{const cls=[r.model.startsWith("naive")?"baseline":"",r.model===houseModel?"house":""].filter(Boolean).join(" ");
+    return `<tr class="${cls}"><td>${r.model}</td>
+    <td class="num">${pct(r.top1_accuracy)}<div class="ci">[${pct(r.top1_accuracy_lo)}, ${pct(r.top1_accuracy_hi)}]</div></td>
+    <td class="num">${num(r.podium_hit_rate)}</td><td class="num">${num(r.spearman_rho)}</td>
+    <td class="num">${num(r.winner_log_loss)}</td><td class="num">${r.n_races}</td></tr>`}).join("")}</tbody></table>`;
 }
 
-/* ---------- backtest tables ---------- */
-function btTable(rows, houseModel){
-  if(!rows||!rows.length) return '<div class="pad"><div class="empty">Unavailable.</div></div>';
-  return `<table><thead><tr><th>Model</th><th>Winner</th><th>Podium</th>
-    <th>Spearman ρ</th><th>Log-loss</th><th>Races</th></tr></thead><tbody>
-    ${rows.map(r=>{
-      const cls=[r.model.startsWith("naive")?"baseline":"", r.model===houseModel?"house":""].filter(Boolean).join(" ");
-      return `<tr class="${cls}"><td>${r.model}</td>
-        <td class="num">${pct(r.top1_accuracy)}<div class="ci">[${pct(r.top1_accuracy_lo)}, ${pct(r.top1_accuracy_hi)}]</div></td>
-        <td class="num">${num(r.podium_hit_rate)}</td><td class="num">${num(r.spearman_rho)}</td>
-        <td class="num">${num(r.winner_log_loss)}</td><td class="num">${r.n_races}</td></tr>`;
-    }).join("")}</tbody></table>`;
-}
+/* the car is decoration: load it after the data, and never let it break the page */
+(function(){
+  const host=document.getElementById("carhost");
+  if(!host) return;
+  const start=()=>import("./car.js")
+    .then(m=>m.mountCar(host))
+    .catch(()=>{ host.innerHTML='<div class="tag" style="position:absolute;bottom:14px;left:14px">[ 3D unavailable ]</div>'; });
+  if("requestIdleCallback" in window) requestIdleCallback(start,{timeout:2500}); else setTimeout(start,600);
+})();
 
-/* ---------- boot ---------- */
 (async function(){
-  const [pre,post,record,bt] = await Promise.all([
-    getJSON("data/latest_pre_quali.json"),
-    getJSON("data/latest_post_quali.json"),
-    getJSON("data/track_record.json"),
-    getJSON("data/backtest.json"),
-  ]);
-  renderRaceBar(post||pre);
-  renderHouse(pre,post,bt);
-  renderKPI(bt,record);
-  renderLast(record);
-  renderModels("m-quali", pre, "qualifying_predictions");
-  renderModels("m-pre",  pre);
-  renderModels("m-post", post);
+  const [pre,post,record,bt]=await Promise.all([
+    getJSON("data/latest_pre_quali.json"),getJSON("data/latest_post_quali.json"),
+    getJSON("data/track_record.json"),getJSON("data/backtest.json")]);
+  renderRaceBar(post||pre); renderHouse(pre,post,bt); renderKPI(bt,record); renderLast(record);
+  renderModels("m-quali",pre,"qualifying_predictions"); renderModels("m-pre",pre); renderModels("m-post",post);
   renderRecord(record);
   if(bt){
-    document.getElementById("bt-post").innerHTML = btTable(bt.post_quali, bt.house&&bt.house.winner&&bt.house.winner.model);
-    document.getElementById("bt-pre").innerHTML  = btTable(bt.pre_quali,  bt.house&&bt.house.winner_pre_quali&&bt.house.winner_pre_quali.model);
+    document.getElementById("bt-post").innerHTML=btTable(bt.post_quali,bt.house&&bt.house.winner&&bt.house.winner.model);
+    document.getElementById("bt-pre").innerHTML=btTable(bt.pre_quali,bt.house&&bt.house.winner_pre_quali&&bt.house.winner_pre_quali.model);
   }
-  const stamp=(post||pre||{}).generated_at || (record||{}).updated_at;
-  if(stamp) document.getElementById("updated").textContent="Last updated "+new Date(stamp).toLocaleString();
+  const stamp=(post||pre||{}).generated_at||(record||{}).updated_at;
+  if(stamp)document.getElementById("updated").textContent="Last updated "+new Date(stamp).toLocaleString();
   requestAnimationFrame(animateBars);
 })();
 </script>
