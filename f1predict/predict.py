@@ -192,6 +192,17 @@ def run(
 
         models = build_production_models(view=view)
 
+    # Qualifying is only worth predicting before it has happened. Once the grid
+    # is known there is nothing to forecast, and the post_quali race models use
+    # the real grid instead.
+    qualifying_predictions = []
+    if view == "pre_quali":
+        from .models.registry import build_qualifying_models
+
+        qualifying_predictions = predict_race(
+            build_qualifying_models(), history, features
+        )
+
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "view": view,
@@ -204,6 +215,7 @@ def run(
         },
         "weather": conditions,
         "predictions": predict_race(models, history, features),
+        "qualifying_predictions": qualifying_predictions,
     }
     return payload
 

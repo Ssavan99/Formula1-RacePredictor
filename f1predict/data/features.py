@@ -169,13 +169,38 @@ def _shifted_cumsum(df: pd.DataFrame, group: list[str], column: str) -> pd.Serie
     )
 
 
+#: Columns produced by add_championship_state / add_form_features / add_targets.
+#: Dropped before recomputation so the pipeline is idempotent -- update.py and
+#: predict.py both re-run it over a table that already contains them, and a
+#: merge onto an existing column silently produces `_x`/`_y` suffixes instead.
+DERIVED_COLUMNS = [
+    "total_race_points", "is_win",
+    "driver_points_before", "driver_wins_before", "driver_standings_pos_before",
+    "constructor_points_before", "constructor_wins_before",
+    "constructor_standings_pos_before",
+    "constructor_round_points", "constructor_round_wins",
+    "did_not_finish", "driver_form_3", "driver_form_5", "driver_dnf_rate_5",
+    "constructor_form_3", "constructor_form_5", "driver_career_starts",
+    "driver_circuit_mean_finish", "constructor_circuit_mean_finish",
+    "driver_age", "is_winner", "is_podium",
+]
+
+
+def _drop_derived(df: pd.DataFrame) -> pd.DataFrame:
+    present = [c for c in DERIVED_COLUMNS if c in df.columns]
+    return df.drop(columns=present) if present else df
+
+
 def add_championship_state(df: pd.DataFrame) -> pd.DataFrame:
     """Points, wins and standings position *entering* each round.
 
     Derived from race + sprint points rather than the standings endpoints, which
     would blow the request budget. Shifted by one round within each season, so a
     driver's row never sees the points they are about to score.
+
+    Idempotent: any previously computed derived columns are discarded first.
     """
+    df = _drop_derived(df)
     df = df.sort_values(["season", "round", "driver_id"]).reset_index(drop=True)
     df["total_race_points"] = df["points"].fillna(0) + df.get(
         "sprint_points", pd.Series(0, index=df.index)

@@ -7,7 +7,7 @@
   "MLP (overlapping split, rounds 12+ only)": 0.45454545454545453,
   "SVM (overlapping split, all 22 rounds)": 0.4090909090909091,
   "SVM (overlapping split, rounds 12+ only)": 0.8181818181818182,
-  "naive: pole sitter wins": 0.36363636363636365,
+  "naive: pole sitter wins": 0.45454545454545453,
   "_n_test_races": 22,
   "_n_features_with_leak": 85
 }

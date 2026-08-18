@@ -83,12 +83,17 @@ code{font-family:var(--mono);font-size:.86em;background:var(--chip);padding:1px 
 </section>
 
 <section>
-  <h2>Predictions <span class="note">— before qualifying</span></h2>
+  <h2>Qualifying prediction <span class="note">— who starts on pole</span></h2>
+  <div id="quali-pred" class="grid"><div class="empty">Loading…</div></div>
+</section>
+
+<section>
+  <h2>Race predictions <span class="note">— before qualifying, no grid known</span></h2>
   <div id="pre-quali" class="grid"><div class="empty">Loading…</div></div>
 </section>
 
 <section>
-  <h2>Predictions <span class="note">— after qualifying, using the real grid</span></h2>
+  <h2>Race predictions <span class="note">— after qualifying, using the real grid</span></h2>
   <div id="post-quali" class="grid"><div class="empty">Loading…</div></div>
 </section>
 
@@ -185,9 +190,10 @@ function renderTrackRecord(record){
 
 function renderBacktest(data){
   const el = document.getElementById("backtest");
-  if(!data || !data.summary){ el.innerHTML = '<div class="empty">Backtest results unavailable.</div>'; return; }
-  const best = Math.max(...data.summary.map(r=>r.top1_accuracy||0));
-  const rows = data.summary.map(r=>{
+  const rowsFor = data && (data.post_quali || data.summary);
+  if(!rowsFor){ el.innerHTML = '<div class="empty">Backtest results unavailable.</div>'; return; }
+  const best = Math.max(...rowsFor.map(r=>r.top1_accuracy||0));
+  const rows = rowsFor.map(r=>{
     const isBaseline = r.model.startsWith("naive");
     const cls = [isBaseline?"baseline":"", r.top1_accuracy===best?"best":""].filter(Boolean).join(" ");
     return `<tr class="${cls}">
@@ -211,6 +217,9 @@ function renderBacktest(data){
     getJSON("data/backtest.json"),
   ]);
   renderRace(post || pre);
+  renderPredictions("quali-pred",
+    pre && pre.qualifying_predictions
+      ? {predictions: pre.qualifying_predictions} : null);
   renderPredictions("pre-quali", pre);
   renderPredictions("post-quali", post);
   renderTrackRecord(record);
