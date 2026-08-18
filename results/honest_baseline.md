@@ -130,7 +130,7 @@ not have it** — the pole baseline (0.573) beats the best pre-qualifying model
 
 The original notebook reported 0.818 precision for the SVM. It reproduces, and
 it is not fabricated — it is a small-sample artifact. Running the original code
-path on the original committed `Data/Final.csv`:
+path on the original committed `data/Final.csv`:
 
 | Configuration | Top-1 | Test races |
 |---|---|---|
@@ -155,7 +155,7 @@ lead to different results"; that caution was correct, and this quantifies it.
 
 ### The `status_*` leak, separately
 
-`Data/Final.csv` carries `status_Finished`, `status_Illness`, `status_Incident`
+`data/Final.csv` carries `status_Finished`, `status_Illness`, `status_Incident`
 and `status_Mechanical Issue` — the finishing status of the race being
 predicted. The original feature matrix dropped three columns by name (`driver`,
 `podium`, `points`), so all four went in. Of 3707 rows, 681 have

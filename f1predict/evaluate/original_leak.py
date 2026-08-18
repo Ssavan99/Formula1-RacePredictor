@@ -5,7 +5,7 @@ hyperparameters against it does not isolate the leak -- the feature space
 changed too. To measure what the leak was actually worth, this reproduces the
 2023 setup exactly:
 
-* the original committed ``Data/Final.csv`` (2014-2022, 88 columns),
+* the original committed ``data/Final.csv`` (2014-2022, 88 columns),
 * the original target (``podium == 1`` binarised to "won the race"),
 * the original split (train seasons <= 2021, test season 2022),
 * the original scoring (per race, argmax of predicted win probability,
@@ -31,7 +31,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-ORIGINAL_DATASET = Path("Data/Final.csv")
+ORIGINAL_DATASET = Path("data/Final.csv")
 RESULTS_DIR = Path("results")
 
 STATUS_COLUMNS = [
@@ -134,7 +134,7 @@ def run() -> dict:
 
     # The naive rule to beat, on the same 2022 test season.
     #
-    # `Data/Final.csv` is raw Ergast, where a pit-lane start is grid == 0. Using
+    # `data/Final.csv` is raw Ergast, where a pit-lane start is grid == 0. Using
     # idxmin directly would nominate the pit-lane starter as the pole sitter --
     # 9 of the 22 races in 2022 have such an entry. That understates the
     # baseline as 0.364 when it is really 0.455, which is the difference between
@@ -166,7 +166,7 @@ def main() -> int:
     )
 
     print()
-    print("Original pipeline, original data (Data/Final.csv), original split")
+    print("Original pipeline, original data (data/Final.csv), original split")
     print(f"train seasons <= 2021, test season 2022 "
           f"({results['_n_test_races']} races, "
           f"{results['_n_features_with_leak']} features)")
