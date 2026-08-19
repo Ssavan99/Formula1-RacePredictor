@@ -117,7 +117,7 @@ export async function mountHero(canvas, { onProgress = () => {} } = {}) {
     if (!node.isMesh) return;
     const partCentre = new THREE.Box3().setFromObject(node).getCenter(new THREE.Vector3());
     const direction = partCentre.clone().sub(carCentre);
-    direction.y = Math.abs(direction.y) * 0.55 + 0.25;   // bias upward: parts lift as they part
+    direction.y *= 0.30;                 // damp vertical travel; keep its sign
     if (direction.lengthSq() < 1e-6) direction.set(0, 1, 0);
     parts.push({ node, home: node.position.clone(), dir: direction.normalize().divideScalar(scale) });
   });
@@ -171,7 +171,7 @@ export async function mountHero(canvas, { onProgress = () => {} } = {}) {
     const bell = Math.sin(Math.PI * cycle);
     const eased = bell * bell * (3 - 2 * bell) / 2 + bell / 2;  // fuller peak
     for (const part of parts) {
-      part.node.position.copy(part.home).addScaledVector(part.dir, eased * 3.4);
+      part.node.position.copy(part.home).addScaledVector(part.dir, eased * 1.75);
     }
     // A slow counter-rotation while apart makes the separation read as
     // deliberate rather than as the model falling over.
