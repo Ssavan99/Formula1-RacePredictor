@@ -6,10 +6,12 @@
  * travels over the page, which is the failure mode every drivable-car attempt
  * ran into.
  *
- * Scroll maps to three overlapping phases:
- *   0.00-0.35  orbit from front three-quarter round to the side
- *   0.35-0.70  continue round to the rear, camera drops toward the floor
- *   0.55-1.00  parts separate outward along their own bounding-box normals
+ * The car sits BEHIND the page content, dimmed, and the whole site scrolls over
+ * it. Scroll drives a continuous orbit; the exploded view rises and falls again
+ * so the car is whole at both ends and only comes apart in the middle:
+ *
+ *   0.00-1.00  orbit front three-quarter -> side -> rear, dropping to the floor
+ *   0.18-0.82  parts separate, peaking at 0.50, fully reassembled by 0.82
  *
  * The model is CC Attribution by dark_igorek. Draco-compressed and texture-
  * reduced from 105.8MB to 2.5MB, with all 16 meshes kept separate so the
@@ -31,7 +33,7 @@ export async function mountHero(canvas, { onProgress = () => {} } = {}) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.25;
+  renderer.toneMappingExposure = 1.05;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -146,12 +148,18 @@ export async function mountHero(canvas, { onProgress = () => {} } = {}) {
     camera.position.set(Math.sin(angle) * radius, Math.max(height, 0.7), Math.cos(angle) * radius);
     camera.lookAt(0, 0.78 - p * 0.10, 0);
 
-    // Explode: parts drift outward once past the halfway point.
-    const spread = Math.max(0, (p - 0.55) / 0.45);
-    const eased = spread * spread * (3 - 2 * spread);          // smoothstep
+    // Explode on a bell curve: nothing before 0.18, fully apart at 0.50, back
+    // together by 0.82. A ramp would leave the car in pieces at the bottom of
+    // the page, which is the wrong note to end on.
+    const window_ = Math.min(Math.max((p - 0.18) / 0.64, 0), 1);
+    const bell = Math.sin(Math.PI * window_);
+    const eased = bell * bell * (3 - 2 * bell) / 2 + bell / 2;  // fuller peak
     for (const part of parts) {
-      part.node.position.copy(part.home).addScaledVector(part.dir, eased * 1.35);
+      part.node.position.copy(part.home).addScaledVector(part.dir, eased * 3.4);
     }
+    // A slow counter-rotation while apart makes the separation read as
+    // deliberate rather than as the model falling over.
+    pivot.rotation.y = eased * 0.35;
 
     renderer.render(scene, camera);
   }
