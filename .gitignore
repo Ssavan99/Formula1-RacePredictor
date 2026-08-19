@@ -145,5 +145,7 @@ models/*.joblib
 data/cache/fastf1/
 data/cache/*.log
 
-# Showcase experiment images are committed (CC BY-SA, credited)
-!showcase/img/*.jpg
+# 3D model source files are large; the web-ready .glb is committed under docs/
+*.blend
+*.usdz
+*.fbx
