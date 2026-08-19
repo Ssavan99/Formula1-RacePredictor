@@ -10,8 +10,14 @@
  * it. Scroll drives a continuous orbit; the exploded view rises and falls again
  * so the car is whole at both ends and only comes apart in the middle:
  *
- *   0.00-1.00  orbit front three-quarter -> side -> rear, dropping to the floor
- *   0.18-0.82  parts separate, peaking at 0.50, fully reassembled by 0.82
+ * Motion is driven by scroll DISTANCE, not by progress through the page. Tying
+ * it to a 0-1 fraction of total height meant a short page (empty tables, a race
+ * with no results yet) compressed the whole cycle into a few hundred pixels, so
+ * the car never visibly reassembled -- it was already past the end of the curve.
+ * A fixed rate per pixel turns at the same speed however long the page is.
+ *
+ *   rotation   continuous, ANGLE_PER_PX radians per pixel scrolled
+ *   explode    one bell curve per CYCLE_PX, so it always comes back together
  *
  * The model is CC Attribution by dark_igorek. Draco-compressed and texture-
  * reduced from 105.8MB to 2.5MB, with all 16 meshes kept separate so the
@@ -117,7 +123,15 @@ export async function mountHero(canvas, { onProgress = () => {} } = {}) {
   });
 
   // --- scroll-driven state ------------------------------------------------
-  let progress = 0, shown = 0;
+  //: Pixels of scrolling per full explode-and-reassemble cycle. Set from the
+  //: page's actual scrollable distance so the car is always whole again by the
+  //: bottom: on a short page (empty tables, no results yet) a fixed 2400px
+  //: cycle peaked at the last reachable pixel and never reassembled.
+  let cyclePx = 2400;
+  //: Radians of orbit per pixel scrolled. A full turn takes ~3600px.
+  const ANGLE_PER_PX = (Math.PI * 2) / 3600;
+
+  let scrolled = 0, shown = 0;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function resize() {
@@ -138,21 +152,23 @@ export async function mountHero(canvas, { onProgress = () => {} } = {}) {
     if (!visible || document.hidden) return;
 
     // Ease toward the scroll target so flicks feel weighted rather than jumpy.
-    shown += (progress - shown) * (reduced ? 1 : 0.09);
-    const p = shown;
+    shown += (scrolled - shown) * (reduced ? 1 : 0.09);
 
-    // Orbit: three-quarter front -> side -> rear, dropping toward the floor.
-    const angle = -0.55 + p * Math.PI * 1.45;
-    const radius = 8.6 - p * 1.2;
-    const height = 2.15 - p * 0.95;
-    camera.position.set(Math.sin(angle) * radius, Math.max(height, 0.7), Math.cos(angle) * radius);
-    camera.lookAt(0, 0.78 - p * 0.10, 0);
+    // Orbit continuously: never snaps back, and turns at the same rate whether
+    // the page is one screen long or ten.
+    const angle = -0.55 + shown * ANGLE_PER_PX;
+    // Radius and height breathe gently over the cycle instead of ramping to a
+    // fixed end state, which only made sense when there was an "end".
+    const swing = Math.sin((shown / cyclePx) * Math.PI * 2);
+    const radius = 8.4 - swing * 0.7;
+    const height = 1.85 + swing * 0.55;
+    camera.position.set(Math.sin(angle) * radius, Math.max(height, 0.75), Math.cos(angle) * radius);
+    camera.lookAt(0, 0.76, 0);
 
-    // Explode on a bell curve: nothing before 0.18, fully apart at 0.50, back
-    // together by 0.82. A ramp would leave the car in pieces at the bottom of
-    // the page, which is the wrong note to end on.
-    const window_ = Math.min(Math.max((p - 0.18) / 0.64, 0), 1);
-    const bell = Math.sin(Math.PI * window_);
+    // Explode on a bell curve, once per CYCLE_PX: apart in the middle of each
+    // cycle, whole at both ends, repeating for as long as the page scrolls.
+    const cycle = ((shown % cyclePx) + cyclePx) % cyclePx / cyclePx;
+    const bell = Math.sin(Math.PI * cycle);
     const eased = bell * bell * (3 - 2 * bell) / 2 + bell / 2;  // fuller peak
     for (const part of parts) {
       part.node.position.copy(part.home).addScaledVector(part.dir, eased * 3.4);
@@ -166,7 +182,15 @@ export async function mountHero(canvas, { onProgress = () => {} } = {}) {
   frame();
 
   return {
-    setProgress(value) { progress = Math.min(Math.max(value, 0), 1); },
+    /** Drive the animation from absolute scroll position, in pixels. */
+    setScroll(px) { scrolled = Math.max(0, px || 0); },
+    /** Back-compat for callers that only know page progress (0-1). */
+    setProgress(value) { scrolled = Math.min(Math.max(value, 0), 1) * cyclePx; },
+    /**
+     * Tell the car how far the page can actually scroll, so one cycle fits.
+     * Clamped: too short and it spins frantically, too long and nothing moves.
+     */
+    setExtent(px) { cyclePx = Math.min(Math.max(px || 0, 700), 3200); },
     parts: parts.length,
   };
 }

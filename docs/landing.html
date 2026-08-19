@@ -236,7 +236,7 @@ const get=async p=>{try{const r=await fetch(p,{cache:"no-store"});return r.ok?aw
 document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));
   document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id===b.dataset.panel));
-  requestAnimationFrame(bars); scrollTo({top:0,behavior:"smooth"});
+  requestAnimationFrame(bars);   // stay where the reader was; do not jump to top
 }));
 const bars=()=>document.querySelectorAll(".tbar[data-w]").forEach(b=>b.style.width=b.dataset.w+"%");
 
@@ -248,8 +248,12 @@ let car=null;
 }catch(e){ document.getElementById("car-bg").style.display="none"; console.error("car:",e);} })();
 
 function onScroll(){
-  const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
-  if(car) car.setProgress(Math.min(Math.max(scrollY/max,0),1));
+  if(!car) return;
+  // Rotation runs at a fixed rate per pixel (steady speed, whatever the page
+  // length), but the explode cycle is sized to the scrollable distance so the
+  // car is always back together by the bottom.
+  car.setExtent(Math.max(1, document.documentElement.scrollHeight - innerHeight));
+  car.setScroll(scrollY);
 }
 let tick=false;
 addEventListener("scroll",()=>{if(tick)return;tick=true;requestAnimationFrame(()=>{onScroll();tick=false})},{passive:true});
