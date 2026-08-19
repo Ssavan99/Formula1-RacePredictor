@@ -74,7 +74,7 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
 
   const keys = new Set();
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  function carDimensions() { return innerWidth < 520 ? { width: 72, height: 130 } : { width: 92, height: 166 }; }
+  function carDimensions() { return innerWidth < 520 ? { width: 46, height: 83 } : { width: 62, height: 112 }; }
   function safeBounds() {
     const { width, height } = carDimensions();
     const horizontal = innerWidth < 520 ? 46 : 68;
@@ -209,9 +209,15 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
   car.addEventListener("pointerup", releasePointer);
   car.addEventListener("pointercancel", releasePointer);
 
-  // Free-drive band, as a fraction of the viewport, in which the page does not
-  // move at all. Outside it the camera follows.
-  const FREE_BAND = 0.46;
+  //: Fraction of the drivable range, centred, in which driving does nothing to
+  //  the page. Defined against the bounds rather than the viewport so there is
+  //  always clearance between the band edge and the hard clamp.
+  const FREE_BAND = 0.44;
+
+  //: The page travels faster than the car once the band is crossed. Without
+  //  this the page can only ever move at driving speed, which reads as "it
+  //  just doesn't go down".
+  const CAMERA_GAIN = 2.4;
 
   /**
    * Camera follow: the car pushes the page instead of bumping into it.
@@ -228,23 +234,29 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
    * is no threshold to stutter across.
    */
   function cameraFollow() {
-    const halfBand = (innerHeight * FREE_BAND) / 2;
-    const centre = innerHeight / 2;
-    const { height } = carDimensions();
-    const carCentre = state.y + height / 2;
+    const bounds = safeBounds();
+    const range = bounds.bottom - bounds.top;
+    if (range <= 0) return;
+
+    const margin = (range * (1 - FREE_BAND)) / 2;
+    const bandTop = bounds.top + margin;
+    const bandBottom = bounds.bottom - margin;
 
     let overshoot = 0;
-    if (carCentre < centre - halfBand) overshoot = carCentre - (centre - halfBand);
-    else if (carCentre > centre + halfBand) overshoot = carCentre - (centre + halfBand);
+    if (state.y < bandTop) overshoot = state.y - bandTop;
+    else if (state.y > bandBottom) overshoot = state.y - bandBottom;
     if (!overshoot) return;
 
     const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
-    const target = clamp(window.scrollY + overshoot, 0, maxScroll);
+    const target = clamp(window.scrollY + overshoot * CAMERA_GAIN, 0, maxScroll);
     const applied = target - window.scrollY;
-    if (!applied) return;                       // already at an end: let the car run to the edge
+
+    // At the very top or bottom of the document there is nowhere left to
+    // scroll, so let the car keep driving to the real edge instead of pinning.
+    if (!applied) return;
 
     window.scrollTo(window.scrollX, target);
-    state.y -= applied;                          // the world moved, so the car did not
+    state.y -= overshoot;   // car holds at the band edge; the world moves past it
   }
 
   function resizeEffects() {
@@ -266,7 +278,7 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
   function drawEffects(dt) {
     effectContext.save();
     effectContext.globalCompositeOperation = "destination-out";
-    effectContext.fillStyle = `rgba(0,0,0,${clamp(dt * .22, 0, .018)})`;
+    effectContext.fillStyle = `rgba(0,0,0,${clamp(dt * 14, 0, .34)})`;
     effectContext.fillRect(0, 0, innerWidth, innerHeight);
     effectContext.restore();
 
@@ -282,7 +294,7 @@ export function mountSiteCar(container, { onStateChange = () => {} } = {}) {
       if (previousTrack) {
         effectContext.save();
         effectContext.globalCompositeOperation = "source-over";
-        effectContext.strokeStyle = `rgba(18,20,24,${hardTurn ? .27 : .15})`;
+        effectContext.strokeStyle = `rgba(14,16,20,${hardTurn ? .10 : .05})`;
         effectContext.lineWidth = hardTurn ? 2.25 : 1.5;
         effectContext.lineCap = "round";
         for (const [from, to] of [[previousTrack.left, left], [previousTrack.right, right]]) {

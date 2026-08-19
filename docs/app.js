@@ -236,3 +236,42 @@ async function load() {
 }
 
 load();
+
+
+/* ---------------------------------------------------------------------------
+ * Start gantry.
+ *
+ * The real procedure: five reds illuminate one per second, hold, then all go
+ * out together -- and it is the going-out that starts the race, not the coming
+ * on. Markup for the housing already existed but nothing ever lit it.
+ *
+ * Runs on a long cycle so it reads as ambience rather than a demand for
+ * attention, and stops entirely under reduced-motion or when tabbed away.
+ * ------------------------------------------------------------------------- */
+(function startGantry() {
+  const lamps = [...document.querySelectorAll(".start-housing i")];
+  if (!lamps.length) return;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    lamps.forEach(lamp => lamp.classList.add("lit"));
+    return;
+  }
+
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  async function cycle() {
+    for (const lamp of lamps) {
+      if (document.hidden) return;
+      lamp.classList.add("lit");
+      await wait(1000);
+    }
+    await wait(900 + Math.random() * 1200);   // the variable hold before lights out
+    lamps.forEach(lamp => lamp.classList.remove("lit"));
+  }
+
+  (async function loop() {
+    while (true) {
+      if (!document.hidden) await cycle();
+      await wait(9000);
+    }
+  })();
+})();

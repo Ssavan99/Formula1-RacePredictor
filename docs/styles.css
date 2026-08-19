@@ -67,57 +67,63 @@ h1,h2,p{overflow-wrap:anywhere}h1{margin:0;max-width:760px;font-size:clamp(38px,
 @media(max-width:650px){.site-header{grid-template-areas:"brand" "live" "tabs" "gantry"}.start-gantry{justify-self:start}.start-gantry>span{display:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
+
 /* ============================================================
-   DARK PADDOCK THEME
-   Rich charcoal rather than black: a pure-black page loses the
-   panel edges that carry this layout, and reads cheap rather
-   than premium. Surfaces sit at #12-#26 so borders and elevation
-   stay visible, with F1 red (#e10600) and a champagne gold for
-   the expensive-paddock note.
+   MONACO THEME
+   Modelled on the f1-monaco reference: a deep charcoal ground
+   with slightly-raised charcoal panels, off-white text, one red.
+   Panels are separated by ELEVATION, not by outlines -- the
+   light theme's near-black hairlines become glare on a dark
+   ground, and the cream surfaces they framed were what made the
+   text sit on top of a light block.
    ============================================================ */
 :root{
-  --paper:#1b1f28;          /* card surface */
-  --paper-deep:#11141b;     /* page ground */
-  --white:#232936;          /* raised panel */
-  --ink:#e9edf5;            /* strong: text + hairlines */
-  --ink-soft:#98a2b4;       /* secondary text */
-  --line:#2f3644;           /* dividers */
+  --paper:#232527;          /* raised panel */
+  --paper-deep:#161819;     /* page ground */
+  --white:#2b2e30;          /* highest surface */
+  --ink:#ecedee;            /* primary text */
+  --ink-soft:#9a9da1;       /* secondary text */
+  --line:#31353a;           /* hairline, used sparingly */
   --red:#e10600;            /* the F1 red */
-  --red-dark:#ff6b63;       /* legible on dark, unlike the light-theme value */
-  --butter:#d8b45c;         /* champagne */
-  --peach:#dfa093;
-  --sky:#7fb4cd;
-  --mint:#79c3a2;
-  --lavender:#a89ed6;
-  --shadow:0 22px 52px rgba(0,0,0,.55);
-  --shadow-small:0 10px 26px rgba(0,0,0,.42);
+  --red-dark:#ff6f68;
+  --butter:#c9a961;         /* champagne, accents only -- never a surface */
+  --peach:#d59a8f; --sky:#7fb4cd; --mint:#79c3a2; --lavender:#a89ed6;
+  --shadow:0 24px 60px rgba(0,0,0,.62);
+  --shadow-small:0 12px 28px rgba(0,0,0,.48);
 }
 html{color-scheme:dark}
 body{background:var(--paper-deep);color:var(--ink)}
 
-/* Borders were near-black on paper; at full strength on a dark ground they
-   glare. Same structure, dialled to a hairline. */
-.paper-card,.pick-card,.model-card,.stat-card,.numbers-table,
-.forecast-hero,.house-score,.weather-card,.last-result,
-.garage,.drive-console,.tab,.live-badge{border-color:var(--line)!important}
+/* Every surface is a dark panel. Nothing in this theme is cream or white:
+   mixing a dark ground with light cards is what made the text hard to read. */
+.paper-card,.pick-card,.model-card,.stat-card,.forecast-hero,.house-score,
+.weather-card,.last-result,.garage,.drive-console,.numbers-table,
+.live-badge,.tab,.stamp,.explain-button,.garage-button,.brand-mark,
+.score-dial,.chip,.confidence-note{
+  background:var(--paper);
+  color:var(--ink);
+  border-color:transparent;
+  box-shadow:var(--shadow-small);
+}
+.tab.is-active,.garage-button.is-active,.stamp{background:var(--white);color:var(--ink)}
+.tab.is-active{box-shadow:inset 0 -3px 0 var(--red),var(--shadow-small)}
 
-/* Places the light theme inverted to near-black now need a raised dark
-   surface, or they punch a white hole in the page. */
-.tab.is-active,.stamp,.garage-button.is-active,.explain-button:hover,
-.brand-mark,.score-dial{background:var(--white);color:var(--ink)}
+/* Type: bold, tight, upper -- the reference leans hard on weight for hierarchy. */
+h1,h2,.rb-name,.pick-driver,.brand strong{
+  text-transform:uppercase;letter-spacing:-.02em;font-weight:800;color:var(--ink)}
+.eyebrow,.mini-label,.tiny,.pod-p{
+  color:var(--butter);text-transform:uppercase;letter-spacing:.14em;font-weight:600}
+p,.race-meta,#score-note,.garage-copy p,.data-note{color:var(--ink-soft)}
+a{color:var(--red-dark)}
+.live-dot{background:var(--red);box-shadow:0 0 0 4px rgba(225,6,0,.2)}
 
-/* Headline accents pick up the red instead of ink-on-paper. */
-h1,.rb-name{color:var(--ink)}
-.eyebrow,.mini-label{color:var(--butter)}
-.live-dot{background:var(--red);box-shadow:0 0 0 4px rgba(225,6,0,.18)}
+/* The car is decoration laid over data. */
+.drive-car{opacity:.30;filter:saturate(.95)}
+.drive-car:hover,.drive-car:focus-visible,.drive-car.is-moving,.drive-car.is-grabbed{opacity:.5}
+.drive-car.is-parked{opacity:.16}
+.drive-effects{opacity:.22}
+.drive-car .car-trail{opacity:0}
 
-/* The car is decoration over data: keep it clearly readable through. */
-.drive-car{opacity:.34;filter:saturate(.95)}
-.drive-car:hover,.drive-car:focus-visible,.drive-car.is-moving,.drive-car.is-grabbed{opacity:.58}
-.drive-car.is-parked{opacity:.20}
-.drive-effects{opacity:.28}
-.drive-car .car-trail{opacity:calc(var(--car-speed) * .28)}
-
-/* Start gantry: five reds arming in sequence, then out -- the real procedure. */
-.start-housing i{background:#2a1418;box-shadow:inset 0 0 0 1px var(--line)}
-.start-housing i.lit{background:var(--red);box-shadow:0 0 12px 2px rgba(225,6,0,.55),inset 0 0 0 1px #ff8a84}
+/* Start gantry: five reds, armed in sequence then out. */
+.start-housing i{background:#26191b;box-shadow:inset 0 0 0 1px #34383d}
+.start-housing i.lit{background:var(--red);box-shadow:0 0 14px 3px rgba(225,6,0,.6)}
