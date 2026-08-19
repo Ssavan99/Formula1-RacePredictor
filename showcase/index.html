@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Pitwall — scroll showcase</title>
+<style>
+/* Monaco palette, same tokens as the main site so this can be lifted straight in. */
+:root{
+  --ground:#101112; --panel:#1b1d1f; --raised:#232527;
+  --ink:#ecedee; --soft:#9a9da1; --red:#e10600; --gold:#c9a961;
+  --line:#2a2d31;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+.tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+.tag b{color:var(--red);font-weight:600}
+
+/* ---------- the pinned stage ----------
+   The car is pinned for the length of the scroll track. Scrolling scrubs
+   through the angles rather than moving the car, so nothing ever sits on top
+   of the data further down the page. */
+.track{position:relative;height:420vh}          /* 5 frames x ~84vh of travel */
+.stage{position:sticky;top:0;height:100vh;overflow:hidden;
+  display:grid;grid-template-rows:auto 1fr auto;gap:0}
+
+.stage-head{padding:26px 0 0}
+.stage-head h1{margin:6px 0 0;font-size:clamp(2rem,7vw,4.4rem);line-height:.92;
+  letter-spacing:-.045em;text-transform:uppercase;font-weight:800}
+.stage-head h1 em{font-style:normal;color:var(--red)}
+.stage-head p{margin:10px 0 0;color:var(--soft);max-width:44ch;font-size:.95rem}
+
+.shots{position:relative}
+.shot{position:absolute;inset:0;display:grid;place-items:center;
+  opacity:0;transform:scale(1.06);transition:opacity .5s ease,transform .8s cubic-bezier(.2,.7,.3,1);
+  will-change:opacity,transform}
+.shot.is-live{opacity:1;transform:scale(1)}
+.shot img{max-width:min(100%,1000px);max-height:56vh;object-fit:contain;
+  filter:drop-shadow(0 40px 60px rgba(0,0,0,.7)) contrast(1.04) saturate(1.05)}
+/* a red floor-glow so the car sits in the scene rather than floating */
+.shots::after{content:"";position:absolute;left:50%;bottom:6%;width:min(70%,760px);height:90px;
+  transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(225,6,0,.20),transparent 70%);filter:blur(22px)}
+
+.readout{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+  padding:0 0 30px;flex-wrap:wrap}
+.frame-label{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--soft)}
+.frame-label b{color:var(--ink);display:block;font-size:1.05rem;letter-spacing:-.01em;
+  text-transform:none;margin-top:3px}
+.ticks{display:flex;gap:7px;align-items:center}
+.tick{width:34px;height:3px;background:var(--line);border-radius:2px;transition:background .35s ease}
+.tick.is-live{background:var(--red)}
+.scroll-cue{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;color:var(--soft);
+  text-transform:uppercase;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{opacity:.45;transform:translateY(0)}50%{opacity:1;transform:translateY(4px)}}
+
+/* ---------- content below, completely unobstructed ---------- */
+.after{padding:80px 0 100px;border-top:1px solid var(--line);background:var(--ground)}
+.after h2{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--soft);font-weight:600;margin:0 0 16px}
+.cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--panel);border-radius:14px;padding:18px 20px;box-shadow:0 12px 28px rgba(0,0,0,.45)}
+.card b{display:block;font-family:var(--mono);font-size:1.7rem;letter-spacing:-.03em}
+.card span{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+footer{padding:26px 0 60px;color:var(--soft);font-size:.76rem;border-top:1px solid var(--line)}
+footer a{color:var(--red)}
+
+@media (prefers-reduced-motion:reduce){
+  .track{height:auto}
+  .stage{position:static;height:auto}
+  .shots{position:relative;height:auto;display:grid;gap:18px}
+  .shot{position:static;opacity:1;transform:none}
+  .scroll-cue{animation:none}
+}
+@media (max-width:640px){ .shot img{max-height:42vh} .track{height:380vh} }
+</style>
+</head>
+<body>
+
+<div class="track" id="track">
+  <div class="stage">
+    <div class="wrap stage-head">
+      <div class="tag"><b>[01]</b> Pitwall</div>
+      <h1>Every call,<br><em>published first</em></h1>
+      <p>Pole, winner and podium for the next Grand Prix — committed to the record before the race runs, and scored against it afterwards.</p>
+    </div>
+
+    <div class="shots" id="shots">
+      <figure class="shot is-live"><img src="img/a523-1.jpg" alt="Alpine A523 Formula 1 car, front three-quarter" loading="eager"></figure>
+      <figure class="shot"><img src="img/a523-2.jpg" alt="Alpine A523 Formula 1 car, front" loading="lazy"></figure>
+      <figure class="shot"><img src="img/a523-3.jpg" alt="Alpine A523 Formula 1 car, side profile" loading="lazy"></figure>
+      <figure class="shot"><img src="img/a523-4.jpg" alt="Alpine A523 Formula 1 car, rear three-quarter" loading="lazy"></figure>
+      <figure class="shot"><img src="img/a523-5.jpg" alt="Alpine A523 Formula 1 car, detail" loading="lazy"></figure>
+    </div>
+
+    <div class="wrap readout">
+      <div class="frame-label" id="frame-label">Angle 01<b>Front three-quarter</b></div>
+      <div class="ticks" id="ticks"></div>
+      <div class="scroll-cue">Scroll to rotate ↓</div>
+    </div>
+  </div>
+</div>
+
+<section class="after">
+  <div class="wrap">
+    <h2>Backtest — 103 races, 2022–2026</h2>
+    <div class="cards">
+      <div class="card"><b>58.3%</b><span>winner called right</span></div>
+      <div class="card"><b>67.3%</b><span>podium slots right</span></div>
+      <div class="card"><b>57.3%</b><span>best naive rule</span></div>
+      <div class="card"><b>103</b><span>races tested</span></div>
+    </div>
+    <p style="color:var(--soft);margin-top:22px;font-size:.9rem;max-width:62ch">
+      This page exists to test the scroll treatment only. The real tabs, house
+      picks and tables live on the main site — the point here is that the car
+      never sits on top of any of it.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Car photography: Alpine A523 by <a href="https://www.flickr.com/people/5chw4r7z/">5chw4r7z</a>,
+    <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>, via
+    <a href="https://commons.wikimedia.org/">Wikimedia Commons</a>. Used unmodified except for resizing.
+  </div>
+</footer>
+
+<script>
+/* Scroll scrubs the angle. The stage is pinned, so the sequence advances in
+ * place: no element is ever dragged over the content below, which is the whole
+ * reason for choosing this over a car that drives across the page. */
+const LABELS = [
+  ["Angle 01", "Front three-quarter"],
+  ["Angle 02", "Head on"],
+  ["Angle 03", "Side profile"],
+  ["Angle 04", "Rear three-quarter"],
+  ["Angle 05", "Detail"],
+];
+const shots = [...document.querySelectorAll(".shot")];
+const track = document.getElementById("track");
+const label = document.getElementById("frame-label");
+const ticksHost = document.getElementById("ticks");
+
+shots.forEach(() => ticksHost.insertAdjacentHTML("beforeend", '<i class="tick"></i>'));
+const ticks = [...ticksHost.children];
+
+let current = -1;
+function render() {
+  const rect = track.getBoundingClientRect();
+  const travel = rect.height - innerHeight;
+  // 0 at the moment the stage pins, 1 when it releases
+  const progress = travel > 0 ? Math.min(Math.max(-rect.top / travel, 0), 1) : 0;
+  const index = Math.min(shots.length - 1, Math.floor(progress * shots.length));
+  if (index === current) return;
+  current = index;
+
+  shots.forEach((shot, i) => shot.classList.toggle("is-live", i === index));
+  ticks.forEach((tick, i) => tick.classList.toggle("is-live", i === index));
+  label.innerHTML = `${LABELS[index][0]}<b>${LABELS[index][1]}</b>`;
+}
+
+let queued = false;
+addEventListener("scroll", () => {
+  if (queued) return;
+  queued = true;
+  requestAnimationFrame(() => { render(); queued = false; });
+}, { passive: true });
+addEventListener("resize", render, { passive: true });
+render();
+</script>
+</body>
+</html>
