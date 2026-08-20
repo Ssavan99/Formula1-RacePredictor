@@ -42,7 +42,9 @@ def cmd_predict(args: argparse.Namespace) -> int:
         )
         return 0
 
-    payload = predict_module.run(view=args.view, client=client, today=today)
+    payload = predict_module.run(
+        view=args.view, client=client, today=today, with_llm=args.with_llm
+    )
     if payload is None:
         # For post_quali this is the normal state before Saturday.
         print(f"Could not produce a {args.view} prediction yet.")
@@ -100,6 +102,15 @@ def main(argv: list[str] | None = None) -> int:
         help="only predict if the next race is at most this many days away",
     )
     predict_parser.add_argument("--force", action="store_true")
+    predict_parser.add_argument(
+        "--with-llm",
+        action="store_true",
+        help=(
+            "also run the LLM entrant. Needs GEMINI_API_KEY; skipped with a "
+            "warning if absent, because a missing optional key must not stop "
+            "the tabular models from publishing."
+        ),
+    )
     predict_parser.set_defaults(func=cmd_predict)
 
     settle_parser = sub.add_parser("settle", help="score predictions for finished races")
