@@ -149,3 +149,7 @@ data/cache/*.log
 *.blend
 *.usdz
 *.fbx
+
+# Dev-only: puppeteer for headless screenshots
+node_modules/
+package-lock.json
