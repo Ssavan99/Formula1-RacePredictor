@@ -62,24 +62,6 @@ points per departure. Shrinking it toward an empirical `P(win | grid slot)` is
 what closed the gap. Making a model *less* willing to back its marginal opinions
 beat every attempt to make it smarter.
 
-## What the original project got wrong
-
-The 2023 version reported **0.818 precision**. That number reproduces, and it is
-not fraud — it is two separate defects:
-
-- **A post-race feature.** `status_Finished` — whether the driver finished *the
-  race being predicted* — was in the model's inputs. Of 3707 rows, 681 had it at
-  zero and **not one was a winner**: the model was told which 18% of the grid to
-  rule out in advance. Measured: worth **+0.136 top-1**.
-- **An 11-race test set.** The 0.818 is reproduced exactly by scoring rounds
-  12–22 only. At n=11 the 95% interval is **[0.48, 0.98]** — half the available
-  range. Over the full season the same model gives 0.409, *below* the baseline.
-
-`f1predict/data/contracts.py` makes the first structurally hard to repeat: every
-column is registered with the moment its value becomes knowable, and
-unregistered columns are **rejected, not admitted**. While rebuilding, that guard
-caught nine further post-race columns the *new* pipeline had produced by accident.
-
 ## Models
 
 | Model | Approach |
