@@ -423,9 +423,29 @@ def build_dataset(
 
     if weather is not None:
         df = attach_weather(df, weather)
+
+    df = attach_practice_features(df)
+
     return df.sort_values(["race_date", "round", "finish_position"]).reset_index(
         drop=True
     )
+
+
+def attach_practice_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Join cached FastF1 practice pace, if it has been backfilled.
+
+    Optional by design: the practice table is produced by a separate, slow job,
+    and the pipeline must still build a dataset without it. Seasons before 2018
+    have no FastF1 coverage and simply carry nulls.
+    """
+    from .practice import FEATURE_CACHE, attach_practice
+
+    try:
+        practice = pd.read_parquet(FEATURE_CACHE)
+    except (FileNotFoundError, OSError):
+        log.info("no practice table at %s; skipping practice features", FEATURE_CACHE)
+        practice = None
+    return attach_practice(df, practice)
 
 
 def validate_standings(df: pd.DataFrame, client: JolpicaClient, season: int) -> dict:

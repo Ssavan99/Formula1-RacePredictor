@@ -1,217 +1,188 @@
-# Formula 1 Race Predictor
+# Pitwall — Formula 1 race predictions
 
-Three models predict every Formula 1 race. Their predictions are published
-before the race runs, scored after it, and measured against baselines a
-one-line rule could produce.
+Pole, winner and podium for the next Grand Prix. Every call is committed to git
+**before** the race runs and scored against the result afterwards, so the track
+record cannot be fitted after the fact.
 
-**[Live site →](https://ssavan99.github.io/Formula1-RacePredictor/)** — next
-race, every model's prediction side by side, and a public track record.
+**[Live site →](https://ssavan99.github.io/Formula1-RacePredictor/)**
 
 ---
 
-## The headline result
+## The headline number
 
-**No model here beats "assume the pole sitter wins."**
+Walk-forward over **103 races (2022–2026)**. Top-1 winner accuracy, 95% bootstrap
+intervals resampling races:
 
-Walk-forward over 103 races, 2022–2026. Top-1 winner accuracy, 95% bootstrap
-intervals over races:
+| Model | Top-1 winner | Podium | Spearman ρ | Log-loss |
+|---|---|---|---|---|
+| **lambdarank + grid anchor** | **0.583** [0.49, 0.68] | 0.660 | 0.661 | **1.377** |
+| **plackett-luce + grid anchor** | **0.583** [0.49, 0.68] | **0.673** | 0.651 | 1.399 |
+| naive: pole sitter wins | 0.573 [0.48, 0.67] | 0.663 | 0.628 | 1.757 |
+| lightgbm: lambdarank | 0.544 [0.45, 0.64] | 0.654 | 0.664 | 1.576 |
+| plackett-luce | 0.495 [0.40, 0.59] | 0.628 | 0.646 | 1.651 |
+| original: MLP (2023) | 0.476 [0.38, 0.57] | 0.544 | 0.577 | 5.023 |
+| original: SVM (2023) | 0.087 [0.04, 0.15] | 0.372 | 0.494 | 2.503 |
+| naive: random | 0.039 [0.01, 0.08] | 0.172 | 0.009 | 3.017 |
 
-| Model | Top-1 winner | Spearman ρ | Winner log-loss |
-|---|---|---|---|
-| **naive: pole sitter wins** | **0.573** [0.48, 0.67] | 0.628 | 1.757 |
-| lightgbm: lambdarank | 0.515 [0.42, 0.61] | **0.653** | **1.475** |
-| original: MLP | 0.476 [0.38, 0.57] | 0.567 | 5.789 |
-| plackett-luce | 0.456 [0.36, 0.55] | 0.652 | 1.702 |
-| naive: random | 0.039 [0.01, 0.08] | 0.009 | 3.017 |
+**Read that honestly.** The anchored models beat the pole-sitter rule by
+**+0.0097 — one race in 103**, with an interval spanning zero. That is a tie, not
+a victory, and saying otherwise would repeat the exact mistake this project was
+built to expose. The real win is calibration: log-loss **1.377 vs 1.757**, an
+interval nowhere near zero. These are the first models here to *match* a
+one-line rule on accuracy while publishing probabilities you can actually trust.
 
-At n=103 the intervals are wide enough that no model is statistically
-separable from the pole-sitter rule in either direction. That is the honest
-state of the problem, and it is stated first because it is the most useful
-thing on this page.
+Full methodology, every rejected experiment, and the limitations:
+**[results/honest_baseline.md](results/honest_baseline.md)**
 
-Where the models *do* separate: **ordering the full field and calibrating
-probabilities**. LambdaRank beats the original by +0.086 Spearman ρ
-[+0.063, +0.107] and −4.31 log-loss [−5.87, −2.86], intervals excluding zero.
-The original MLP emits ≈0.99 for its pick and ≈0 for everyone else, so it is
-catastrophically wrong whenever it is wrong.
+## Where the headroom is
 
-Full methodology, adoption decisions, and limitations: **[results/honest_baseline.md](results/honest_baseline.md)**.
+Measured before any modelling:
 
-## What qualifying is worth
+| | |
+|---|---|
+| Winner started on pole | 57.3% |
+| **Winner started top-3** | **88.3%** |
+| Winner started outside top-5 | 6.8% |
+| Pole sitter finished outside top-10 | 9.7% |
 
-Qualifying only exists from Saturday, so the project predicts twice and scores
-both records separately.
+The task is not "find one driver in twenty" — it is **telling front-runners
+apart**, which puts a realistic ceiling near 0.85 rather than 1.0.
 
-| Model | Before qualifying | After qualifying |
+That framing produced the one change that actually worked. Splitting the races by
+whether the ranker agreed with the pole sitter:
+
+| | Races | Correct |
 |---|---|---|
-| lightgbm: lambdarank | 0.456 | 0.515 |
-| best baseline available | 0.470 (most wins so far) | 0.573 (pole sitter) |
+| Agreed with pole | 47 | **0.809** |
+| Backed someone else | 56 | **0.321** |
+| …where pole would have given | 56 | 0.375 |
 
-Knowing the grid is worth about 6 points to the model. The single fact *who is
-on pole* outperforms every model that does not have it.
+The model was never bad at picking winners — it **over-deviated**, losing ~5.4
+points per departure. Shrinking it toward an empirical `P(win | grid slot)` is
+what closed the gap. Making a model *less* willing to back its marginal opinions
+beat every attempt to make it smarter.
 
-## Sample output
+## What the original project got wrong
 
-```
-$ python -m f1predict.cli predict --view pre_quali --within-days 10
+The 2023 version reported **0.818 precision**. That number reproduces, and it is
+not fraud — it is two separate defects:
 
-Wrote docs/data/predictions/2026_12_pre_quali.json for Dutch Grand Prix (R12, 2026-08-23)
-  original: MLP                    -> leclerc         p=0.525
-  lightgbm: lambdarank             -> antonelli       p=0.367
-  plackett-luce                    -> russell         p=0.149
-```
+- **A post-race feature.** `status_Finished` — whether the driver finished *the
+  race being predicted* — was in the model's inputs. Of 3707 rows, 681 had it at
+  zero and **not one was a winner**: the model was told which 18% of the grid to
+  rule out in advance. Measured: worth **+0.136 top-1**.
+- **An 11-race test set.** The 0.818 is reproduced exactly by scoring rounds
+  12–22 only. At n=11 the 95% interval is **[0.48, 0.98]** — half the available
+  range. Over the full season the same model gives 0.409, *below* the baseline.
 
-Three models, three different picks — and probabilities that reflect how much
-each is actually willing to commit.
+`f1predict/data/contracts.py` makes the first structurally hard to repeat: every
+column is registered with the moment its value becomes knowable, and
+unregistered columns are **rejected, not admitted**. While rebuilding, that guard
+caught nine further post-race columns the *new* pipeline had produced by accident.
 
-## The three approaches
+## Models
 
-| Model | What it does | Why it is here |
+| Model | Approach |
+|---|---|
+| **original: MLP / SVM** | The 2023 approach, preserved unchanged and still scored. Retained because it is part of the project's history. |
+| **lightgbm: lambdarank** | Learning-to-rank — one race is a query, the drivers are candidates, finishing order is relevance. |
+| **plackett-luce** | Discrete choice over the field; win probabilities sum to 1 by construction. |
+| **+ grid anchor** | Both shrunk toward an empirical prior over starting slots. Weight chosen on 2021 alone, never the test window. |
+
+**Built, measured, rejected** — code kept so the negative results stay
+reproducible: a weighted ensemble (beat no component), a retirement-hazard model
+(improved calibration, not accuracy), a practice-era re-tune (validation window
+was 22 races — too thin to trust), and an LLM entrant (mid-table).
+
+**Deliberately not attempted:** transformers or deep tabular models. ~1,000 races
+× 20 drivers is far too small, and several published F1-ML papers reporting
+near-perfect scores are leakage artifacts of the same class found here.
+
+## The LLM, and why it cannot be backtested
+
+An LLM trained on the internet has *read the results*. Asking it to predict the
+2024 Monaco GP is asking it to recall — the same failure as the `status_*` leak,
+arriving through the weights instead of a column.
+
+So `scripts/probe_llm.py` **measures** where its knowledge ends rather than
+trusting a published cutoff:
+
+| Season | Winners recalled | Said UNKNOWN |
 |---|---|---|
-| **original: MLP** | Per-driver binary classification of "did this driver win", field ranked by predicted probability | The project's original approach, preserved. Competitive on top-1; its probabilities are not trustworthy. |
-| **lightgbm: lambdarank** | Learning-to-rank, one race = one query group, optimises NDCG over finishing order | A race *is* a ranking problem with natural groups. Best model overall. |
-| **plackett-luce** | Discrete choice over the field; win probabilities sum to 1 by construction | The only model whose probabilities are a real distribution. Best of the three at picking the podium. |
+| 2020–2024 | **1.00** | 0.00 |
+| **2025–2026** | **0.00** | **1.00** |
 
-**A weighted ensemble was built, backtested, and rejected** — it failed to beat
-LambdaRank on any metric (top-1 −0.029 [−0.146, +0.087]). The code stays in
-`f1predict/models/ensemble.py` so the negative result is reproducible.
-
-**Deliberately not attempted:** transformers or deep tabular models. ~1,000
-races × 20 drivers is far too small for them to beat gradient boosting, and
-several published F1-ML results reporting near-perfect scores are leakage
-artifacts of the same class this project found in its own history.
-
-## The leak guard
-
-The single most important piece of code here is
-[`f1predict/data/contracts.py`](f1predict/data/contracts.py). Every column is
-registered with the point in time at which its value becomes knowable, and a
-feature matrix is assembled only from columns available before the moment being
-predicted from. Unregistered columns are **rejected, not admitted** — adding a
-feature requires stating when it becomes known.
-
-It exists because the original pipeline fed `status_Finished`,
-`status_Incident`, `status_Illness` and `status_Mechanical Issue` — the
-finishing status of the race being predicted — straight into the model. Of 3707
-rows, 681 have `status_Finished == 0`, and not one is a winner: the model was
-told which ~18% of the field to rule out before predicting. Measured, that leak
-was worth **+0.136 top-1**.
-
-While building this project the guard caught nine further post-race columns
-that the *new* feature pipeline had itself produced.
-
-## Install
-
-Python 3.10+.
-
-```bash
-git clone https://github.com/Ssavan99/Formula1-RacePredictor.git
-cd Formula1-RacePredictor
-python -m venv .venv && .venv/bin/pip install -r requirements.txt
-```
-
-On Windows use `.venv\Scripts\pip` instead.
-
-## Usage
-
-Build the dataset (once, ~15 minutes; self-throttles against a 200 req/hour
-API limit and caches everything to disk):
-
-```bash
-python -m f1predict.data.backfill --start-season 2014 --verbose
-```
-
-Reproduce the headline number:
-
-```bash
-python -m f1predict.evaluate.run_backtest --models baselines,original,new --view post_quali
-```
-
-Predict the next race:
-
-```bash
-python -m f1predict.cli predict --view pre_quali --within-days 10
-```
-
-Other entry points:
-
-```bash
-python -m f1predict.cli next        # next race on the calendar
-python -m f1predict.data.update     # incremental refresh, current season only
-python -m f1predict.settle          # score past predictions
-python -m pytest tests/ -q          # 98 tests
-```
+A clean step, and no sign of live-search grounding. Scored on those 35 genuinely
+unseen races it lands **mid-table** — clear of random, level at ordering the
+podium, below the tabular models at picking winners. At n=35 nothing is
+separable, so that is evidence of absence of a large effect, not proof of a small
+one.
 
 ## How it stays current
 
-Everything runs on free tiers: a public GitHub repo (unlimited Actions
-minutes), GitHub Pages, the [Jolpica-F1](https://github.com/jolpica/jolpica-f1)
-API, and [Open-Meteo](https://open-meteo.com/). No API keys, no accounts, no
-paid services.
+Everything runs on free tiers: public GitHub repo (unlimited Actions minutes),
+GitHub Pages, [Jolpica-F1](https://github.com/jolpica/jolpica-f1),
+[Open-Meteo](https://open-meteo.com/), [FastF1](https://docs.fastf1.dev/). No API
+keys, no accounts, no paid services.
 
 - **Tuesday 06:00 UTC** — refetch the calendar, refresh the dataset, settle any
-  race that has now run, and if the next race is within 10 days, publish
-  qualifying and pre-weekend race predictions.
-- **Saturday 20:00 UTC** — if qualifying has run, publish a post-qualifying race
+  race that has run, and if the next is within 10 days publish qualifying and
+  pre-weekend predictions.
+- **Saturday 20:00 UTC** — if qualifying has run, publish a post-qualifying
   prediction using the real grid.
 
-The schedule is calendar-driven rather than triggered off the previous race: a
-previous-race trigger has no season opener and breaks on calendar gaps and
-back-to-back weekends. A standing weekly job that asks "is there a race soon?"
-handles all three identically. The calendar is refetched every run, not once a
-season — the 2026 schedule lists round 16 as "Bahrain Grand Prix in Malaysia",
-a mid-season relocation an annual fetch would miss.
+Calendar-driven on a fixed schedule rather than triggered off the previous race:
+a previous-race trigger has no season opener and breaks on calendar gaps and
+back-to-back weekends. The calendar is refetched every run, because it genuinely
+changes mid-season — the 2026 schedule lists round 16 as "Bahrain Grand Prix in
+Malaysia".
 
-**Predictions are committed before the race takes place**, so git history is
-the evidence the track record was not fitted after the fact.
+Models are **refit from scratch before every prediction** on all data through the
+most recent race.
 
-## Data
+## Quick start
 
-| Source | Used for | Cost |
-|---|---|---|
-| [Jolpica-F1](https://github.com/jolpica/jolpica-f1) | Results, qualifying, sprints, calendar | Free, no key, 200 req/hour |
-| [Open-Meteo](https://open-meteo.com/) | Race-window weather (archive + forecast) | Free, no key |
+```bash
+python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
+python -m f1predict.data.backfill --start-season 2014 --verbose   # once, ~15 min
+python -m f1predict.evaluate.run_backtest --models baselines,original,new --view post_quali
+python -m f1predict.cli predict --view pre_quali --within-days 10
+python -m pytest tests/ -q                                        # 98 tests
+```
 
-The original pipeline used the Ergast API, which was frozen after 2024 and shut
-down in early 2025; Jolpica is its schema-compatible successor. Championship
-standings are derived from race and sprint results rather than fetched, which
-fits the request budget — validated at **0 mismatches** against the official
-end-of-season tables for 2023, 2024 and 2025.
-
-Weather is taken hourly and aggregated over the race window rather than the
-whole day, because a grand prix is a two-hour event.
-
-## Limitations
-
-- **n = 103 races.** Most differences here are not statistically separable. The
-  intervals are the result, not decoration.
-- **Backtest weather is optimistic.** Historical rows use reanalysis — what
-  actually happened during the race — while a live prediction has only a
-  forecast. Figures involving weather are an upper bound on live performance.
-- **The original SVM has not been retuned.** Its hyperparameters were searched
-  against the original 88-column feature matrix; in the rebuilt 25-column space
-  its ordering signal survives (ρ = 0.536) but its top pick collapses to 0.107.
-  That is a fair report of those hyperparameters here, not a fair test of the
-  method.
-- **`driver_career_starts` counts from 2010**, not from a driver's true debut.
-- **No tyre, pit-strategy, or practice-session data.** FastF1 exposes these
-  free and is the obvious next source.
+Serve the site locally with `python serve_docs.py`.
 
 ## Layout
 
 ```
-f1predict/
-  data/       Jolpica + Open-Meteo clients, feature builder, leak guard
-  models/     original MLP/SVM, LambdaRank, Plackett-Luce, ensemble, registry
-  evaluate/   walk-forward backtest, baselines, metrics, leak analysis
-  predict.py  inference for an upcoming race
-  settle.py   scoring past predictions into the track record
-docs/         GitHub Pages site + published JSON
-results/      backtest output and the written-up findings
-tests/        98 tests, mostly about leakage
-notebooks/    the original 2023 notebooks, unchanged
+f1predict/     data layer + leak guard, models, evaluation, inference
+docs/          the site (index.html), 3D hero, model, published JSON
+  classic-2d.html   earlier build with a drivable 2D car, kept as a fallback
+results/       backtest output and the written-up findings
+scripts/       operational and research tooling (see scripts/README.md)
+notebooks/     the original 2023 notebooks, unchanged
+tests/         98 tests, mostly about leakage
 ```
 
-## Licence
+## Limitations
 
-MIT.
+- **n = 103.** Most differences here are not statistically separable. The
+  intervals are the result, not decoration.
+- **Backtest weather is optimistic.** Historical rows use ERA5 reanalysis — what
+  actually happened during the race — while a live prediction only has a
+  forecast. Figures involving weather are an upper bound on live performance.
+- **Practice pace starts in 2018**, so training is restricted to 2018+.
+- **`driver_career_starts` counts from 2010**, not a driver's true debut.
+- **The live record is empty** until the first race after launch, and will need a
+  full season before it means much.
+
+## Credits
+
+Data: [Jolpica-F1](https://github.com/jolpica/jolpica-f1) ·
+[Open-Meteo](https://open-meteo.com/) · [FastF1](https://docs.fastf1.dev/)
+
+3D model: *McLaren MP4/5* by
+[dark_igorek](https://sketchfab.com/dark_igorek), CC Attribution, via Sketchfab.
+Draco-compressed for the web (105.8 MB → 2.5 MB); see `docs/model/CREDITS.md`.
+
+MIT licensed.

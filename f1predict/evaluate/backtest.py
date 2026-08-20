@@ -53,6 +53,7 @@ def walk_forward(
     refit_every: int = 1,
     min_train_races: int = MIN_TRAIN_RACES,
     target: str = "finish_position",
+    min_season: int | None = None,
     progress: bool = True,
 ) -> pd.DataFrame:
     """Score each model on each race in ``test_seasons``.
@@ -62,12 +63,18 @@ def walk_forward(
             which is the honest default; raise it only if a model is too slow to
             refit 100+ times, and say so in the write-up if you do.
         target: column holding the true finishing order.
+        min_season: drop training rows before this season. Useful when a feature
+            only exists from a given year -- median-filling four seasons of
+            absent practice data injects a large block of fabricated values,
+            which can cost more than the extra history is worth.
 
     Returns:
         One row per (model, race) with the per-race value of every metric.
     """
     test_seasons = set(test_seasons)
     df = df.sort_values(["race_date", "round"]).reset_index(drop=True)
+    if min_season is not None:
+        df = df[df["season"] >= min_season].reset_index(drop=True)
     races = race_keys(df)
     test_races = races[races["season"].isin(test_seasons)]
 

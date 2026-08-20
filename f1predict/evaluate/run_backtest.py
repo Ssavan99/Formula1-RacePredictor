@@ -34,9 +34,19 @@ def build_models(groups: set[str], view: str) -> list[RaceModel]:
     if "baselines" in groups:
         models.extend(build_baselines(view=view))
     if "original" in groups:
-        from ..models.original import LeakyOriginalSVM, OriginalMLP, OriginalSVM
+        from ..models.original import (
+            LeakyOriginalSVM,
+            OriginalMLP,
+            OriginalSVM,
+            OriginalSVMTuned,
+        )
 
-        models.extend([OriginalMLP(view=view), OriginalSVM(view=view)])
+        # The original SVM is kept exactly as specified AND retuned alongside
+        # it, so "the method was fine, the kernel was wrong" is a claim the
+        # table supports rather than an assertion.
+        models.extend(
+            [OriginalMLP(view=view), OriginalSVM(view=view), OriginalSVMTuned(view=view)]
+        )
         # The leak needs qualifying-era features to be comparable to the
         # original setup; it is an artifact either way, never a candidate.
         if view == "post_quali":
@@ -46,6 +56,15 @@ def build_models(groups: set[str], view: str) -> list[RaceModel]:
         from ..models.ranker import LambdaRankModel
 
         models.extend([LambdaRankModel(view=view), PlackettLuceModel(view=view)])
+    if "reliability" in groups:
+        from ..models.ranker import LambdaRankModel
+        from ..models.reliability import ReliabilityAdjusted
+
+        models.append(
+            ReliabilityAdjusted(
+                LambdaRankModel(view=view), name="lambdarank + reliability"
+            )
+        )
     if "ensemble" in groups:
         from ..models.ensemble import build_ensemble
 
@@ -58,6 +77,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--models", default="baselines,original")
     parser.add_argument("--view", default="post_quali", choices=sorted(VIEWS))
     parser.add_argument("--refit-every", type=int, default=1)
+    parser.add_argument(
+        "--min-season", type=int, default=None,
+        help="drop training rows before this season (practice pace starts 2018)")
     parser.add_argument("--tag", default=None, help="suffix for output filenames")
     parser.add_argument(
         "--drop-weather",
@@ -91,7 +113,8 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit(f"no models selected from {sorted(groups)}")
 
     per_race = walk_forward(
-        df, models, test_seasons=DEFAULT_TEST_SEASONS, refit_every=args.refit_every
+        df, models, test_seasons=DEFAULT_TEST_SEASONS,
+        refit_every=args.refit_every, min_season=args.min_season,
     )
     table = summarise(per_race)
 

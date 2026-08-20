@@ -27,6 +27,7 @@ from .features import (
     add_championship_state,
     add_form_features,
     add_targets,
+    attach_practice_features,
     attach_weather,
     flatten_qualifying,
     flatten_results,
@@ -47,6 +48,7 @@ RAW_COLUMNS = [
     "sprint_points",
     "weather_temp_max", "weather_precipitation", "weather_windspeed_max",
     "weather_is_wet",
+    "practice_best_gap", "practice_long_run_gap", "practice_laps",
 ]
 
 
@@ -103,6 +105,7 @@ def update(
     combined = add_championship_state(combined)
     combined = add_form_features(combined)
     combined = add_targets(combined)
+    combined = attach_practice_features(combined)
     combined = combined.sort_values(
         ["race_date", "round", "finish_position"]
     ).reset_index(drop=True)

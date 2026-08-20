@@ -10,10 +10,20 @@ Three approaches run side by side. What each is here for, and what it is not:
 * **plackett-luce** -- the only model whose win probabilities form a genuine
   distribution over the field by construction, and the most interpretable.
 
-A weighted ensemble of all three was built, backtested and **rejected**: it did
-not beat LambdaRank on any metric (top-1 -0.029 [-0.146, +0.087], Spearman
-+0.005 [-0.004, +0.013], log-loss -0.027 [-0.136, +0.082]). The code is kept in
-`ensemble.py` so the negative result is reproducible rather than merely claimed.
+Two additions were built, measured and **rejected**, and their code is kept so
+the negative results stay reproducible:
+
+* **Ensemble** — did not beat LambdaRank on any metric (top-1 -0.029
+  [-0.146, +0.087]). See `ensemble.py`.
+* **Reliability-adjusted LambdaRank** — improves calibration for real (log-loss
+  -0.0279 [-0.0363, -0.0189]) but does not improve *who* it picks (top-1 -0.0097
+  [-0.0291, +0.0000]). See `reliability.py`. Retirement appears close to
+  irreducible noise at this feature resolution.
+
+`OriginalSVMTuned` is not in the shipping set either -- at 0.427 it sits below
+the MLP and Plackett-Luce -- but it stays in the code and the results table
+because it demonstrates that the original SVM's weakness was a kernel mismatch
+(0.107 -> 0.427), not the method.
 
 Honest framing, which the README leads with: **on top-1 winner accuracy no model
 here beats "assume the pole sitter wins" (0.573), and none beats the original
@@ -37,16 +47,41 @@ PRODUCTION_MODEL_NAMES = (
 )
 
 
+#: Shrinkage weight toward the grid prior, chosen on 2021 (inside the training
+#: era, never the backtest window). See models/anchored.py for why.
+ANCHOR_WEIGHT = 0.60
+
+
 def build_production_models(view: str = "post_quali") -> list[RaceModel]:
-    """The adopted race-winner models for a given feature view."""
+    """The adopted race-winner models for a given feature view.
+
+    The anchored variants lead: they match or edge the pole-sitter rule on top-1
+    (0.583 vs 0.573, a nominal win well inside the noise) and beat it decisively
+    on calibration (log-loss 1.377 vs 1.757, interval excluding zero). The
+    unanchored LambdaRank and the original MLP are kept alongside so the effect
+    of the anchor is visible rather than asserted.
+
+    Anchoring only makes sense once a grid exists, so the pre-weekend view keeps
+    the plain models.
+    """
+    from .anchored import GridAnchored
     from .choice import PlackettLuceModel
     from .original import OriginalMLP
     from .ranker import LambdaRankModel
 
+    if view == "post_quali":
+        return [
+            GridAnchored(LambdaRankModel(view=view), weight=ANCHOR_WEIGHT,
+                         name="lambdarank + grid anchor"),
+            GridAnchored(PlackettLuceModel(view=view), weight=ANCHOR_WEIGHT,
+                         name="plackett-luce + grid anchor"),
+            LambdaRankModel(view=view),
+            OriginalMLP(view=view),
+        ]
     return [
-        OriginalMLP(view=view),
         LambdaRankModel(view=view),
         PlackettLuceModel(view=view),
+        OriginalMLP(view=view),
     ]
 
 

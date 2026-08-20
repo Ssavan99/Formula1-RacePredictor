@@ -200,3 +200,293 @@ feature pipeline had itself produced.
 4. None of those were detectable without baselines, confidence intervals, and
    an adversarial read of the harness. Adding all three was the highest-value
    change in this repository.
+
+---
+
+# Round 2 — after tuning, a retuned SVM, and a reliability model
+
+Re-run 2026-08-18. Same protocol, same 103 races, same tie-invariant metrics.
+
+| Model | Top-1 | Podium | Spearman ρ | Log-loss |
+|---|---|---|---|---|
+| **naive: pole sitter wins** | **0.573** [0.48, 0.67] | **0.663** | 0.628 | 1.757 |
+| lightgbm: lambdarank *(tuned)* | 0.553 [0.46, 0.65] | 0.631 | **0.664** | 1.530 |
+| lambdarank + reliability | 0.544 [0.45, 0.64] | 0.625 | 0.663 | **1.502** |
+| ensemble *(rejected)* | 0.485 [0.39, 0.58] | 0.605 | 0.658 | 1.448 |
+| original: MLP | 0.476 [0.38, 0.57] | 0.573 | 0.567 | 5.789 |
+| plackett-luce | 0.456 [0.36, 0.55] | 0.628 | 0.652 | 1.702 |
+| **original: SVM (retuned)** | **0.427** [0.33, 0.52] | 0.511 | 0.329 | 2.026 |
+| original: SVM (2023 config) | 0.107 [0.05, 0.17] | 0.366 | 0.536 | 2.487 |
+| naive: random | 0.039 [0.01, 0.08] | 0.172 | 0.009 | 3.017 |
+
+## Where the headroom actually is
+
+Measured on the same window, before any modelling:
+
+| | |
+|---|---|
+| Winner started on pole | 57.3% |
+| **Winner started top-3** | **88.3%** |
+| Winner started outside top-5 | 6.8% |
+| Mean winning grid slot | 2.17 |
+| Pole sitter finished outside top-10 | 9.7% |
+
+The task is not "find one driver in twenty" — it is "pick correctly among the
+front three", which is where 88% of winners come from. That reframes 0.553 from
+"barely better than a coin flip" to "roughly two thirds of the way to a ceiling
+of about 0.88".
+
+## Tuning
+
+`f1predict/models/tuning.py`, 81 configurations, fit on ≤2019 and validated on
+2020–21. **Seasons ≥2022 are never loaded**, so the backtest above remains a
+clean estimate rather than something the hyperparameters were chosen to
+maximise.
+
+LightGBM's shipped settings (300 / 0.05 / 15 / 30) were guesses that had never
+been tested against this data. Tuning moved them to 300 / 0.02 / 7 / 30 and lifted
+top-1 from **0.515 → 0.553**, closing most of the gap to the pole baseline. The
+two are now statistically indistinguishable.
+
+## The SVM was never the problem — its kernel was
+
+The 2023 configuration (`gamma=0.1, C=10.0, kernel='sigmoid'`) scores 0.107 top-1
+in the rebuilt feature space while keeping ρ = 0.536. A model that orders the
+field respectably but cannot pick its top entry is showing a kernel mismatched to
+the feature space, not a method that does not work — those settings were searched
+against the original 88-column mostly-sparse matrix.
+
+Re-searching over 21 configurations selects `rbf, C=10.0, gamma='scale'`:
+
+| | Top-1 | Spearman ρ |
+|---|---|---|
+| SVM, 2023 configuration | 0.107 | 0.536 |
+| SVM, retuned | **0.427** | 0.329 |
+
+A four-fold improvement in picking winners — and, interestingly, *worse* ordering
+of the rest of the field. The 2023 configuration is kept unchanged in the code
+and the table; this is the same approach improved in place, reported beside it
+rather than replacing it.
+
+## Reliability model — measured, and rejected
+
+The pole sitter fails to finish in the top ten in 9.7% of races, so modelling
+retirement separately from pace looked worth trying. Paired against its own base
+model:
+
+| Metric | reliability − lambdarank |
+|---|---|
+| top-1 | −0.0097 [−0.0291, +0.0000] |
+| podium | −0.0065 [−0.0194, +0.0065] |
+| Spearman ρ | −0.0017 [−0.0064, +0.0031] |
+| **log-loss** | **−0.0279 [−0.0363, −0.0189]** |
+
+It genuinely improves calibration — that interval excludes zero — and does not
+improve *who you pick* at all. Since the adoption rule is about beating the base
+model, it does not ship. The finding is the useful part: at this feature
+resolution retirement is close to irreducible noise. Predicting *that* a car will
+break is much harder than predicting which car is fast.
+
+## Still outstanding
+
+- **FastF1 practice pace** is built and verified but only partially backfilled
+  (~90s per race, ~180 races). Not yet joined into the dataset, so none of the
+  numbers above are affected by it either way.
+- **Podium** is now reported as a first-class column for every model rather than
+  a footnote; LambdaRank leads the models at 0.631, still behind the pole-sitter
+  rule at 0.663.
+
+---
+
+# Round 3 — FastF1 practice pace joined in
+
+Backfill completed: **184 races, 2018–2026**, 99.7% best-lap and 89.6% long-run
+coverage across the test window. FastF1 has no usable timing before 2018, so
+training is restricted to 2018+ — median-filling four absent seasons injects a
+large block of fabricated values, and measuring showed it costs more than the
+extra history is worth.
+
+**One consistent configuration** (practice features present, training from 2018):
+
+| Model | Top-1 | Podium | Spearman ρ | Log-loss |
+|---|---|---|---|---|
+| **naive: pole sitter wins** | **0.573** [0.48, 0.67] | **0.663** | 0.628 | 1.757 |
+| lightgbm: lambdarank | 0.544 [0.45, 0.64] | **0.654** | **0.664** | 1.576 |
+| plackett-luce | 0.495 [0.40, 0.59] | 0.628 | 0.646 | 1.651 |
+| original: MLP | 0.476 [0.38, 0.57] | 0.544 | 0.577 | 5.023 |
+| original: SVM (retuned) | 0.447 [0.35, 0.54] | 0.498 | 0.277 | 2.053 |
+| original: SVM (2023 config) | 0.087 [0.04, 0.15] | 0.372 | 0.494 | 2.503 |
+| naive: random | 0.039 [0.01, 0.08] | 0.172 | 0.009 | 3.017 |
+
+## Did practice pace help? Partly, and not where expected
+
+Measured across three configurations on identical folds:
+
+| Configuration | LambdaRank top-1 | Plackett-Luce top-1 | LambdaRank podium |
+|---|---|---|---|
+| no practice, train 2014+ | **0.553** | 0.456 | 0.631 |
+| practice, train 2014+ | 0.534 | 0.466 | 0.647 |
+| practice, train 2018+ | 0.544 | **0.495** | **0.654** |
+
+* **Podium improved materially**: 0.631 → 0.654, now within a point of the
+  pole-sitter rule (0.663) where it had been three points behind.
+* **Plackett-Luce gained the most**: 0.456 → 0.495. A linear choice model has no
+  way to synthesise "who is quick this weekend" from standings alone, so a
+  direct pace measurement is worth more to it than to a tree ensemble that can
+  approximate it from interactions.
+* **LambdaRank's top-1 did not improve** — 0.553 → 0.544, a difference far
+  inside the noise at n=103 (the intervals overlap almost entirely).
+
+The honest summary: practice pace helps the *ordering* tasks and the weaker
+model, and does nothing measurable for the strongest model's top pick. It is
+kept because two of those three effects are real and none is negative.
+
+## Why the practice-era hyperparameters were not adopted
+
+Re-tuning on the practice-inclusive feature space is the right instinct — it is
+what fixed the SVM. But practice starts in 2018 and the test window starts in
+2022, leaving **one clean validation season (22 races)**. Selecting the best of
+81 configurations against 22 races is precisely the small-sample overfitting this
+project exists to avoid: it would pick the configuration luckiest on 22 races,
+not the best one.
+
+So the earlier settings, validated on 39 races, are kept. This is a case where
+the correct move was to *decline* an apparent improvement because the evidence
+for it was too thin to trust.
+
+## Still open
+
+- **LLM entrant** — implemented in `f1predict/models/llm.py`, with an empirical
+  knowledge-cutoff probe rather than a trusted docs figure, because an LLM
+  cannot honestly enter a backtest over races it was trained on. Awaiting a run
+  of the probe to establish the clean window.
+
+---
+
+# Round 4 — beating the baseline, and being precise about by how much
+
+The goal was to get a model past "assume the pole sitter wins" (0.573). The route
+turned out to be a diagnostic rather than a bigger model.
+
+## The diagnostic
+
+Splitting the 103 backtest races by whether LambdaRank agreed with the pole
+sitter:
+
+| | Races | Top-1 correct |
+|---|---|---|
+| Model **agrees** with pole sitter | 47 | **0.809** |
+| Model **backs someone else** | 56 | **0.321** |
+| ...where taking pole would have given | 56 | 0.375 |
+
+The model was never weak at picking winners — it was **over-confident about
+deviating**. Every departure from pole cost about 5.4 points of accuracy. It has
+`grid` as a feature and still under-weights it, because a tree ensemble splits on
+whatever reduces training loss and grid is only decisive for the very top slot.
+
+## The fix
+
+`models/anchored.py` blends the model's within-race distribution with an
+empirical prior over starting slots:
+
+    p_final  ∝  (1 - w) * p_model  +  w * P(win | grid slot)
+
+`P(win | grid)` is estimated on the training fold only and smoothed so a rarely
+seen slot cannot dominate. `w` was swept on **2021 alone** — inside the training
+era, never the backtest window — and 0.60 chosen at the start of a plateau rather
+than at an isolated spike.
+
+## Result
+
+| Model | Top-1 | Podium | Spearman ρ | Log-loss |
+|---|---|---|---|---|
+| **lambdarank + grid anchor** | **0.583** [0.49, 0.68] | 0.660 | 0.661 | **1.377** |
+| **plackett-luce + grid anchor** | **0.583** [0.49, 0.68] | **0.673** | 0.651 | 1.399 |
+| naive: pole sitter wins | 0.573 [0.48, 0.67] | 0.663 | 0.628 | 1.757 |
+| lightgbm: lambdarank | 0.544 [0.45, 0.64] | 0.654 | 0.664 | 1.576 |
+| plackett-luce | 0.495 [0.40, 0.59] | 0.628 | 0.646 | 1.651 |
+| original: MLP | 0.476 [0.38, 0.57] | 0.544 | 0.577 | 5.023 |
+
+Paired against the baseline, over the races both scored:
+
+| Metric | Δ vs pole-sitter rule | Verdict |
+|---|---|---|
+| top-1 | **+0.0097** [−0.019, +0.039] | **tie** — nominal win only |
+| podium (PL-anchored) | +0.0097 [−0.003, +0.026] | tie, leaning better (p=0.91) |
+| **winner log-loss** | **−0.380** [−0.430, −0.329] | **decisively better** |
+
+### What that honestly means
+
+**On accuracy we edge it and no more.** +0.0097 is *one race in 103*, and the
+interval spans zero. Anyone reporting "our model beats the baseline" on that
+number would be repeating the mistake this project was built to expose. The
+correct claim is that the anchored models are the first here to **match** the
+pole-sitter rule on accuracy.
+
+**On probability quality the win is real.** Log-loss 1.377 against 1.757, with an
+interval nowhere near zero. That difference matters for what this site actually
+does: the baseline is a rule that cannot express doubt, while the anchored model
+publishes a calibrated distribution and is now at least as accurate.
+
+The useful lesson is that the gain came from making the model *less* willing to
+back its own marginal opinions, not from more capacity. Its confident calls were
+already excellent (0.809 when it agreed with pole); the losses were all in the
+margin.
+
+---
+
+# LLM entrant — measured, on the only window where measuring is honest
+
+An LLM cannot enter the main backtest: it was trained on text describing those
+races, so asking it to predict 2024 Monaco is asking it to recall. That is the
+same failure as the `status_*` leak, arriving through the weights instead of a
+column.
+
+## Measuring the contamination rather than trusting a docs page
+
+`probe_llm.py` asks who won four races per season, walking forward, with the
+model explicitly allowed to answer UNKNOWN:
+
+| Season | Winners recalled | Said UNKNOWN | Verdict |
+|---|---|---|---|
+| 2020 | 1.00 | 0.00 | contaminated |
+| 2021 | 1.00 | 0.00 | contaminated |
+| 2022 | 1.00 | 0.00 | contaminated |
+| 2023 | 1.00 | 0.00 | contaminated |
+| 2024 | 1.00 | 0.00 | contaminated |
+| **2025** | **0.00** | **1.00** | **usable** |
+| **2026** | **0.00** | **1.00** | **usable** |
+
+A clean step. It recalls every winner through 2024 and honestly says UNKNOWN
+from 2025 — no hallucination, and no sign of live search grounding, which would
+have shown up as continued recall. `gemini-3.1-flash-lite` was chosen precisely
+because it is the oldest generation the key can still reach: a newer model would
+have a later cutoff and therefore a *smaller* honest window.
+
+## Result on the 35 clean races
+
+All entrants re-scored on exactly those races, pre-qualifying view (the LLM gets
+no grid, so neither does anything it is compared against):
+
+| Model | Top-1 | Podium |
+|---|---|---|
+| naive: previous winner | 0.343 [0.20, 0.51] | 0.316 |
+| naive: most wins so far | 0.293 [0.16, 0.44] | 0.565 |
+| lightgbm: lambdarank | 0.286 [0.14, 0.43] | 0.552 |
+| naive: championship leader | 0.260 [0.12, 0.40] | 0.589 |
+| **llm: gemini** | **0.229** [0.09, 0.37] | 0.562 |
+| naive: best recent form | 0.214 [0.09, 0.36] | 0.512 |
+| naive: random | 0.057 [0.00, 0.14] | 0.124 |
+
+**The LLM lands mid-table**: clearly better than random, comparable to the
+others at ordering the podium (0.562), and below both the tabular model and
+three of the simple heuristics at picking the winner.
+
+At n=35 the interval is about ±15 points, so nothing here is separable and this
+ranks the entrants only loosely. But it is evidence of absence of a large
+effect: reasoning over the same tabular features in prose does not beat fitting
+a model to them. That is the outcome the sceptical prior expected, and it is
+worth having measured rather than assumed.
+
+It stays in the project as a forward-testing entrant, labelled as preliminary,
+and it is never mixed into the main backtest table.

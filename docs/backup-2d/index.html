@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f6f2e9">
+  <meta name="description" content="Honest Formula 1 pole, winner and podium forecasts, updated before every race and scored in public.">
+  <title>Pitwall — F1 race predictions</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to predictions</a>
+
+  <div class="page-confetti" aria-hidden="true">
+    <span class="confetti confetti-a"></span><span class="confetti confetti-b"></span>
+    <span class="confetti confetti-c"></span><span class="confetti confetti-d"></span>
+  </div>
+
+  <div class="drive-layer" id="drive-layer"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#weekend" aria-label="Pitwall home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M7 31h22l6-8h6l-4 13H7z"/><circle cx="15" cy="36" r="5"/><circle cx="34" cy="36" r="5"/><path d="M17 27l4-9h10l4 9" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+      </span>
+      <span><strong>Pitwall</strong><small>every call published before the race, scored after it</small></span>
+    </a>
+    <div class="live-badge" aria-label="Prediction status"><span class="live-dot" aria-hidden="true"></span><span id="header-status">Loading race week…</span></div>
+    <nav class="tabs" role="tablist" aria-label="Forecast views">
+      <button class="tab is-active" id="tab-weekend" role="tab" aria-selected="true" aria-controls="weekend" data-tab="weekend">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V5m0 1h11l-2.5 3L16 12H5"/></svg>Race weekend
+      </button>
+      <button class="tab" id="tab-models" role="tab" aria-selected="false" aria-controls="models" data-tab="models" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18V8m6 10V4m6 14v-7m4 7H2"/></svg>Model paddock
+      </button>
+      <button class="tab" id="tab-numbers" role="tab" aria-selected="false" aria-controls="numbers" data-tab="numbers" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16M8 3v18"/></svg>The numbers
+      </button>
+    </nav>
+    <div class="start-gantry" aria-hidden="true">
+      <span>Start procedure</span>
+      <div class="start-housing"><i style="--light:0"></i><i style="--light:1"></i><i style="--light:2"></i><i style="--light:3"></i><i style="--light:4"></i></div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="tab-panel is-active" id="weekend" role="tabpanel" aria-labelledby="tab-weekend" tabindex="0">
+      <div class="weekend-shell">
+        <section class="forecast-hero paper-card" aria-labelledby="race-title">
+          <div class="forecast-copy">
+            <div class="eyebrow-row"><p class="eyebrow"><span aria-hidden="true">●</span> Next up</p><span class="race-round" id="race-round">Round —</span></div>
+            <h1 id="race-title">Loading the next Grand Prix…</h1>
+            <div class="race-meta" id="race-meta" aria-live="polite"><span class="skeleton-line"></span></div>
+            <div class="countdown" aria-label="Time until race start"><span class="countdown-label">Lights out in</span><strong id="countdown">—d —h —m</strong></div>
+          </div>
+          <aside class="house-score" aria-labelledby="house-score-title">
+            <div class="score-dial" id="score-dial" style="--score:0"><span id="score-value">—</span></div>
+            <div><p class="mini-label" id="house-score-title">House form</p><strong id="score-label">Backtest accuracy</strong><p id="score-note">Measured race by race, never shuffled through time.</p></div>
+          </aside>
+        </section>
+
+        <section class="prediction-section" aria-labelledby="our-call-title">
+          <div class="section-heading">
+            <div><p class="eyebrow">Our final call</p><h2 id="our-call-title">One call. One grid. No hedging.</h2></div>
+            <button class="explain-button" type="button" aria-expanded="false" aria-controls="confidence-note" id="explain-confidence">How confidence works<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 10 4 4 4-4"/></svg></button>
+          </div>
+          <p class="confidence-note" id="confidence-note" hidden>Each card separates the model's confidence in this specific call from its historical walk-forward accuracy. Neither is a promise; together they show how strongly the model leans and how often that type of call has held up.</p>
+          <div class="house-grid" id="house-grid" aria-live="polite" aria-busy="true"><div class="pick-card skeleton-card"></div><div class="pick-card skeleton-card"></div><div class="pick-card skeleton-card"></div></div>
+        </section>
+
+        <section class="support-grid">
+          <article class="weather-card paper-card" aria-labelledby="weather-title">
+            <div class="card-title-row"><div><p class="eyebrow">Trackside</p><h2 id="weather-title">Race-day weather</h2></div><div class="weather-art" aria-hidden="true"><span class="weather-sun"></span><span class="weather-cloud"></span></div></div>
+            <div class="weather-stats" id="weather-stats"><span class="skeleton-line"></span></div>
+          </article>
+          <article class="last-result paper-card" aria-labelledby="last-result-title">
+            <div class="card-title-row"><div><p class="eyebrow">Scrutineering</p><h2 id="last-result-title">Last call, checked</h2></div><span class="stamp" id="result-stamp">Pending</span></div>
+            <div id="last-result" class="empty-state">The public record starts with the first race after launch.</div>
+          </article>
+        </section>
+
+        <section class="garage drive-dock paper-card" aria-labelledby="garage-title">
+          <div class="garage-copy">
+            <p class="eyebrow">Open pit lane</p><h2 id="garage-title">Drive the forecast</h2>
+            <p>The scarlet car now runs across the whole site. Build speed, steer through the margins, and it will carry the page with it when you reach the top or bottom edge.</p>
+          </div>
+          <div class="drive-console">
+            <div class="garage-controls" role="group" aria-label="Site-wide car controls">
+              <button class="garage-button is-active" type="button" data-car-toggle aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16h14l-2-6H7zM7 16v3m10-3v3M9 13h6"/></svg><span data-car-toggle-label>Driving armed</span></button>
+              <button class="garage-button" type="button" data-car-reset><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7v5h5M5.8 12A7 7 0 1 0 8 6.8L5 9"/></svg>Find car</button>
+            </div>
+            <p class="garage-hint" id="garage-hint" aria-live="polite"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>or arrows to drive · <kbd>Esc</kbd> parks</span></p>
+          </div>
+          <noscript><p class="garage-fallback">The car needs JavaScript, but every prediction remains readable.</p></noscript>
+        </section>
+        <p class="data-note">Predictions are committed before each race and settled afterward. Git history is the receipt.</p>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="models" role="tabpanel" aria-labelledby="tab-models" tabindex="0" hidden>
+      <div class="content-shell">
+        <header class="page-heading"><p class="eyebrow">Under the bodywork</p><h1>Every model’s call</h1><p>Home shows one house forecast. Here you can inspect the disagreements, probabilities and full predicted order.</p></header>
+        <div class="model-toolbar" aria-label="Prediction timing"><button class="pill-toggle is-active" type="button" data-model-view="pre" aria-pressed="true">Before qualifying</button><button class="pill-toggle" type="button" data-model-view="post" aria-pressed="false">After qualifying</button><span id="model-view-note">The grid is not known yet.</span></div>
+        <div class="model-grid" id="model-grid" aria-live="polite"><div class="model-card skeleton-card"></div><div class="model-card skeleton-card"></div></div>
+        <section class="qualifying-models" aria-labelledby="quali-model-title"><div class="section-heading compact"><div><p class="eyebrow">Saturday forecast</p><h2 id="quali-model-title">Qualifying models</h2></div></div><div class="model-grid" id="quali-model-grid"></div></section>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="numbers" role="tabpanel" aria-labelledby="tab-numbers" tabindex="0" hidden>
+      <div class="content-shell">
+        <header class="page-heading numbers-heading"><div><p class="eyebrow">No victory laps for vibes</p><h1>The backtest table</h1><p>Walk-forward results over 103 races. Every prediction uses only information available before that race.</p></div><aside class="baseline-callout"><span>Hard truth</span><strong id="baseline-headline">The pole-sitter rule remains unbeaten.</strong></aside></header>
+        <div class="numbers-toolbar"><div class="segmented" role="group" aria-label="Backtest timing"><button type="button" class="is-active" data-backtest-view="post" aria-pressed="true">After qualifying</button><button type="button" data-backtest-view="pre" aria-pressed="false">Before qualifying</button></div><p>Click a column heading to sort.</p></div>
+        <div class="table-wrap"><table class="results-table" id="results-table"><caption>Model performance on held-out Formula 1 races</caption><thead><tr><th scope="col"><button data-sort="model">Approach</button></th><th scope="col" aria-sort="descending"><button data-sort="top1_accuracy">Winner <span aria-hidden="true">↓</span></button></th><th scope="col"><button data-sort="podium_hit_rate">Podium</button></th><th scope="col"><button data-sort="spearman_rho">Order ρ</button></th><th scope="col"><button data-sort="winner_log_loss">Log-loss</button></th><th scope="col"><button data-sort="n_races">Races</button></th></tr></thead><tbody id="results-body"><tr><td colspan="6">Loading results…</td></tr></tbody></table></div>
+        <div class="method-cards"><article><span class="method-number">01</span><h2>Walk forward</h2><p>Train on the past, predict the next race, then move forward one race and repeat.</p></article><article><span class="method-number">02</span><h2>Keep the baselines</h2><p>A model only matters if it beats simple rules such as choosing the pole sitter.</p></article><article><span class="method-number">03</span><h2>Show uncertainty</h2><p>Intervals are bootstrapped over races—the independent unit—not over twenty correlated driver rows.</p></article></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><p><strong>Free data, public record.</strong> Jolpica-F1 · Open-Meteo · FastF1</p><p id="last-updated">Waiting for the latest forecast…</p></footer>
+  <script type="module" src="./app.js?v=10"></script>
+</body>
+</html>
