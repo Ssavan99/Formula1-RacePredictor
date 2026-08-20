@@ -40,7 +40,9 @@ jobs:
       - run: pip install -r requirements.txt
 
       - name: Predict using the real starting grid
-        run: python -m f1predict.cli predict --view post_quali --within-days 2
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python -m f1predict.cli predict --view post_quali --within-days 2 --with-llm
 
       - name: Commit
         run: |

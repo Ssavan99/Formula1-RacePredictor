@@ -153,6 +153,7 @@ def run(
     client: JolpicaClient | None = None,
     weather_client: WeatherClient | None = None,
     today: date | None = None,
+    with_llm: bool = False,
 ) -> dict | None:
     """Produce predictions for the next race, or ``None`` if there is none."""
     client = client or JolpicaClient()
@@ -190,7 +191,19 @@ def run(
     if models is None:
         from .models.registry import build_production_models
 
-        models = build_production_models(view=view)
+        models = list(build_production_models(view=view))
+
+    # The LLM is a forward-testing entrant only: it cannot enter the backtest,
+    # because its training data contains the results of past races. A missing
+    # key is not an error -- the tabular models still publish.
+    if with_llm:
+        try:
+            from .models.llm import LLMPredictor, _api_key
+
+            _api_key()
+            models = [*models, LLMPredictor(view=view)]
+        except Exception as exc:
+            log.warning("LLM entrant skipped: %s", exc)
 
     # Qualifying is only worth predicting before it has happened. Once the grid
     # is known there is nothing to forecast, and the post_quali race models use
