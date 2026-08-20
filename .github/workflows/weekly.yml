@@ -55,10 +55,15 @@ jobs:
         run: python -m f1predict.settle
 
       - name: Predict the upcoming race
+        env:
+          # Optional. When absent the LLM entrant is skipped and the tabular
+          # models still publish -- a missing key must never fail the run.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python -m f1predict.cli predict \
             --view pre_quali \
             --within-days 10 \
+            --with-llm \
             ${{ inputs.force_predict && '--force' || '' }}
 
       - name: Commit
