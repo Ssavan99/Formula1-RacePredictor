@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: f1-refresh          # never race the weekly job for the same commit
@@ -56,3 +57,33 @@ jobs:
             git commit -m "Post-qualifying prediction: $(date -u +%Y-%m-%d)"
             git push
           fi
+
+      # This job failed silently for a whole race weekend: it built the
+      # prediction, could not push it, and nothing said so. weekly.yml already
+      # reported failures; this one did not.
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Post-qualifying prediction failed';
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: 'automation'
+            });
+            const body = `Run failed: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+
+            If the log ends in \`GH006: Protected branch update failed\`, the
+            prediction was built correctly and only the push was refused --
+            branch protection on \`main\` requires a pull request and the
+            GITHUB_TOKEN cannot bypass it.
+
+            That prediction cannot be recovered afterwards: regenerating it once
+            the race has run would produce a call made with knowledge of the
+            result.`;
+            if (!open.data.some(i => i.title === title)) {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title, body, labels: ['automation']
+              });
+            }
