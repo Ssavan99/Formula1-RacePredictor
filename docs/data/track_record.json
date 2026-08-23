@@ -1,0 +1,99 @@
+{
+  "settled": [
+    {
+      "season": 2026,
+      "round": 12,
+      "race_name": "Dutch Grand Prix",
+      "date": "2026-08-23",
+      "view": "pre_quali",
+      "predicted_at": "2026-08-20T00:23:35.702980+00:00",
+      "model": "lightgbm: lambdarank",
+      "predicted_winner": "antonelli",
+      "actual_winner": "norris",
+      "top1_correct": 0,
+      "podium_hits": 2,
+      "winner_probability": 0.0986,
+      "winner_log_loss": 2.3166840173735475
+    },
+    {
+      "season": 2026,
+      "round": 12,
+      "race_name": "Dutch Grand Prix",
+      "date": "2026-08-23",
+      "view": "pre_quali",
+      "predicted_at": "2026-08-20T00:23:35.702980+00:00",
+      "model": "plackett-luce",
+      "predicted_winner": "russell",
+      "actual_winner": "norris",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0783,
+      "winner_log_loss": 2.54720767598538
+    },
+    {
+      "season": 2026,
+      "round": 12,
+      "race_name": "Dutch Grand Prix",
+      "date": "2026-08-23",
+      "view": "pre_quali",
+      "predicted_at": "2026-08-20T00:23:35.702980+00:00",
+      "model": "original: MLP",
+      "predicted_winner": "leclerc",
+      "actual_winner": "norris",
+      "top1_correct": 0,
+      "podium_hits": 2,
+      "winner_probability": 0.0033,
+      "winner_log_loss": 5.713832810509703
+    },
+    {
+      "season": 2026,
+      "round": 12,
+      "race_name": "Dutch Grand Prix",
+      "date": "2026-08-23",
+      "view": "pre_quali",
+      "predicted_at": "2026-08-20T00:23:35.702980+00:00",
+      "model": "llm: gemini",
+      "predicted_winner": "antonelli",
+      "actual_winner": "norris",
+      "top1_correct": 0,
+      "podium_hits": 2,
+      "winner_probability": 0.0295,
+      "winner_log_loss": 3.523365015636363
+    }
+  ],
+  "updated_at": "2026-08-23T19:13:33.286482+00:00",
+  "summary": [
+    {
+      "model": "lightgbm: lambdarank",
+      "view": "pre_quali",
+      "races": 1,
+      "top1_accuracy": 0.0,
+      "podium_hits_per_race": 2.0,
+      "winner_log_loss": 2.317
+    },
+    {
+      "model": "llm: gemini",
+      "view": "pre_quali",
+      "races": 1,
+      "top1_accuracy": 0.0,
+      "podium_hits_per_race": 2.0,
+      "winner_log_loss": 3.523
+    },
+    {
+      "model": "original: MLP",
+      "view": "pre_quali",
+      "races": 1,
+      "top1_accuracy": 0.0,
+      "podium_hits_per_race": 2.0,
+      "winner_log_loss": 5.714
+    },
+    {
+      "model": "plackett-luce",
+      "view": "pre_quali",
+      "races": 1,
+      "top1_accuracy": 0.0,
+      "podium_hits_per_race": 1.0,
+      "winner_log_loss": 2.547
+    }
+  ]
+}

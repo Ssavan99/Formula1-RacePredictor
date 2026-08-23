@@ -1,48 +1,13 @@
 {
-  "built_at": "2026-08-18T20:52:28.344286+00:00",
-  "rows": 5347,
-  "seasons": [
-    2014,
-    2015,
-    2016,
-    2017,
-    2018,
-    2019,
-    2020,
-    2021,
-    2022,
-    2023,
-    2024,
-    2025,
-    2026
-  ],
-  "races": 263,
+  "updated_at": "2026-08-23T19:13:04.087770+00:00",
+  "rows": 5369,
+  "races": 264,
   "last_race": {
     "season": 2026,
-    "round": 11,
-    "name": "Hungarian Grand Prix",
-    "date": "2026-07-26"
+    "round": 12,
+    "name": "Dutch Grand Prix",
+    "date": "2026-08-23"
   },
-  "jolpica_requests": 0,
-  "weather_requests": 0,
-  "standings_validation": [
-    {
-      "season": 2023,
-      "checked": 22,
-      "mismatches": 0,
-      "detail": {}
-    },
-    {
-      "season": 2024,
-      "checked": 24,
-      "mismatches": 0,
-      "detail": {}
-    },
-    {
-      "season": 2025,
-      "checked": 21,
-      "mismatches": 0,
-      "detail": {}
-    }
-  ]
+  "jolpica_requests": 8,
+  "weather_requests": 1
 }
