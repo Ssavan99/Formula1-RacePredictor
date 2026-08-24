@@ -61,7 +61,7 @@
       "winner_log_loss": 3.523365015636363
     }
   ],
-  "updated_at": "2026-08-23T19:13:33.286482+00:00",
+  "updated_at": "2026-08-24T05:01:53.191066+00:00",
   "summary": [
     {
       "model": "lightgbm: lambdarank",
