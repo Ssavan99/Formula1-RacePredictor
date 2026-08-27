@@ -1,0 +1,25 @@
+# Generated / dependency directories
+node_modules/
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+
+# Large raw-data folder (not source code)
+data/
+Plots/
+results/
+
+# Bundled third-party / vendor assets and generated site assets
+docs/vendor/
+docs/model/
+docs/data/
+
+# Non-code documents outside scope of code-only extraction
+*.pdf
+*.blend
+*.usdz
+*.fbx

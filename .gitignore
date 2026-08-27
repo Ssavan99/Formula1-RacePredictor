@@ -153,3 +153,6 @@ data/cache/*.log
 # Dev-only: puppeteer for headless screenshots
 node_modules/
 package-lock.json
+
+# graphify knowledge graph output (regenerable)
+graphify-out/
