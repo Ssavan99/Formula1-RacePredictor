@@ -215,12 +215,18 @@ def attach_practice(df: pd.DataFrame, practice: pd.DataFrame) -> pd.DataFrame:
     """
     feature_columns = ["practice_best_gap", "practice_long_run_gap", "practice_laps"]
 
+    # Idempotent: a caller may pass a frame that already carries these columns
+    # from a previous attach (e.g. an incremental update re-deriving over the
+    # whole history). Without dropping them first, `merge` suffixes both sides
+    # as `_x`/`_y` instead of overwriting, which silently produces columns the
+    # leak guard has never heard of.
+    df = df.drop(columns=[c for c in feature_columns if c in df.columns])
+
     if practice is None or practice.empty:
         for column in feature_columns:
             df[column] = np.nan
         return df
 
-    df = df.copy()
     df["_code"] = _driver_code(df["driver_id"])
 
     merged = df.merge(

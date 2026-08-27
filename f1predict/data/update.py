@@ -48,7 +48,12 @@ RAW_COLUMNS = [
     "sprint_points",
     "weather_temp_max", "weather_precipitation", "weather_windspeed_max",
     "weather_is_wet",
-    "practice_best_gap", "practice_long_run_gap", "practice_laps",
+    # NOTE: practice_best_gap / practice_long_run_gap / practice_laps are
+    # deliberately NOT listed here. They are derived by attach_practice_features
+    # below, not raw API data; carrying them forward as "raw" made `combined`
+    # already have those columns by the time attach_practice_features ran a
+    # second merge over them, which pandas resolved with silent `_x`/`_y`
+    # suffixes instead of overwriting -- columns the leak guard then rejected.
 ]
 
 
