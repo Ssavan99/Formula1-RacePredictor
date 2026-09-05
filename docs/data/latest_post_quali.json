@@ -1,0 +1,710 @@
+{
+  "generated_at": "2026-09-05T21:49:00.100346+00:00",
+  "view": "post_quali",
+  "race": {
+    "season": 2026,
+    "round": 13,
+    "name": "Italian Grand Prix",
+    "date": "2026-09-06",
+    "circuit": "monza"
+  },
+  "weather": {
+    "weather_temp_max": 31.7,
+    "weather_precipitation": 0.0,
+    "weather_windspeed_max": 8.1,
+    "weather_is_wet": 0.0
+  },
+  "predictions": [
+    {
+      "model": "lambdarank + grid anchor",
+      "view": "post_quali",
+      "ranking": [
+        {
+          "position": 1,
+          "driver_id": "gasly",
+          "constructor_id": "alpine",
+          "win_probability": 0.3653
+        },
+        {
+          "position": 2,
+          "driver_id": "russell",
+          "constructor_id": "mercedes",
+          "win_probability": 0.2274
+        },
+        {
+          "position": 3,
+          "driver_id": "piastri",
+          "constructor_id": "mclaren",
+          "win_probability": 0.1054
+        },
+        {
+          "position": 4,
+          "driver_id": "leclerc",
+          "constructor_id": "ferrari",
+          "win_probability": 0.0602
+        },
+        {
+          "position": 5,
+          "driver_id": "hamilton",
+          "constructor_id": "ferrari",
+          "win_probability": 0.0519
+        },
+        {
+          "position": 6,
+          "driver_id": "antonelli",
+          "constructor_id": "mercedes",
+          "win_probability": 0.0417
+        },
+        {
+          "position": 7,
+          "driver_id": "max_verstappen",
+          "constructor_id": "red_bull",
+          "win_probability": 0.0387
+        },
+        {
+          "position": 8,
+          "driver_id": "norris",
+          "constructor_id": "mclaren",
+          "win_probability": 0.0298
+        },
+        {
+          "position": 9,
+          "driver_id": "arvid_lindblad",
+          "constructor_id": "rb",
+          "win_probability": 0.0184
+        },
+        {
+          "position": 10,
+          "driver_id": "colapinto",
+          "constructor_id": "alpine",
+          "win_probability": 0.011
+        },
+        {
+          "position": 11,
+          "driver_id": "lawson",
+          "constructor_id": "red_bull",
+          "win_probability": 0.0102
+        },
+        {
+          "position": 12,
+          "driver_id": "bortoleto",
+          "constructor_id": "audi",
+          "win_probability": 0.0066
+        },
+        {
+          "position": 13,
+          "driver_id": "hulkenberg",
+          "constructor_id": "audi",
+          "win_probability": 0.0051
+        },
+        {
+          "position": 14,
+          "driver_id": "bearman",
+          "constructor_id": "haas",
+          "win_probability": 0.0045
+        },
+        {
+          "position": 15,
+          "driver_id": "tsunoda",
+          "constructor_id": "rb",
+          "win_probability": 0.0042
+        },
+        {
+          "position": 16,
+          "driver_id": "sainz",
+          "constructor_id": "williams",
+          "win_probability": 0.0035
+        },
+        {
+          "position": 17,
+          "driver_id": "ocon",
+          "constructor_id": "haas",
+          "win_probability": 0.0029
+        },
+        {
+          "position": 18,
+          "driver_id": "stroll",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.0028
+        },
+        {
+          "position": 19,
+          "driver_id": "alonso",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.0027
+        },
+        {
+          "position": 20,
+          "driver_id": "albon",
+          "constructor_id": "williams",
+          "win_probability": 0.0026
+        },
+        {
+          "position": 21,
+          "driver_id": "bottas",
+          "constructor_id": "cadillac",
+          "win_probability": 0.0026
+        },
+        {
+          "position": 22,
+          "driver_id": "perez",
+          "constructor_id": "cadillac",
+          "win_probability": 0.0026
+        }
+      ]
+    },
+    {
+      "model": "plackett-luce + grid anchor",
+      "view": "post_quali",
+      "ranking": [
+        {
+          "position": 1,
+          "driver_id": "gasly",
+          "constructor_id": "alpine",
+          "win_probability": 0.3562
+        },
+        {
+          "position": 2,
+          "driver_id": "russell",
+          "constructor_id": "mercedes",
+          "win_probability": 0.2319
+        },
+        {
+          "position": 3,
+          "driver_id": "piastri",
+          "constructor_id": "mclaren",
+          "win_probability": 0.0916
+        },
+        {
+          "position": 4,
+          "driver_id": "leclerc",
+          "constructor_id": "ferrari",
+          "win_probability": 0.0728
+        },
+        {
+          "position": 5,
+          "driver_id": "hamilton",
+          "constructor_id": "ferrari",
+          "win_probability": 0.0565
+        },
+        {
+          "position": 6,
+          "driver_id": "max_verstappen",
+          "constructor_id": "red_bull",
+          "win_probability": 0.0452
+        },
+        {
+          "position": 7,
+          "driver_id": "antonelli",
+          "constructor_id": "mercedes",
+          "win_probability": 0.0352
+        },
+        {
+          "position": 8,
+          "driver_id": "norris",
+          "constructor_id": "mclaren",
+          "win_probability": 0.0292
+        },
+        {
+          "position": 9,
+          "driver_id": "arvid_lindblad",
+          "constructor_id": "rb",
+          "win_probability": 0.0203
+        },
+        {
+          "position": 10,
+          "driver_id": "colapinto",
+          "constructor_id": "alpine",
+          "win_probability": 0.015
+        },
+        {
+          "position": 11,
+          "driver_id": "lawson",
+          "constructor_id": "red_bull",
+          "win_probability": 0.0131
+        },
+        {
+          "position": 12,
+          "driver_id": "bortoleto",
+          "constructor_id": "audi",
+          "win_probability": 0.0061
+        },
+        {
+          "position": 13,
+          "driver_id": "bearman",
+          "constructor_id": "haas",
+          "win_probability": 0.005
+        },
+        {
+          "position": 14,
+          "driver_id": "hulkenberg",
+          "constructor_id": "audi",
+          "win_probability": 0.0043
+        },
+        {
+          "position": 15,
+          "driver_id": "sainz",
+          "constructor_id": "williams",
+          "win_probability": 0.004
+        },
+        {
+          "position": 16,
+          "driver_id": "ocon",
+          "constructor_id": "haas",
+          "win_probability": 0.0026
+        },
+        {
+          "position": 17,
+          "driver_id": "albon",
+          "constructor_id": "williams",
+          "win_probability": 0.0026
+        },
+        {
+          "position": 18,
+          "driver_id": "alonso",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.0025
+        },
+        {
+          "position": 19,
+          "driver_id": "tsunoda",
+          "constructor_id": "rb",
+          "win_probability": 0.0023
+        },
+        {
+          "position": 20,
+          "driver_id": "stroll",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.0018
+        },
+        {
+          "position": 21,
+          "driver_id": "perez",
+          "constructor_id": "cadillac",
+          "win_probability": 0.0008
+        },
+        {
+          "position": 22,
+          "driver_id": "bottas",
+          "constructor_id": "cadillac",
+          "win_probability": 0.0008
+        }
+      ]
+    },
+    {
+      "model": "lightgbm: lambdarank",
+      "view": "post_quali",
+      "ranking": [
+        {
+          "position": 1,
+          "driver_id": "russell",
+          "constructor_id": "mercedes",
+          "win_probability": 0.2201
+        },
+        {
+          "position": 2,
+          "driver_id": "piastri",
+          "constructor_id": "mclaren",
+          "win_probability": 0.111
+        },
+        {
+          "position": 3,
+          "driver_id": "gasly",
+          "constructor_id": "alpine",
+          "win_probability": 0.1101
+        },
+        {
+          "position": 4,
+          "driver_id": "hamilton",
+          "constructor_id": "ferrari",
+          "win_probability": 0.1053
+        },
+        {
+          "position": 5,
+          "driver_id": "antonelli",
+          "constructor_id": "mercedes",
+          "win_probability": 0.0964
+        },
+        {
+          "position": 6,
+          "driver_id": "leclerc",
+          "constructor_id": "ferrari",
+          "win_probability": 0.0927
+        },
+        {
+          "position": 7,
+          "driver_id": "norris",
+          "constructor_id": "mclaren",
+          "win_probability": 0.0668
+        },
+        {
+          "position": 8,
+          "driver_id": "max_verstappen",
+          "constructor_id": "red_bull",
+          "win_probability": 0.0556
+        },
+        {
+          "position": 9,
+          "driver_id": "lawson",
+          "constructor_id": "red_bull",
+          "win_probability": 0.0234
+        },
+        {
+          "position": 10,
+          "driver_id": "arvid_lindblad",
+          "constructor_id": "rb",
+          "win_probability": 0.0214
+        },
+        {
+          "position": 11,
+          "driver_id": "colapinto",
+          "constructor_id": "alpine",
+          "win_probability": 0.0198
+        },
+        {
+          "position": 12,
+          "driver_id": "bortoleto",
+          "constructor_id": "audi",
+          "win_probability": 0.0144
+        },
+        {
+          "position": 13,
+          "driver_id": "hulkenberg",
+          "constructor_id": "audi",
+          "win_probability": 0.0106
+        },
+        {
+          "position": 14,
+          "driver_id": "bearman",
+          "constructor_id": "haas",
+          "win_probability": 0.0093
+        },
+        {
+          "position": 15,
+          "driver_id": "tsunoda",
+          "constructor_id": "rb",
+          "win_probability": 0.0085
+        },
+        {
+          "position": 16,
+          "driver_id": "sainz",
+          "constructor_id": "williams",
+          "win_probability": 0.0067
+        },
+        {
+          "position": 17,
+          "driver_id": "ocon",
+          "constructor_id": "haas",
+          "win_probability": 0.0051
+        },
+        {
+          "position": 18,
+          "driver_id": "stroll",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.0048
+        },
+        {
+          "position": 19,
+          "driver_id": "alonso",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.0046
+        },
+        {
+          "position": 20,
+          "driver_id": "albon",
+          "constructor_id": "williams",
+          "win_probability": 0.0045
+        },
+        {
+          "position": 21,
+          "driver_id": "bottas",
+          "constructor_id": "cadillac",
+          "win_probability": 0.0044
+        },
+        {
+          "position": 22,
+          "driver_id": "perez",
+          "constructor_id": "cadillac",
+          "win_probability": 0.0044
+        }
+      ]
+    },
+    {
+      "model": "original: MLP",
+      "view": "post_quali",
+      "ranking": [
+        {
+          "position": 1,
+          "driver_id": "russell",
+          "constructor_id": "mercedes",
+          "win_probability": 0.9769
+        },
+        {
+          "position": 2,
+          "driver_id": "gasly",
+          "constructor_id": "alpine",
+          "win_probability": 0.0141
+        },
+        {
+          "position": 3,
+          "driver_id": "piastri",
+          "constructor_id": "mclaren",
+          "win_probability": 0.0053
+        },
+        {
+          "position": 4,
+          "driver_id": "hamilton",
+          "constructor_id": "ferrari",
+          "win_probability": 0.0028
+        },
+        {
+          "position": 5,
+          "driver_id": "leclerc",
+          "constructor_id": "ferrari",
+          "win_probability": 0.0008
+        },
+        {
+          "position": 6,
+          "driver_id": "norris",
+          "constructor_id": "mclaren",
+          "win_probability": 0.0001
+        },
+        {
+          "position": 7,
+          "driver_id": "antonelli",
+          "constructor_id": "mercedes",
+          "win_probability": 0.0
+        },
+        {
+          "position": 8,
+          "driver_id": "max_verstappen",
+          "constructor_id": "red_bull",
+          "win_probability": 0.0
+        },
+        {
+          "position": 9,
+          "driver_id": "arvid_lindblad",
+          "constructor_id": "rb",
+          "win_probability": 0.0
+        },
+        {
+          "position": 10,
+          "driver_id": "lawson",
+          "constructor_id": "red_bull",
+          "win_probability": 0.0
+        },
+        {
+          "position": 11,
+          "driver_id": "ocon",
+          "constructor_id": "haas",
+          "win_probability": 0.0
+        },
+        {
+          "position": 12,
+          "driver_id": "colapinto",
+          "constructor_id": "alpine",
+          "win_probability": 0.0
+        },
+        {
+          "position": 13,
+          "driver_id": "bearman",
+          "constructor_id": "haas",
+          "win_probability": 0.0
+        },
+        {
+          "position": 14,
+          "driver_id": "tsunoda",
+          "constructor_id": "rb",
+          "win_probability": 0.0
+        },
+        {
+          "position": 15,
+          "driver_id": "hulkenberg",
+          "constructor_id": "audi",
+          "win_probability": 0.0
+        },
+        {
+          "position": 16,
+          "driver_id": "albon",
+          "constructor_id": "williams",
+          "win_probability": 0.0
+        },
+        {
+          "position": 17,
+          "driver_id": "sainz",
+          "constructor_id": "williams",
+          "win_probability": 0.0
+        },
+        {
+          "position": 18,
+          "driver_id": "alonso",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.0
+        },
+        {
+          "position": 19,
+          "driver_id": "bortoleto",
+          "constructor_id": "audi",
+          "win_probability": 0.0
+        },
+        {
+          "position": 20,
+          "driver_id": "stroll",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.0
+        },
+        {
+          "position": 21,
+          "driver_id": "perez",
+          "constructor_id": "cadillac",
+          "win_probability": 0.0
+        },
+        {
+          "position": 22,
+          "driver_id": "bottas",
+          "constructor_id": "cadillac",
+          "win_probability": 0.0
+        }
+      ]
+    },
+    {
+      "model": "llm: gemini",
+      "view": "post_quali",
+      "ranking": [
+        {
+          "position": 1,
+          "driver_id": "antonelli",
+          "constructor_id": "mercedes",
+          "win_probability": 0.5932
+        },
+        {
+          "position": 2,
+          "driver_id": "leclerc",
+          "constructor_id": "ferrari",
+          "win_probability": 0.2182
+        },
+        {
+          "position": 3,
+          "driver_id": "hamilton",
+          "constructor_id": "ferrari",
+          "win_probability": 0.0803
+        },
+        {
+          "position": 4,
+          "driver_id": "russell",
+          "constructor_id": "mercedes",
+          "win_probability": 0.0295
+        },
+        {
+          "position": 5,
+          "driver_id": "piastri",
+          "constructor_id": "mclaren",
+          "win_probability": 0.0109
+        },
+        {
+          "position": 6,
+          "driver_id": "bortoleto",
+          "constructor_id": "audi",
+          "win_probability": 0.004
+        },
+        {
+          "position": 7,
+          "driver_id": "bearman",
+          "constructor_id": "haas",
+          "win_probability": 0.004
+        },
+        {
+          "position": 8,
+          "driver_id": "albon",
+          "constructor_id": "williams",
+          "win_probability": 0.004
+        },
+        {
+          "position": 9,
+          "driver_id": "colapinto",
+          "constructor_id": "alpine",
+          "win_probability": 0.004
+        },
+        {
+          "position": 10,
+          "driver_id": "bottas",
+          "constructor_id": "cadillac",
+          "win_probability": 0.004
+        },
+        {
+          "position": 11,
+          "driver_id": "hulkenberg",
+          "constructor_id": "audi",
+          "win_probability": 0.004
+        },
+        {
+          "position": 12,
+          "driver_id": "gasly",
+          "constructor_id": "alpine",
+          "win_probability": 0.004
+        },
+        {
+          "position": 13,
+          "driver_id": "lawson",
+          "constructor_id": "red_bull",
+          "win_probability": 0.004
+        },
+        {
+          "position": 14,
+          "driver_id": "max_verstappen",
+          "constructor_id": "red_bull",
+          "win_probability": 0.004
+        },
+        {
+          "position": 15,
+          "driver_id": "alonso",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.004
+        },
+        {
+          "position": 16,
+          "driver_id": "arvid_lindblad",
+          "constructor_id": "rb",
+          "win_probability": 0.004
+        },
+        {
+          "position": 17,
+          "driver_id": "ocon",
+          "constructor_id": "haas",
+          "win_probability": 0.004
+        },
+        {
+          "position": 18,
+          "driver_id": "norris",
+          "constructor_id": "mclaren",
+          "win_probability": 0.004
+        },
+        {
+          "position": 19,
+          "driver_id": "perez",
+          "constructor_id": "cadillac",
+          "win_probability": 0.004
+        },
+        {
+          "position": 20,
+          "driver_id": "sainz",
+          "constructor_id": "williams",
+          "win_probability": 0.004
+        },
+        {
+          "position": 21,
+          "driver_id": "stroll",
+          "constructor_id": "aston_martin",
+          "win_probability": 0.004
+        },
+        {
+          "position": 22,
+          "driver_id": "tsunoda",
+          "constructor_id": "rb",
+          "win_probability": 0.004
+        }
+      ]
+    }
+  ],
+  "qualifying_predictions": []
+}
