@@ -59,41 +59,216 @@
       "podium_hits": 2,
       "winner_probability": 0.0295,
       "winner_log_loss": 3.523365015636363
+    },
+    {
+      "season": 2026,
+      "round": 13,
+      "race_name": "Italian Grand Prix",
+      "date": "2026-09-06",
+      "view": "post_quali",
+      "predicted_at": "2026-09-05T21:49:00.100346+00:00",
+      "model": "lambdarank + grid anchor",
+      "predicted_winner": "gasly",
+      "actual_winner": "antonelli",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0417,
+      "winner_log_loss": 3.177254150177381
+    },
+    {
+      "season": 2026,
+      "round": 13,
+      "race_name": "Italian Grand Prix",
+      "date": "2026-09-06",
+      "view": "post_quali",
+      "predicted_at": "2026-09-05T21:49:00.100346+00:00",
+      "model": "plackett-luce + grid anchor",
+      "predicted_winner": "gasly",
+      "actual_winner": "antonelli",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0352,
+      "winner_log_loss": 3.3467091963780855
+    },
+    {
+      "season": 2026,
+      "round": 13,
+      "race_name": "Italian Grand Prix",
+      "date": "2026-09-06",
+      "view": "post_quali",
+      "predicted_at": "2026-09-05T21:49:00.100346+00:00",
+      "model": "lightgbm: lambdarank",
+      "predicted_winner": "russell",
+      "actual_winner": "antonelli",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0964,
+      "winner_log_loss": 2.339249077365637
+    },
+    {
+      "season": 2026,
+      "round": 13,
+      "race_name": "Italian Grand Prix",
+      "date": "2026-09-06",
+      "view": "post_quali",
+      "predicted_at": "2026-09-05T21:49:00.100346+00:00",
+      "model": "original: MLP",
+      "predicted_winner": "russell",
+      "actual_winner": "antonelli",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0,
+      "winner_log_loss": 34.538776394910684
+    },
+    {
+      "season": 2026,
+      "round": 13,
+      "race_name": "Italian Grand Prix",
+      "date": "2026-09-06",
+      "view": "post_quali",
+      "predicted_at": "2026-09-05T21:49:00.100346+00:00",
+      "model": "llm: gemini",
+      "predicted_winner": "antonelli",
+      "actual_winner": "antonelli",
+      "top1_correct": 1,
+      "podium_hits": 1,
+      "winner_probability": 0.5932,
+      "winner_log_loss": 0.5222236687183601
+    },
+    {
+      "season": 2026,
+      "round": 13,
+      "race_name": "Italian Grand Prix",
+      "date": "2026-09-06",
+      "view": "pre_quali",
+      "predicted_at": "2026-09-01T11:07:43.697847+00:00",
+      "model": "lightgbm: lambdarank",
+      "predicted_winner": "hamilton",
+      "actual_winner": "antonelli",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.1063,
+      "winner_log_loss": 2.241489993634235
+    },
+    {
+      "season": 2026,
+      "round": 13,
+      "race_name": "Italian Grand Prix",
+      "date": "2026-09-06",
+      "view": "pre_quali",
+      "predicted_at": "2026-09-01T11:07:43.697847+00:00",
+      "model": "plackett-luce",
+      "predicted_winner": "russell",
+      "actual_winner": "antonelli",
+      "top1_correct": 0,
+      "podium_hits": 2,
+      "winner_probability": 0.1315,
+      "winner_log_loss": 2.028748427364318
+    },
+    {
+      "season": 2026,
+      "round": 13,
+      "race_name": "Italian Grand Prix",
+      "date": "2026-09-06",
+      "view": "pre_quali",
+      "predicted_at": "2026-09-01T11:07:43.697847+00:00",
+      "model": "original: MLP",
+      "predicted_winner": "piastri",
+      "actual_winner": "antonelli",
+      "top1_correct": 0,
+      "podium_hits": 2,
+      "winner_probability": 0.1208,
+      "winner_log_loss": 2.1136189934814222
+    },
+    {
+      "season": 2026,
+      "round": 13,
+      "race_name": "Italian Grand Prix",
+      "date": "2026-09-06",
+      "view": "pre_quali",
+      "predicted_at": "2026-09-01T11:07:43.697847+00:00",
+      "model": "llm: gemini",
+      "predicted_winner": "antonelli",
+      "actual_winner": "antonelli",
+      "top1_correct": 1,
+      "podium_hits": 1,
+      "winner_probability": 0.5932,
+      "winner_log_loss": 0.5222236687183601
     }
   ],
-  "updated_at": "2026-09-01T11:07:39.494022+00:00",
+  "updated_at": "2026-09-08T10:36:26.528634+00:00",
   "summary": [
     {
-      "model": "lightgbm: lambdarank",
-      "view": "pre_quali",
+      "model": "llm: gemini",
+      "view": "post_quali",
       "races": 1,
-      "top1_accuracy": 0.0,
-      "podium_hits_per_race": 2.0,
-      "winner_log_loss": 2.317
+      "top1_accuracy": 1.0,
+      "podium_hits_per_race": 1.0,
+      "winner_log_loss": 0.522
     },
     {
       "model": "llm: gemini",
       "view": "pre_quali",
+      "races": 2,
+      "top1_accuracy": 0.5,
+      "podium_hits_per_race": 1.5,
+      "winner_log_loss": 2.023
+    },
+    {
+      "model": "lambdarank + grid anchor",
+      "view": "post_quali",
       "races": 1,
       "top1_accuracy": 0.0,
-      "podium_hits_per_race": 2.0,
-      "winner_log_loss": 3.523
+      "podium_hits_per_race": 1.0,
+      "winner_log_loss": 3.177
+    },
+    {
+      "model": "lightgbm: lambdarank",
+      "view": "post_quali",
+      "races": 1,
+      "top1_accuracy": 0.0,
+      "podium_hits_per_race": 1.0,
+      "winner_log_loss": 2.339
+    },
+    {
+      "model": "lightgbm: lambdarank",
+      "view": "pre_quali",
+      "races": 2,
+      "top1_accuracy": 0.0,
+      "podium_hits_per_race": 1.5,
+      "winner_log_loss": 2.279
+    },
+    {
+      "model": "original: MLP",
+      "view": "post_quali",
+      "races": 1,
+      "top1_accuracy": 0.0,
+      "podium_hits_per_race": 1.0,
+      "winner_log_loss": 34.539
     },
     {
       "model": "original: MLP",
       "view": "pre_quali",
-      "races": 1,
+      "races": 2,
       "top1_accuracy": 0.0,
       "podium_hits_per_race": 2.0,
-      "winner_log_loss": 5.714
+      "winner_log_loss": 3.914
     },
     {
       "model": "plackett-luce",
       "view": "pre_quali",
+      "races": 2,
+      "top1_accuracy": 0.0,
+      "podium_hits_per_race": 1.5,
+      "winner_log_loss": 2.288
+    },
+    {
+      "model": "plackett-luce + grid anchor",
+      "view": "post_quali",
       "races": 1,
       "top1_accuracy": 0.0,
       "podium_hits_per_race": 1.0,
-      "winner_log_loss": 2.547
+      "winner_log_loss": 3.347
     }
   ]
 }
