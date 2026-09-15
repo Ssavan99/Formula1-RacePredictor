@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-09-08T10:36:25.384346+00:00",
-  "rows": 5391,
-  "races": 265,
+  "updated_at": "2026-09-15T11:06:10.707677+00:00",
+  "rows": 5413,
+  "races": 266,
   "last_race": {
     "season": 2026,
-    "round": 13,
-    "name": "Italian Grand Prix",
-    "date": "2026-09-06"
+    "round": 14,
+    "name": "Spanish Grand Prix",
+    "date": "2026-09-13"
   },
-  "jolpica_requests": 8,
+  "jolpica_requests": 10,
   "weather_requests": 2
 }
