@@ -329,81 +329,216 @@
       "podium_hits": 2,
       "winner_probability": 0.5932,
       "winner_log_loss": 0.5222236687183601
+    },
+    {
+      "season": 2026,
+      "round": 15,
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26",
+      "view": "post_quali",
+      "predicted_at": "2026-09-26T22:16:49.029641+00:00",
+      "model": "lambdarank + grid anchor",
+      "predicted_winner": "russell",
+      "actual_winner": "russell",
+      "top1_correct": 1,
+      "podium_hits": 1,
+      "winner_probability": 0.4197,
+      "winner_log_loss": 0.8682151086425919
+    },
+    {
+      "season": 2026,
+      "round": 15,
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26",
+      "view": "post_quali",
+      "predicted_at": "2026-09-26T22:16:49.029641+00:00",
+      "model": "plackett-luce + grid anchor",
+      "predicted_winner": "russell",
+      "actual_winner": "russell",
+      "top1_correct": 1,
+      "podium_hits": 1,
+      "winner_probability": 0.4247,
+      "winner_log_loss": 0.8563722416629115
+    },
+    {
+      "season": 2026,
+      "round": 15,
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26",
+      "view": "post_quali",
+      "predicted_at": "2026-09-26T22:16:49.029641+00:00",
+      "model": "lightgbm: lambdarank",
+      "predicted_winner": "antonelli",
+      "actual_winner": "russell",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.2225,
+      "winner_log_loss": 1.502828177375842
+    },
+    {
+      "season": 2026,
+      "round": 15,
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26",
+      "view": "post_quali",
+      "predicted_at": "2026-09-26T22:16:49.029641+00:00",
+      "model": "original: MLP",
+      "predicted_winner": "piastri",
+      "actual_winner": "russell",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.2403,
+      "winner_log_loss": 1.4258671362397137
+    },
+    {
+      "season": 2026,
+      "round": 15,
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26",
+      "view": "post_quali",
+      "predicted_at": "2026-09-26T22:16:49.029641+00:00",
+      "model": "llm: gemini",
+      "predicted_winner": "russell",
+      "actual_winner": "russell",
+      "top1_correct": 1,
+      "podium_hits": 1,
+      "winner_probability": 0.5932,
+      "winner_log_loss": 0.5222236687183601
+    },
+    {
+      "season": 2026,
+      "round": 15,
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26",
+      "view": "pre_quali",
+      "predicted_at": "2026-09-22T10:59:39.681675+00:00",
+      "model": "lightgbm: lambdarank",
+      "predicted_winner": "antonelli",
+      "actual_winner": "russell",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.1264,
+      "winner_log_loss": 2.06830379726938
+    },
+    {
+      "season": 2026,
+      "round": 15,
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26",
+      "view": "pre_quali",
+      "predicted_at": "2026-09-22T10:59:39.681675+00:00",
+      "model": "plackett-luce",
+      "predicted_winner": "antonelli",
+      "actual_winner": "russell",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.148,
+      "winner_log_loss": 1.9105430052180221
+    },
+    {
+      "season": 2026,
+      "round": 15,
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26",
+      "view": "pre_quali",
+      "predicted_at": "2026-09-22T10:59:39.681675+00:00",
+      "model": "original: MLP",
+      "predicted_winner": "russell",
+      "actual_winner": "russell",
+      "top1_correct": 1,
+      "podium_hits": 1,
+      "winner_probability": 0.7405,
+      "winner_log_loss": 0.3004296452742835
+    },
+    {
+      "season": 2026,
+      "round": 15,
+      "race_name": "Azerbaijan Grand Prix",
+      "date": "2026-09-26",
+      "view": "pre_quali",
+      "predicted_at": "2026-09-22T10:59:39.681675+00:00",
+      "model": "llm: gemini",
+      "predicted_winner": "antonelli",
+      "actual_winner": "russell",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0803,
+      "winner_log_loss": 2.521985658029421
     }
   ],
-  "updated_at": "2026-09-22T10:59:34.749929+00:00",
+  "updated_at": "2026-09-29T12:09:29.283730+00:00",
   "summary": [
     {
       "model": "llm: gemini",
-      "view": "pre_quali",
+      "view": "post_quali",
       "races": 3,
       "top1_accuracy": 0.6667,
-      "podium_hits_per_race": 1.667,
-      "winner_log_loss": 1.523
-    },
-    {
-      "model": "lightgbm: lambdarank",
-      "view": "post_quali",
-      "races": 2,
-      "top1_accuracy": 0.5,
-      "podium_hits_per_race": 1.5,
-      "winner_log_loss": 1.762
+      "podium_hits_per_race": 1.333,
+      "winner_log_loss": 0.856
     },
     {
       "model": "llm: gemini",
-      "view": "post_quali",
-      "races": 2,
-      "top1_accuracy": 0.5,
-      "podium_hits_per_race": 1.5,
-      "winner_log_loss": 1.022
-    },
-    {
-      "model": "original: MLP",
-      "view": "post_quali",
-      "races": 2,
-      "top1_accuracy": 0.5,
-      "podium_hits_per_race": 1.5,
-      "winner_log_loss": 17.83
-    },
-    {
-      "model": "lightgbm: lambdarank",
       "view": "pre_quali",
-      "races": 3,
-      "top1_accuracy": 0.3333,
-      "podium_hits_per_race": 1.667,
-      "winner_log_loss": 2.05
+      "races": 4,
+      "top1_accuracy": 0.5,
+      "podium_hits_per_race": 1.5,
+      "winner_log_loss": 1.772
     },
     {
       "model": "original: MLP",
       "view": "pre_quali",
-      "races": 3,
-      "top1_accuracy": 0.3333,
-      "podium_hits_per_race": 2.0,
-      "winner_log_loss": 2.859
-    },
-    {
-      "model": "plackett-luce",
-      "view": "pre_quali",
-      "races": 3,
-      "top1_accuracy": 0.3333,
-      "podium_hits_per_race": 1.667,
-      "winner_log_loss": 2.081
+      "races": 4,
+      "top1_accuracy": 0.5,
+      "podium_hits_per_race": 1.75,
+      "winner_log_loss": 2.22
     },
     {
       "model": "lambdarank + grid anchor",
       "view": "post_quali",
-      "races": 2,
-      "top1_accuracy": 0.0,
-      "podium_hits_per_race": 2.0,
-      "winner_log_loss": 2.26
+      "races": 3,
+      "top1_accuracy": 0.3333,
+      "podium_hits_per_race": 1.667,
+      "winner_log_loss": 1.796
+    },
+    {
+      "model": "lightgbm: lambdarank",
+      "view": "post_quali",
+      "races": 3,
+      "top1_accuracy": 0.3333,
+      "podium_hits_per_race": 1.333,
+      "winner_log_loss": 1.676
+    },
+    {
+      "model": "original: MLP",
+      "view": "post_quali",
+      "races": 3,
+      "top1_accuracy": 0.3333,
+      "podium_hits_per_race": 1.333,
+      "winner_log_loss": 12.362
     },
     {
       "model": "plackett-luce + grid anchor",
       "view": "post_quali",
-      "races": 2,
-      "top1_accuracy": 0.0,
-      "podium_hits_per_race": 2.0,
-      "winner_log_loss": 2.438
+      "races": 3,
+      "top1_accuracy": 0.3333,
+      "podium_hits_per_race": 1.667,
+      "winner_log_loss": 1.911
+    },
+    {
+      "model": "lightgbm: lambdarank",
+      "view": "pre_quali",
+      "races": 4,
+      "top1_accuracy": 0.25,
+      "podium_hits_per_race": 1.5,
+      "winner_log_loss": 2.054
+    },
+    {
+      "model": "plackett-luce",
+      "view": "pre_quali",
+      "races": 4,
+      "top1_accuracy": 0.25,
+      "podium_hits_per_race": 1.5,
+      "winner_log_loss": 2.038
     }
   ]
 }
