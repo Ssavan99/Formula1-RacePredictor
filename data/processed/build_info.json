@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-09-29T12:09:28.436635+00:00",
-  "rows": 5435,
-  "races": 267,
+  "updated_at": "2026-10-06T12:46:34.749651+00:00",
+  "rows": 5457,
+  "races": 268,
   "last_race": {
     "season": 2026,
-    "round": 15,
-    "name": "Azerbaijan Grand Prix",
-    "date": "2026-09-26"
+    "round": 16,
+    "name": "Bahrain Grand Prix in Malaysia",
+    "date": "2026-10-04"
   },
   "jolpica_requests": 10,
   "weather_requests": 2
