@@ -599,81 +599,216 @@
       "podium_hits": 1,
       "winner_probability": 0.004,
       "winner_log_loss": 5.521460917862246
+    },
+    {
+      "season": 2026,
+      "round": 17,
+      "race_name": "Singapore Grand Prix",
+      "date": "2026-10-11",
+      "view": "post_quali",
+      "predicted_at": "2026-10-10T23:06:28.573260+00:00",
+      "model": "lambdarank + grid anchor",
+      "predicted_winner": "max_verstappen",
+      "actual_winner": "max_verstappen",
+      "top1_correct": 1,
+      "podium_hits": 3,
+      "winner_probability": 0.3766,
+      "winner_log_loss": 0.976571662759085
+    },
+    {
+      "season": 2026,
+      "round": 17,
+      "race_name": "Singapore Grand Prix",
+      "date": "2026-10-11",
+      "view": "post_quali",
+      "predicted_at": "2026-10-10T23:06:28.573260+00:00",
+      "model": "plackett-luce + grid anchor",
+      "predicted_winner": "max_verstappen",
+      "actual_winner": "max_verstappen",
+      "top1_correct": 1,
+      "podium_hits": 2,
+      "winner_probability": 0.3816,
+      "winner_log_loss": 0.9633823394080056
+    },
+    {
+      "season": 2026,
+      "round": 17,
+      "race_name": "Singapore Grand Prix",
+      "date": "2026-10-11",
+      "view": "post_quali",
+      "predicted_at": "2026-10-10T23:06:28.573260+00:00",
+      "model": "lightgbm: lambdarank",
+      "predicted_winner": "antonelli",
+      "actual_winner": "max_verstappen",
+      "top1_correct": 0,
+      "podium_hits": 3,
+      "winner_probability": 0.1396,
+      "winner_log_loss": 1.968974088653865
+    },
+    {
+      "season": 2026,
+      "round": 17,
+      "race_name": "Singapore Grand Prix",
+      "date": "2026-10-11",
+      "view": "post_quali",
+      "predicted_at": "2026-10-10T23:06:28.573260+00:00",
+      "model": "original: MLP",
+      "predicted_winner": "antonelli",
+      "actual_winner": "max_verstappen",
+      "top1_correct": 0,
+      "podium_hits": 2,
+      "winner_probability": 0.021,
+      "winner_log_loss": 3.863232841258714
+    },
+    {
+      "season": 2026,
+      "round": 17,
+      "race_name": "Singapore Grand Prix",
+      "date": "2026-10-11",
+      "view": "post_quali",
+      "predicted_at": "2026-10-10T23:06:28.573260+00:00",
+      "model": "llm: gemini",
+      "predicted_winner": "antonelli",
+      "actual_winner": "max_verstappen",
+      "top1_correct": 0,
+      "podium_hits": 2,
+      "winner_probability": 0.004,
+      "winner_log_loss": 5.521460917862246
+    },
+    {
+      "season": 2026,
+      "round": 17,
+      "race_name": "Singapore Grand Prix",
+      "date": "2026-10-11",
+      "view": "pre_quali",
+      "predicted_at": "2026-10-06T12:46:40.895323+00:00",
+      "model": "lightgbm: lambdarank",
+      "predicted_winner": "antonelli",
+      "actual_winner": "max_verstappen",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0706,
+      "winner_log_loss": 2.650725134482941
+    },
+    {
+      "season": 2026,
+      "round": 17,
+      "race_name": "Singapore Grand Prix",
+      "date": "2026-10-11",
+      "view": "pre_quali",
+      "predicted_at": "2026-10-06T12:46:40.895323+00:00",
+      "model": "plackett-luce",
+      "predicted_winner": "antonelli",
+      "actual_winner": "max_verstappen",
+      "top1_correct": 0,
+      "podium_hits": 2,
+      "winner_probability": 0.1024,
+      "winner_log_loss": 2.2788685663767296
+    },
+    {
+      "season": 2026,
+      "round": 17,
+      "race_name": "Singapore Grand Prix",
+      "date": "2026-10-11",
+      "view": "pre_quali",
+      "predicted_at": "2026-10-06T12:46:40.895323+00:00",
+      "model": "original: MLP",
+      "predicted_winner": "hamilton",
+      "actual_winner": "max_verstappen",
+      "top1_correct": 0,
+      "podium_hits": 2,
+      "winner_probability": 0.0054,
+      "winner_log_loss": 5.221356325411908
+    },
+    {
+      "season": 2026,
+      "round": 17,
+      "race_name": "Singapore Grand Prix",
+      "date": "2026-10-11",
+      "view": "pre_quali",
+      "predicted_at": "2026-10-06T12:46:40.895323+00:00",
+      "model": "llm: gemini",
+      "predicted_winner": "antonelli",
+      "actual_winner": "max_verstappen",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0109,
+      "winner_log_loss": 4.518992489747039
     }
   ],
-  "updated_at": "2026-10-06T12:46:35.489424+00:00",
+  "updated_at": "2026-10-13T13:35:57.855695+00:00",
   "summary": [
     {
       "model": "lambdarank + grid anchor",
       "view": "post_quali",
-      "races": 4,
-      "top1_accuracy": 0.5,
-      "podium_hits_per_race": 2.0,
-      "winner_log_loss": 1.59
-    },
-    {
-      "model": "llm: gemini",
-      "view": "post_quali",
-      "races": 4,
-      "top1_accuracy": 0.5,
-      "podium_hits_per_race": 1.75,
-      "winner_log_loss": 1.022
-    },
-    {
-      "model": "original: MLP",
-      "view": "post_quali",
-      "races": 4,
-      "top1_accuracy": 0.5,
-      "podium_hits_per_race": 1.5,
-      "winner_log_loss": 9.444
+      "races": 5,
+      "top1_accuracy": 0.6,
+      "podium_hits_per_race": 2.2,
+      "winner_log_loss": 1.468
     },
     {
       "model": "plackett-luce + grid anchor",
       "view": "post_quali",
-      "races": 4,
-      "top1_accuracy": 0.5,
-      "podium_hits_per_race": 1.75,
-      "winner_log_loss": 1.678
+      "races": 5,
+      "top1_accuracy": 0.6,
+      "podium_hits_per_race": 1.8,
+      "winner_log_loss": 1.535
+    },
+    {
+      "model": "llm: gemini",
+      "view": "post_quali",
+      "races": 5,
+      "top1_accuracy": 0.4,
+      "podium_hits_per_race": 1.8,
+      "winner_log_loss": 1.922
+    },
+    {
+      "model": "original: MLP",
+      "view": "post_quali",
+      "races": 5,
+      "top1_accuracy": 0.4,
+      "podium_hits_per_race": 1.6,
+      "winner_log_loss": 8.328
     },
     {
       "model": "llm: gemini",
       "view": "pre_quali",
-      "races": 5,
-      "top1_accuracy": 0.4,
-      "podium_hits_per_race": 1.4,
-      "winner_log_loss": 2.522
+      "races": 6,
+      "top1_accuracy": 0.3333,
+      "podium_hits_per_race": 1.333,
+      "winner_log_loss": 2.855
     },
     {
       "model": "original: MLP",
       "view": "pre_quali",
-      "races": 5,
-      "top1_accuracy": 0.4,
-      "podium_hits_per_race": 1.8,
-      "winner_log_loss": 2.121
+      "races": 6,
+      "top1_accuracy": 0.3333,
+      "podium_hits_per_race": 1.833,
+      "winner_log_loss": 2.638
     },
     {
       "model": "lightgbm: lambdarank",
       "view": "post_quali",
-      "races": 4,
-      "top1_accuracy": 0.25,
-      "podium_hits_per_race": 1.75,
-      "winner_log_loss": 1.739
+      "races": 5,
+      "top1_accuracy": 0.2,
+      "podium_hits_per_race": 2.0,
+      "winner_log_loss": 1.785
     },
     {
       "model": "lightgbm: lambdarank",
       "view": "pre_quali",
-      "races": 5,
-      "top1_accuracy": 0.2,
-      "podium_hits_per_race": 1.6,
-      "winner_log_loss": 2.199
+      "races": 6,
+      "top1_accuracy": 0.1667,
+      "podium_hits_per_race": 1.5,
+      "winner_log_loss": 2.274
     },
     {
       "model": "plackett-luce",
       "view": "pre_quali",
-      "races": 5,
-      "top1_accuracy": 0.2,
-      "podium_hits_per_race": 1.4,
-      "winner_log_loss": 2.113
+      "races": 6,
+      "top1_accuracy": 0.1667,
+      "podium_hits_per_race": 1.5,
+      "winner_log_loss": 2.14
     }
   ]
 }
