@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-10-20T10:56:59.231653+00:00",
-  "rows": 5479,
-  "races": 269,
+  "updated_at": "2026-10-27T11:37:24.718470+00:00",
+  "rows": 5501,
+  "races": 270,
   "last_race": {
     "season": 2026,
-    "round": 17,
-    "name": "Singapore Grand Prix",
-    "date": "2026-10-11"
+    "round": 18,
+    "name": "United States Grand Prix",
+    "date": "2026-10-25"
   },
   "jolpica_requests": 10,
   "weather_requests": 2

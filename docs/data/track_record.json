@@ -734,9 +734,69 @@
       "podium_hits": 1,
       "winner_probability": 0.0109,
       "winner_log_loss": 4.518992489747039
+    },
+    {
+      "season": 2026,
+      "round": 18,
+      "race_name": "United States Grand Prix",
+      "date": "2026-10-25",
+      "view": "pre_quali",
+      "predicted_at": "2026-10-20T10:57:02.649659+00:00",
+      "model": "lightgbm: lambdarank",
+      "predicted_winner": "antonelli",
+      "actual_winner": "antonelli",
+      "top1_correct": 1,
+      "podium_hits": 1,
+      "winner_probability": 0.3047,
+      "winner_log_loss": 1.1884275929904735
+    },
+    {
+      "season": 2026,
+      "round": 18,
+      "race_name": "United States Grand Prix",
+      "date": "2026-10-25",
+      "view": "pre_quali",
+      "predicted_at": "2026-10-20T10:57:02.649659+00:00",
+      "model": "plackett-luce",
+      "predicted_winner": "antonelli",
+      "actual_winner": "antonelli",
+      "top1_correct": 1,
+      "podium_hits": 2,
+      "winner_probability": 0.162,
+      "winner_log_loss": 1.820158943749753
+    },
+    {
+      "season": 2026,
+      "round": 18,
+      "race_name": "United States Grand Prix",
+      "date": "2026-10-25",
+      "view": "pre_quali",
+      "predicted_at": "2026-10-20T10:57:02.649659+00:00",
+      "model": "original: MLP",
+      "predicted_winner": "max_verstappen",
+      "actual_winner": "antonelli",
+      "top1_correct": 0,
+      "podium_hits": 3,
+      "winner_probability": 0.0107,
+      "winner_log_loss": 4.537511537514277
+    },
+    {
+      "season": 2026,
+      "round": 18,
+      "race_name": "United States Grand Prix",
+      "date": "2026-10-25",
+      "view": "pre_quali",
+      "predicted_at": "2026-10-20T10:57:02.649659+00:00",
+      "model": "llm: gemini",
+      "predicted_winner": "antonelli",
+      "actual_winner": "antonelli",
+      "top1_correct": 1,
+      "podium_hits": 2,
+      "winner_probability": 0.5932,
+      "winner_log_loss": 0.5222236687183601
     }
   ],
-  "updated_at": "2026-10-20T10:56:59.569587+00:00",
+  "updated_at": "2026-10-27T11:37:25.628110+00:00",
   "summary": [
     {
       "model": "lambdarank + grid anchor",
@@ -756,6 +816,14 @@
     },
     {
       "model": "llm: gemini",
+      "view": "pre_quali",
+      "races": 7,
+      "top1_accuracy": 0.4286,
+      "podium_hits_per_race": 1.429,
+      "winner_log_loss": 2.522
+    },
+    {
+      "model": "llm: gemini",
       "view": "post_quali",
       "races": 5,
       "top1_accuracy": 0.4,
@@ -771,20 +839,28 @@
       "winner_log_loss": 8.328
     },
     {
-      "model": "llm: gemini",
+      "model": "lightgbm: lambdarank",
       "view": "pre_quali",
-      "races": 6,
-      "top1_accuracy": 0.3333,
-      "podium_hits_per_race": 1.333,
-      "winner_log_loss": 2.855
+      "races": 7,
+      "top1_accuracy": 0.2857,
+      "podium_hits_per_race": 1.429,
+      "winner_log_loss": 2.119
     },
     {
       "model": "original: MLP",
       "view": "pre_quali",
-      "races": 6,
-      "top1_accuracy": 0.3333,
-      "podium_hits_per_race": 1.833,
-      "winner_log_loss": 2.638
+      "races": 7,
+      "top1_accuracy": 0.2857,
+      "podium_hits_per_race": 2.0,
+      "winner_log_loss": 2.909
+    },
+    {
+      "model": "plackett-luce",
+      "view": "pre_quali",
+      "races": 7,
+      "top1_accuracy": 0.2857,
+      "podium_hits_per_race": 1.571,
+      "winner_log_loss": 2.095
     },
     {
       "model": "lightgbm: lambdarank",
@@ -793,22 +869,6 @@
       "top1_accuracy": 0.2,
       "podium_hits_per_race": 2.0,
       "winner_log_loss": 1.785
-    },
-    {
-      "model": "lightgbm: lambdarank",
-      "view": "pre_quali",
-      "races": 6,
-      "top1_accuracy": 0.1667,
-      "podium_hits_per_race": 1.5,
-      "winner_log_loss": 2.274
-    },
-    {
-      "model": "plackett-luce",
-      "view": "pre_quali",
-      "races": 6,
-      "top1_accuracy": 0.1667,
-      "podium_hits_per_race": 1.5,
-      "winner_log_loss": 2.14
     }
   ]
 }
