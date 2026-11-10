@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-11-03T13:39:13.203659+00:00",
-  "rows": 5523,
-  "races": 271,
+  "updated_at": "2026-11-10T14:21:29.770577+00:00",
+  "rows": 5545,
+  "races": 272,
   "last_race": {
     "season": 2026,
-    "round": 19,
-    "name": "Mexico City Grand Prix",
-    "date": "2026-11-01"
+    "round": 20,
+    "name": "Brazilian Grand Prix",
+    "date": "2026-11-08"
   },
   "jolpica_requests": 12,
-  "weather_requests": 2
+  "weather_requests": 3
 }

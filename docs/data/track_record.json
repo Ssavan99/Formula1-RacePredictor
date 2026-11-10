@@ -929,9 +929,69 @@
       "podium_hits": 2,
       "winner_probability": 0.2182,
       "winner_log_loss": 1.5223432055831665
+    },
+    {
+      "season": 2026,
+      "round": 20,
+      "race_name": "Brazilian Grand Prix",
+      "date": "2026-11-08",
+      "view": "pre_quali",
+      "predicted_at": "2026-11-03T13:39:16.956359+00:00",
+      "model": "lightgbm: lambdarank",
+      "predicted_winner": "antonelli",
+      "actual_winner": "norris",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0619,
+      "winner_log_loss": 2.7822350992915865
+    },
+    {
+      "season": 2026,
+      "round": 20,
+      "race_name": "Brazilian Grand Prix",
+      "date": "2026-11-08",
+      "view": "pre_quali",
+      "predicted_at": "2026-11-03T13:39:16.956359+00:00",
+      "model": "plackett-luce",
+      "predicted_winner": "antonelli",
+      "actual_winner": "norris",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0603,
+      "winner_log_loss": 2.8084231752489974
+    },
+    {
+      "season": 2026,
+      "round": 20,
+      "race_name": "Brazilian Grand Prix",
+      "date": "2026-11-08",
+      "view": "pre_quali",
+      "predicted_at": "2026-11-03T13:39:16.956359+00:00",
+      "model": "original: MLP",
+      "predicted_winner": "russell",
+      "actual_winner": "norris",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.0,
+      "winner_log_loss": 34.538776394910684
+    },
+    {
+      "season": 2026,
+      "round": 20,
+      "race_name": "Brazilian Grand Prix",
+      "date": "2026-11-08",
+      "view": "pre_quali",
+      "predicted_at": "2026-11-03T13:39:16.956359+00:00",
+      "model": "llm: gemini",
+      "predicted_winner": "max_verstappen",
+      "actual_winner": "norris",
+      "top1_correct": 0,
+      "podium_hits": 1,
+      "winner_probability": 0.004,
+      "winner_log_loss": 5.521460917862246
     }
   ],
-  "updated_at": "2026-11-03T13:39:14.348766+00:00",
+  "updated_at": "2026-11-10T14:21:30.548033+00:00",
   "summary": [
     {
       "model": "lambdarank + grid anchor",
@@ -951,19 +1011,19 @@
     },
     {
       "model": "llm: gemini",
-      "view": "pre_quali",
-      "races": 8,
-      "top1_accuracy": 0.375,
-      "podium_hits_per_race": 1.5,
-      "winner_log_loss": 2.397
-    },
-    {
-      "model": "llm: gemini",
       "view": "post_quali",
       "races": 6,
       "top1_accuracy": 0.3333,
       "podium_hits_per_race": 1.667,
       "winner_log_loss": 2.189
+    },
+    {
+      "model": "llm: gemini",
+      "view": "pre_quali",
+      "races": 9,
+      "top1_accuracy": 0.3333,
+      "podium_hits_per_race": 1.444,
+      "winner_log_loss": 2.744
     },
     {
       "model": "original: MLP",
@@ -976,26 +1036,26 @@
     {
       "model": "lightgbm: lambdarank",
       "view": "pre_quali",
-      "races": 8,
-      "top1_accuracy": 0.25,
-      "podium_hits_per_race": 1.5,
-      "winner_log_loss": 2.2
+      "races": 9,
+      "top1_accuracy": 0.2222,
+      "podium_hits_per_race": 1.444,
+      "winner_log_loss": 2.265
     },
     {
       "model": "original: MLP",
       "view": "pre_quali",
-      "races": 8,
-      "top1_accuracy": 0.25,
-      "podium_hits_per_race": 1.875,
-      "winner_log_loss": 2.78
+      "races": 9,
+      "top1_accuracy": 0.2222,
+      "podium_hits_per_race": 1.778,
+      "winner_log_loss": 6.308
     },
     {
       "model": "plackett-luce",
       "view": "pre_quali",
-      "races": 8,
-      "top1_accuracy": 0.25,
-      "podium_hits_per_race": 1.625,
-      "winner_log_loss": 2.08
+      "races": 9,
+      "top1_accuracy": 0.2222,
+      "podium_hits_per_race": 1.556,
+      "winner_log_loss": 2.161
     },
     {
       "model": "lightgbm: lambdarank",
