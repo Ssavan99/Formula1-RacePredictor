@@ -991,7 +991,7 @@
       "winner_log_loss": 5.521460917862246
     }
   ],
-  "updated_at": "2026-11-10T14:21:30.548033+00:00",
+  "updated_at": "2026-11-17T15:33:06.629920+00:00",
   "summary": [
     {
       "model": "lambdarank + grid anchor",

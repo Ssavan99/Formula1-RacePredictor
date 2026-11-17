@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-10T14:21:29.770577+00:00",
+  "updated_at": "2026-11-17T15:33:06.236237+00:00",
   "rows": 5545,
   "races": 272,
   "last_race": {
@@ -9,5 +9,5 @@
     "date": "2026-11-08"
   },
   "jolpica_requests": 12,
-  "weather_requests": 3
+  "weather_requests": 1
 }
